@@ -25,6 +25,8 @@ test: fmt ## Run tests.
 .PHONY: serve
 serve: build ## Serve static files
 	go run cmd/server/main.go --dir web/
+	#Uncomment the command below to serve with python
+	#python3 -m http.server -d web/ 8080
 
 ##@ Build
 
