@@ -27,23 +27,27 @@ license that can be found in the LICENSE file.
 		}
 
 		const go = new Go();
-		let mod, inst;
-		WebAssembly.instantiateStreaming(fetch("test.wasm"), go.importObject).then((result) => {
-			mod = result.module;
-			inst = result.instance;
+		WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
+			go.run(result.instance);
 			document.getElementById("runButton").disabled = false;
 		}).catch((err) => {
 			console.error(err);
 		});
 
-		async function run() {
-			console.clear();
-			await go.run(inst);
-			inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
+		function run() {
+			let input = document.getElementById("input-data").value;
+			let cel = document.getElementById("input-cel").value;
+			document.getElementById("output").value = eval(cel, input)
 		}
 	</script>
 
+	<textarea id="input-cel"></textarea>
+
+	<textarea id="input-data"></textarea>
+
 	<button onClick="run();" id="runButton" disabled>Run</button>
+
+	<textarea id="output" disabled></textarea>
 </body>
 
 </html>
