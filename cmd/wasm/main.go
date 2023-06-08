@@ -4,10 +4,16 @@ import (
 	"errors"
 	"fmt"
 	"syscall/js"
+
+	"gopkg.in/yaml.v3"
+
+	"github.com/undistro/cel-playground/eval"
 )
 
 func main() {
-	js.Global().Set("eval", js.FuncOf(evalWrapper))
+	evalFunc := js.FuncOf(evalWrapper)
+	js.Global().Set("eval", evalFunc)
+	defer evalFunc.Release()
 	<-make(chan bool)
 }
 
@@ -17,12 +23,15 @@ func evalWrapper(this js.Value, args []js.Value) any {
 		return errors.New("invalid arguments")
 	}
 	exp := args[0].String()
-	inp := args[1].String()
-	return eval(exp, inp)
-}
+	is := args[1].String()
 
-// eval evaluates the cel expression against the given input
-func eval(exp, input string) string {
-	// TODO: evaluate CEL expression
-	return fmt.Sprintf("%d\n%d", len(exp), len(input))
+	var input map[string]any
+	if err := yaml.Unmarshal([]byte(is), &input); err != nil {
+		return fmt.Errorf("failed to decode input: %w", err)
+	}
+	output, err := eval.Eval(exp, input)
+	if err != nil {
+		output = err.Error()
+	}
+	return map[string]any{"output": output, "isError": err != nil}
 }
