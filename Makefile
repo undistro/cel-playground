@@ -23,10 +23,10 @@ test: fmt ## Run tests.
 	go test ./... -coverprofile cover.out
 
 .PHONY: serve
-serve: build ## Serve static files
-	go run cmd/server/main.go --dir web/
-	#Uncomment the command below to serve with python
-	#python3 -m http.server -d web/ 8080
+serve: ## Serve static files
+	python3 -m http.server -d web/ 8080
+	#Uncomment the command below to serve with Go
+	#go run cmd/server/main.go --dir web/
 
 ##@ Build
 
