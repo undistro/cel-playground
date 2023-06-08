@@ -20,18 +20,25 @@ func main() {
 // evalWrapper wraps the eval function with `syscall/js` parameters
 func evalWrapper(this js.Value, args []js.Value) any {
 	if len(args) < 2 {
-		return errors.New("invalid arguments")
+		return response("", errors.New("invalid arguments"))
 	}
 	exp := args[0].String()
 	is := args[1].String()
 
 	var input map[string]any
 	if err := yaml.Unmarshal([]byte(is), &input); err != nil {
-		return fmt.Errorf("failed to decode input: %w", err)
+		return response("", fmt.Errorf("failed to decode input: %w", err))
 	}
 	output, err := eval.Eval(exp, input)
 	if err != nil {
-		output = err.Error()
+		return response("", err)
 	}
-	return map[string]any{"output": output, "isError": err != nil}
+	return response(output, nil)
+}
+
+func response(out string, err error) any {
+	if err != nil {
+		out = err.Error()
+	}
+	return map[string]any{"output": out, "isError": err != nil}
 }
