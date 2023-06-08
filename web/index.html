@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
 	<meta charset="utf-8">
@@ -32,17 +32,36 @@
 		function run() {
 			let input = document.getElementById("input-data").value;
 			let cel = document.getElementById("input-cel").value;
-			document.getElementById("output").value = eval(cel, input)
+            let outArea = document.getElementById("output");
+
+            let result = eval(cel, input);
+
+            outArea.value = result.output;
+            outArea.style.color = result.isError ? "red" : "white"
 		}
 	</script>
 
-	<textarea id="input-cel"></textarea>
+	<h1>CEL Playground</h1>
 
-	<textarea id="input-data"></textarea>
+	<textarea id="input-cel" placeholder="CEL expression">object.replicas > 1</textarea>
+
+	<textarea id="input-data" placeholder="Input data in YAML/JSON format">{
+  "object": {
+    "replicas": 42,
+    "name": "Hello, world!",
+    "items": [1, 2, 3, 4],
+    "spec": {
+      "foo": "bar",
+      "key": "value"
+    },
+    "enabled": true,
+    "status": null
+  }
+}</textarea>
 
 	<button onClick="run();" id="runButton" disabled>Run</button>
 
-	<textarea id="output" disabled></textarea>
+	<textarea id="output" style="background-color: #1f2124; color: white;" disabled></textarea>
 </body>
 
 </html>
