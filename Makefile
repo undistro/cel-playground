@@ -32,4 +32,4 @@ serve: ## Serve static files
 
 .PHONY: build
 build: fmt ## Build WASM
-	GOOS=js GOARCH=wasm go build -o web/main.wasm cmd/wasm/main.go
+	GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o web/main.wasm cmd/wasm/main.go
