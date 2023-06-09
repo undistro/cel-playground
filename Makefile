@@ -41,5 +41,5 @@ dotenv: ## Update web/.env file with cel-go dependency version
 ##@ Build
 
 .PHONY: build
-build: fmt ## Build WASM
+build: fmt dotenv ## Build WASM
 	GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o web/main.wasm cmd/wasm/main.go
