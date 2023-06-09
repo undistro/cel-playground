@@ -18,7 +18,7 @@ func main() {
 }
 
 // evalWrapper wraps the eval function with `syscall/js` parameters
-func evalWrapper(this js.Value, args []js.Value) any {
+func evalWrapper(_ js.Value, args []js.Value) any {
 	if len(args) < 2 {
 		return response("", errors.New("invalid arguments"))
 	}
