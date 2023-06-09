@@ -31,8 +31,8 @@ serve: ## Serve static files
 	#go run cmd/server/main.go --dir web/
 
 .PHONY: versions
-versions: ## Update the web/versions.json file
-	yq -i -ojson '.cel-go = "$(CEL_GO_VERSION)"' web/versions.json
+versions: ## Update the web/assets/versions.json file
+	yq -i -ojson '.cel-go = "$(CEL_GO_VERSION)"' web/assets/versions.json
 
 ##@ Build
 
