@@ -53,10 +53,6 @@ EXAMPLES.forEach((example) => {
   const button = document.createElement("button");
   button.classList.add("example-item");
   button.innerText = example.name;
-
-  button.addEventListener("click", async () => {
-    console.log(example);
-  });
   list.appendChild(button);
 });
 
@@ -70,5 +66,4 @@ tippy("#examples", {
   interactiveBorder: 10,
   interactiveDebounce: 0,
   aria: null,
-  //   theme: "playground",
 });

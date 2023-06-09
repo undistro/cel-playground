@@ -1,8 +1,14 @@
 const EDITOR_ELEMENTS = ["cel-input", "data-input"];
 
 const EDITOR_DEFAULTS = {
-  theme: "ace/theme/clouds",
-  mode: "ace/mode/javascript",
+  "cel-input": {
+    theme: "ace/theme/clouds",
+    mode: "ace/mode/javascript",
+  },
+  "data-input": {
+    theme: "ace/theme/clouds",
+    mode: "ace/mode/yaml",
+  },
 };
 
 const SAMPLE_DATA = `{
