@@ -4,67 +4,82 @@
 <head>
 	<meta charset="utf-8">
 	<title>CEL Playground</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
 </head>
 
 <body>
-	<!--
-	Add the following polyfill for Microsoft Edge 17/18 support:
-	<script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
-	(see https://caniuse.com/#feat=textencoder)
-	-->
-	<script src="wasm_exec.js"></script>
-	<script>
-		if (!WebAssembly.instantiateStreaming) { // polyfill
-			WebAssembly.instantiateStreaming = async (resp, importObject) => {
-				const source = await (await resp).arrayBuffer();
-				return await WebAssembly.instantiate(source, importObject);
-			};
-		}
-
-		const go = new Go();
-		WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
-			go.run(result.instance);
-			document.getElementById("runButton").disabled = false;
-		}).catch((err) => {
-			console.error(err);
-		});
-
-		function run() {
-			let input = document.getElementById("input-data").value;
-			let cel = document.getElementById("input-cel").value;
-            let outArea = document.getElementById("output");
-
-            outArea.value = "Evaluating..."
-            let result = eval(cel, input);
-
-            outArea.value = result.output;
-            outArea.style.color = result.isError ? "red" : "white"
-		}
-	</script>
-
-	<h1>CEL Playground</h1>
-
-	<textarea id="input-cel" placeholder="CEL expression">object.replicas > 1</textarea>
-
-	<textarea id="input-data" placeholder="Input data in YAML/JSON format">{
-  "object": {
-    "replicas": 42,
-    "name": "sample",
-    "message": "Hello, world!",
-    "items": [1, 2, 3, 4],
-    "spec": {
-      "foo": "bar",
-      "key": "value"
-    },
-    "enabled": true,
-    "status": null
-  }
-}</textarea>
-
-	<button onClick="run();" id="runButton" disabled>Run</button>
-
-	<textarea id="output" placeholder="Press 'Run' to evaluate your CEL expression." disabled></textarea>
+	<nav class="navbar">
+		<div href="/" class="logo">
+			<span class="title">CEL Playground</span>
+			<div class="divider"></div>
+			<span>Quickly test Common Expression Language</span>
+		</div>
+		<a class="nav-link" href="https://github.com/undistro/cel-playground" target="_blank">
+			<img src="assets/github.svg" alt="GitHub" />
+			Visit GitHub
+		</a>
+	</nav>
+	<main>
+		<div class="editor-container">
+			<div class="editor">
+				<div class="editor__header">
+					<div>
+						<span class="title">
+							Expression
+						</span>
+						<span class="description">(CEL format)</span>
+					</div>
+					<button id="examples" class="examples__button">
+						<span id="example-name">
+							Examples
+						</span>
+						<img src="assets/caret-down.svg" alt="Arrow" />
+					</button>
+				</div>
+				<div id="cel-input" class="editor__input">object.replicas > 1</div>
+			</div>
+			<div class="output-container">
+				<div class="editor">
+					<div class="editor__header">
+						<div>
+							<span class="title">
+								Input
+							</span>
+							<span class="description">(YAML or JSON format)</span>
+						</div>
+						<button id="run" class="button button-primary">
+							Run
+						</button>
+					</div>
+					<div id="data-input" class="editor__input"></div>
+				</div>
+				<div class="editor editor--output">
+					<div class="editor__header">
+						Output
+					</div>
+					<textarea id="output" class="editor__output"
+						placeholder="Press 'Run' to evaluate your CEL expression." disabled></textarea>
+				</div>
+			</div>
+		</div>
+	</main>
+	<footer>
+		<span>Powered by
+			<a href="https://undistro.io>" target="_blank">Undistro</a>
+		</span>
+		<span class="version">
+			CEL v.0.9.0
+		</span>
+	</footer>
+	<script src="scripts/wasm_exec.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
+	<script src="https://unpkg.com/popper.js@1"></script>
+	<script src="https://unpkg.com/tippy.js@4"></script>
+	<script type="module" src="scripts/main.js"></script>
 </body>
 
 </html>
