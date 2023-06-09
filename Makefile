@@ -39,3 +39,7 @@ versions: ## Update the web/versions.json file
 .PHONY: build
 build: fmt versions ## Build WASM
 	GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o web/main.wasm cmd/wasm/main.go
+
+.PHONY: compress
+compress: ## Compress the WASM file
+	gzip --best --keep -f web/main.wasm
