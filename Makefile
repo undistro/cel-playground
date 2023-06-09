@@ -30,16 +30,12 @@ serve: ## Serve static files
 	#Uncomment the command below to serve with Go
 	#go run cmd/server/main.go --dir web/
 
-.PHONY: dotenv
-dotenv: ## Update web/.env file with cel-go dependency version
-	@if grep -q '^CEL_GO_VERSION=' web/.env; then \
-  		sed -i 's/^\(CEL_GO_VERSION=\).*/\1$(CEL_GO_VERSION)/' web/.env; \
-  		else echo "CEL_GO_VERSION=$(CEL_GO_VERSION)" >> web/.env; \
-  	fi
-	@cat web/.env
+.PHONY: versions
+versions: ## Update the web/versions.json file
+	yq -i -ojson '.cel-go = "$(CEL_GO_VERSION)"' web/versions.json
 
 ##@ Build
 
 .PHONY: build
-build: fmt dotenv ## Build WASM
+build: fmt versions ## Build WASM
 	GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o web/main.wasm cmd/wasm/main.go
