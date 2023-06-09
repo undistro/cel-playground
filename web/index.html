@@ -4,6 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>CEL Playground</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
 <body>
@@ -34,6 +35,7 @@
 			let cel = document.getElementById("input-cel").value;
             let outArea = document.getElementById("output");
 
+            outArea.value = "Evaluating..."
             let result = eval(cel, input);
 
             outArea.value = result.output;
@@ -48,7 +50,8 @@
 	<textarea id="input-data" placeholder="Input data in YAML/JSON format">{
   "object": {
     "replicas": 42,
-    "name": "Hello, world!",
+    "name": "sample",
+    "message": "Hello, world!",
     "items": [1, 2, 3, 4],
     "spec": {
       "foo": "bar",
@@ -61,7 +64,7 @@
 
 	<button onClick="run();" id="runButton" disabled>Run</button>
 
-	<textarea id="output" style="background-color: #1f2124; color: white;" disabled></textarea>
+	<textarea id="output" placeholder="Press 'Run' to evaluate your CEL expression." disabled></textarea>
 </body>
 
 </html>

@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    resize: vertical;
+    margin-bottom: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+textarea#output {
+    background-color: #1f2124;
+    color: white;
+}
+
+button#runButton {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #1563ff;
+    color: #fff;
+    border: 1px solid #082766;
+    cursor: pointer;
+    box-sizing: border-box;
+    font-weight: bold;
+    box-shadow: 0 4px 4px rgba(0,0,0,.25);
+    text-shadow: 0 1px 1px rgba(0,0,0,.25);
+}
