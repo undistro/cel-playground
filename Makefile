@@ -25,13 +25,13 @@ test: fmt ## Run tests.
 	go test ./... -coverprofile cover.out
 
 .PHONY: serve
-serve: ## Serve static files
+serve: ## Serve static files.
 	python3 -m http.server -d web/ 8080
 	#Uncomment the command below to serve with Go
 	#go run cmd/server/main.go --dir web/
 
 .PHONY: update-data
-update-data: ## Update the web/assets/data.json file
+update-data: ## Update the web/assets/data.json file.
 	yq -ojson '.' examples.yaml > web/assets/data.json
 	yq -ojson -i '.versions.cel-go = "$(CEL_GO_VERSION)"' web/assets/data.json
 
@@ -48,7 +48,7 @@ checklicense: ## Check copyright license headers in source code files.
 ##@ Build
 
 .PHONY: build
-build: fmt update-data ## Build WASM
+build: fmt update-data ## Build the wasm binary.
 	GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o web/main.wasm cmd/wasm/main.go
 	gzip --best -f web/main.wasm
 
