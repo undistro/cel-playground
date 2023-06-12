@@ -49,10 +49,7 @@ checklicense: ## Check copyright license headers in source code files.
 .PHONY: build
 build: fmt versions ## Build WASM
 	GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o web/main.wasm cmd/wasm/main.go
-
-.PHONY: compress
-compress: ## Compress the WASM file
-	gzip --best --keep -f web/main.wasm
+	gzip --best -f web/main.wasm
 
 ## Location to install dependencies to
 LOCALBIN ?= $(shell pwd)/bin
