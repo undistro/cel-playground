@@ -1,0 +1,27 @@
+{
+  "examples": [
+    {
+      "name": "Kubernetes: Check image registry",
+      "cel": "object.spec.template.spec.containers.all(container,\n  params.allowedRegistries.exists(registry,\n    ((registry in ['docker.io', 'docker.io/library']) && !container.image.contains('/')) ||\n    container.image.startsWith(registry)\n  )\n)\n",
+      "data": "params:\n  allowedRegistries: \n    - myregistry.com\n    - docker.io # use 'docker.io' for Docker Hub\nobject:\n  apiVersion: apps/v1\n  kind: Deployment\n  metadata:\n    name: nginx\n  spec:\n    template:\n      metadata:\n        name: nginx\n        labels:\n          app: nginx\n      spec:\n        containers:\n          - name: nginx\n            image: nginx # the expression looks for this field\n    selector:\n      matchLabels:\n        app: nginx\n"
+    },
+    {
+      "name": "Kubernetes: Disallow HostPorts",
+      "cel": "// According the Pod Security Standards, HostPorts should be disallowed entirely.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline\n\nobject.spec.template.spec.containers.all(container,\n  !has(container.ports) ||\n  container.ports.all(port,\n    !has(port.hostPort) ||\n    port.hostPort == 0\n  )\n)\n",
+      "data": "object:\n  apiVersion: apps/v1\n  kind: Deployment\n  metadata:\n    name: nginx\n  spec:\n    template:\n      metadata:\n        name: nginx\n        labels:\n          app: nginx\n      spec:\n        containers:\n          - name: nginx\n            image: nginx\n            ports:\n              - containerPort: 80\n                hostPort: 80 # the expression looks for this field\n    selector:\n      matchLabels:\n        app: nginx\n"
+    },
+    {
+      "name": "Kubernetes: Require non-root containers",
+      "cel": "// According the Pod Security Standards, Containers must be required to run as non-root users.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted\n\n// Pod or Containers must set `securityContext.runAsNonRoot`\n(\n  (has(podSpec.securityContext) && has(podSpec.securityContext.runAsNonRoot)) ||\n  object.spec.template.spec.containers.all(container,\n    has(container.securityContext) && has(container.securityContext.runAsNonRoot)\n  )\n)\n&&\n\n// Neither Pod nor Containers should set `securityContext.runAsNonRoot` to false\n(\n  (!has(podSpec.securityContext) || !has(podSpec.securityContext.runAsNonRoot) || podSpec.securityContext.runAsNonRoot != false)\n  &&\n  object.spec.template.spec.containers.all(container,\n    !has(container.securityContext) || !has(container.securityContext.runAsNonRoot) || container.securityContext.runAsNonRoot != false\n  )\n)\n",
+      "data": "object:\n  apiVersion: apps/v1\n  kind: Deployment\n  metadata:\n    name: nginx\n  spec:\n    template:\n      metadata:\n        name: nginx\n        labels:\n          app: nginx\n      spec:\n        securityContext:\n          runAsNonRoot: true # the expression looks for this field\n        containers:\n          - name: nginx\n            image: nginx\n            securityContext:\n              runAsNonRoot: false # and this one\n    selector:\n      matchLabels:\n        app: nginx\n"
+    },
+    {
+      "name": "Kubernetes: Drop ALL capabilities",
+      "cel": "// According the Pod Security Standards, Containers must drop `ALL` capabilities, and are only permitted to add back the `NET_BIND_SERVICE` capability.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted\n\n// Containers must drop `ALL` capabilities,\nobject.spec.template.spec.containers.all(container,\n  has(container.securityContext) &&\n  has(container.securityContext.capabilities) &&\n  has(container.securityContext.capabilities.drop) &&\n  size(container.securityContext.capabilities.drop) >= 1 &&\n  container.securityContext.capabilities.drop.exists(c, c == 'ALL')\n)\n&&\n// and are only permitted to add back the `NET_BIND_SERVICE` capability\nobject.spec.template.spec.containers.all(container,\n  !has(container.securityContext) ||\n  !has(container.securityContext.capabilities) ||\n  !has(container.securityContext.capabilities.add) ||\n  container.securityContext.capabilities.add.all(cap, cap in params.allowedCapabilities)\n)\n",
+      "data": "params:\n  allowedCapabilities: [NET_BIND_SERVICE]\nobject:\n  apiVersion: apps/v1\n  kind: Deployment\n  metadata:\n    name: nginx\n  spec:\n    template:\n      metadata:\n        name: nginx\n        labels:\n          app: nginx\n      spec:\n        containers:\n          - name: nginx\n            image: nginx\n            securityContext:\n              capabilities: # the expression looks for this object\n                drop: [ALL]\n                add: [NET_BIND_SERVICE]\n    selector:\n      matchLabels:\n        app: nginx\n"
+    }
+  ],
+  "versions": {
+    "cel-go": "v0.16.0"
+  }
+}
