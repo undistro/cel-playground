@@ -37,7 +37,7 @@ function run() {
 (async function loadAndRunGoWasm() {
   const go = new Go();
 
-  const buffer = pako.ungzip(await (await fetch("main.wasm.gz")).arrayBuffer());
+  const buffer = pako.ungzip(await (await fetch(WASM_URL)).arrayBuffer());
 
   // A fetched response might be decompressed twice on Firefox.
   // See https://bugzilla.mozilla.org/show_bug.cgi?id=610679
