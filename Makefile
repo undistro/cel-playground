@@ -34,6 +34,16 @@ serve: ## Serve static files
 versions: ## Update the web/assets/versions.json file
 	yq -i -ojson '.cel-go = "$(CEL_GO_VERSION)"' web/assets/versions.json
 
+.PHONY: addlicense
+addlicense: ## Add copyright license headers in source code files.
+	@test -s $(LOCALBIN)/addlicense || GOBIN=$(LOCALBIN) go install github.com/google/addlicense@latest
+	$(LOCALBIN)/addlicense -c "Undistro Authors" -l "apache" -ignore ".github/**" -ignore ".idea/**" .
+
+.PHONY: checklicense
+checklicense: ## Check copyright license headers in source code files.
+	@test -s $(LOCALBIN)/addlicense || GOBIN=$(LOCALBIN) go install github.com/google/addlicense@latest
+	$(LOCALBIN)/addlicense -c "Undistro Authors" -l "apache" -ignore ".github/**" -ignore ".idea/**" -check .
+
 ##@ Build
 
 .PHONY: build
@@ -43,3 +53,8 @@ build: fmt versions ## Build WASM
 .PHONY: compress
 compress: ## Compress the WASM file
 	gzip --best --keep -f web/main.wasm
+
+## Location to install dependencies to
+LOCALBIN ?= $(shell pwd)/bin
+$(LOCALBIN):
+	mkdir -p $(LOCALBIN)
