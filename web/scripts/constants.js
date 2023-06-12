@@ -26,7 +26,7 @@ const SAMPLE_DATA = `{
     }
 }`;
 
-const WASM_URL = "main.wasm";
+const WASM_URL = "main.wasm.gz";
 
 const EXAMPLES = [
   {

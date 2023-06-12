@@ -9,6 +9,8 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+	<script src="scripts/wasm_exec.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 </head>
 
 <body>
@@ -51,7 +53,7 @@
 							</span>
 							<span class="description">(YAML or JSON format)</span>
 						</div>
-						<button id="run" class="button button-primary">
+						<button disabled id="run" class="button button-primary">
 							Run
 						</button>
 					</div>
@@ -75,7 +77,6 @@
 			CEL v.0.9.0
 		</span>
 	</footer>
-	<script src="scripts/wasm_exec.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
 	<script src="https://unpkg.com/popper.js@1"></script>
 	<script src="https://unpkg.com/tippy.js@4"></script>

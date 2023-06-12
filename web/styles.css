@@ -123,6 +123,7 @@ a {
 
 .editor>.editor__input {
     height: 100%;
+    font-size: 14px;
 }
 
 .editor.editor--output {
@@ -139,6 +140,7 @@ a {
     resize: none;
     height: 100%;
     padding: 12px;
+    font-size: 14px;
 }
 
 .editor>.editor__output::placeholder {
