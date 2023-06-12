@@ -30,9 +30,10 @@ serve: ## Serve static files
 	#Uncomment the command below to serve with Go
 	#go run cmd/server/main.go --dir web/
 
-.PHONY: versions
-versions: ## Update the web/assets/versions.json file
-	yq -i -ojson '.cel-go = "$(CEL_GO_VERSION)"' web/assets/versions.json
+.PHONY: update-data
+update-data: ## Update the web/assets/data.json file
+	yq -ojson '.' examples.yaml > web/assets/data.json
+	yq -ojson -i '.versions.cel-go = "$(CEL_GO_VERSION)"' web/assets/data.json
 
 .PHONY: addlicense
 addlicense: ## Add copyright license headers in source code files.
@@ -47,7 +48,7 @@ checklicense: ## Check copyright license headers in source code files.
 ##@ Build
 
 .PHONY: build
-build: fmt versions ## Build WASM
+build: fmt update-data ## Build WASM
 	GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o web/main.wasm cmd/wasm/main.go
 	gzip --best -f web/main.wasm
 
