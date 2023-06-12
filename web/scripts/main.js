@@ -1,5 +1,10 @@
 import { AceEditor } from "./editor.js";
-import { EDITOR_ELEMENTS, EXAMPLES, SAMPLE_DATA, WASM_URL } from "./constants.js";
+import {
+  EDITOR_ELEMENTS,
+  EXAMPLES,
+  SAMPLE_DATA,
+  WASM_URL,
+} from "./constants.js";
 
 // Add the following polyfill for Microsoft Edge 17/18 support:
 // <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
@@ -29,15 +34,26 @@ function run() {
   output.style.color = isError ? "red" : "white";
 }
 
-const go = new Go();
-WebAssembly.instantiateStreaming(fetch(WASM_URL), go.importObject)
-  .then((result) => {
-    go.run(result.instance);
-    document.getElementById("run").disabled = false;
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+(async function loadAndRunGoWasm() {
+  const go = new Go();
+
+  const buffer = pako.ungzip(await (await fetch("main.wasm.gz")).arrayBuffer());
+
+  // A fetched response might be decompressed twice on Firefox.
+  // See https://bugzilla.mozilla.org/show_bug.cgi?id=610679
+  if (buffer[0] === 0x1f && buffer[1] === 0x8b) {
+    buffer = pako.ungzip(buffer);
+  }
+
+  WebAssembly.instantiate(buffer, go.importObject)
+    .then((result) => {
+      go.run(result.instance);
+      document.getElementById("run").disabled = false;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+})();
 
 const runButton = document.getElementById("run");
 runButton.addEventListener("click", run);
