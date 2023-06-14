@@ -265,3 +265,14 @@ footer .version {
 .examples__button > #example-name {
     line-height: 24px;
 }
+
+.nice-select > span.current {
+    display: block;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nice-select .list {
+    max-height: none;
+}
