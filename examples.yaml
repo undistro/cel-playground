@@ -87,7 +87,7 @@ examples:
       
       // Pod or Containers must set `securityContext.runAsNonRoot`
       (
-        (has(podSpec.securityContext) && has(podSpec.securityContext.runAsNonRoot)) ||
+        (has(object.spec.template.spec.securityContext) && has(object.spec.template.spec.securityContext.runAsNonRoot)) ||
         object.spec.template.spec.containers.all(container,
           has(container.securityContext) && has(container.securityContext.runAsNonRoot)
         )
@@ -96,7 +96,7 @@ examples:
       
       // Neither Pod nor Containers should set `securityContext.runAsNonRoot` to false
       (
-        (!has(podSpec.securityContext) || !has(podSpec.securityContext.runAsNonRoot) || podSpec.securityContext.runAsNonRoot != false)
+        (!has(object.spec.template.spec.securityContext) || !has(object.spec.template.spec.securityContext.runAsNonRoot) || object.spec.template.spec.securityContext.runAsNonRoot != false)
         &&
         object.spec.template.spec.containers.all(container,
           !has(container.securityContext) || !has(container.securityContext.runAsNonRoot) || container.securityContext.runAsNonRoot != false
