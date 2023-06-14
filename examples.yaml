@@ -220,3 +220,7 @@ examples:
           "href": "https://user:pass@example.com:80/path?query=val#fragment"
         }
       }
+
+  - name: "Optional"
+    cel: 'object.?foo.orValue("fallback")'
+    data: "object: {}"

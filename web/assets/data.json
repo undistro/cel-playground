@@ -29,6 +29,11 @@
       "name": "URLs",
       "cel": "// Examples of Kubernetes URL CEL library that is available in the playground.\n// https://kubernetes.io/docs/reference/using-api/cel/#kubernetes-url-library\n\nisURL(object.href) \n&& url(object.href).getScheme() == 'https' \n&& url(object.href).getHost() == 'example.com:80'\n&& url(object.href).getHostname() == 'example.com'\n&& url(object.href).getPort() == '80'\n&& url(object.href).getEscapedPath() == '/path'\n&& url(object.href).getQuery().size() == 1\n",
       "data": "{\n  \"object\": {\n    \"href\": \"https://user:pass@example.com:80/path?query=val#fragment\"\n  }\n}\n"
+    },
+    {
+      "name": "Optional",
+      "cel": "object.?foo.orValue(\"fallback\")",
+      "data": "object: {}"
     }
   ],
   "versions": {

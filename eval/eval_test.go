@@ -60,7 +60,7 @@ func TestEval(t *testing.T) {
 		},
 		{
 			name: "optional",
-			exp:  "object[?'foo'].orValue('fallback')",
+			exp:  "object.?foo.orValue(\"fallback\")",
 			want: "\"fallback\"",
 		},
 		{
