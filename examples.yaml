@@ -172,3 +172,66 @@ examples:
           selector:
             matchLabels:
               app: nginx
+
+  - name: "Kubernetes: Semantic version check for image tags (Regex)"
+    cel: |
+      // Checks if the container images are tagged following the semantic version.
+
+      object.spec.containers.all(container,
+        container.image.contains("@sha256") || // allow digest
+        container.image.lastIndexOf(":") > -1 &&
+        container.image.substring(container.image.lastIndexOf(":") + 1)
+          .matches('^v?(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$')
+        // the regex above is suggested by semver.org: https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+        // allowing the "v" prefix
+      )
+    data: |
+      object:
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: nginx
+          labels:
+            app: nginx
+        spec:
+          containers:
+            - name: ok1
+              image: registry.com:80/nginx:v1.2.3-rc.1
+            - name: ok2
+              image: registry.com:80/nginx@sha256:asdf
+            - name: wrong
+              image: registry.com:80/nginx:latest  # comment the wrong container to test a success scenario
+
+  - name: "URLs"
+    cel: |
+      // Examples of Kubernetes URL CEL library that is available in the playground.
+      // https://kubernetes.io/docs/reference/using-api/cel/#kubernetes-url-library
+
+      isURL(object.href) 
+      && url(object.href).getScheme() == 'https' 
+      && url(object.href).getHost() == 'example.com:80'
+      && url(object.href).getHostname() == 'example.com'
+      && url(object.href).getPort() == '80'
+      && url(object.href).getEscapedPath() == '/path'
+      && url(object.href).getQuery().size() == 1
+    data: |
+      {
+        "object": {
+          "href": "https://user:pass@example.com:80/path?query=val#fragment"
+        }
+      }
+
+  - name: "Optional"
+    cel: 'object.?foo.orValue("fallback")'
+    data: "object: {}"
+
+  - name: "Duration and timestamp"
+    cel: |
+      // Validate that 'expired' date is after a 'created' date plus a 'ttl' duration
+      has(object.expired) && 
+      timestamp(object.created) + duration(object.ttl) < timestamp(object.expired)
+    data: |
+      object:
+        created: "2023-06-14T02:00:14+00:00"
+        ttl: "5m"
+        expired: "2023-06-14T02:06:14+00:00"

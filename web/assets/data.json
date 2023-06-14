@@ -19,6 +19,26 @@
       "name": "Kubernetes: Drop ALL capabilities",
       "cel": "// According the Pod Security Standards, Containers must drop `ALL` capabilities, and are only permitted to add back the `NET_BIND_SERVICE` capability.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted\n\n// Containers must drop `ALL` capabilities,\nobject.spec.template.spec.containers.all(container,\n  has(container.securityContext) &&\n  has(container.securityContext.capabilities) &&\n  has(container.securityContext.capabilities.drop) &&\n  size(container.securityContext.capabilities.drop) >= 1 &&\n  container.securityContext.capabilities.drop.exists(c, c == 'ALL')\n)\n&&\n// and are only permitted to add back the `NET_BIND_SERVICE` capability\nobject.spec.template.spec.containers.all(container,\n  !has(container.securityContext) ||\n  !has(container.securityContext.capabilities) ||\n  !has(container.securityContext.capabilities.add) ||\n  container.securityContext.capabilities.add.all(cap, cap in params.allowedCapabilities)\n)\n",
       "data": "params:\n  allowedCapabilities: [NET_BIND_SERVICE]\nobject:\n  apiVersion: apps/v1\n  kind: Deployment\n  metadata:\n    name: nginx\n  spec:\n    template:\n      metadata:\n        name: nginx\n        labels:\n          app: nginx\n      spec:\n        containers:\n          - name: nginx\n            image: nginx\n            securityContext:\n              capabilities: # the expression looks for this object\n                drop: [ALL]\n                add: [NET_BIND_SERVICE]\n    selector:\n      matchLabels:\n        app: nginx\n"
+    },
+    {
+      "name": "Kubernetes: Semantic version check for image tags (Regex)",
+      "cel": "// Checks if the container images are tagged following the semantic version.\n\nobject.spec.containers.all(container,\n  container.image.contains(\"@sha256\") || // allow digest\n  container.image.lastIndexOf(\":\") > -1 &&\n  container.image.substring(container.image.lastIndexOf(\":\") + 1)\n    .matches('^v?(0|[1-9]\\\\d*)\\\\.(0|[1-9]\\\\d*)\\\\.(0|[1-9]\\\\d*)(?:-((?:0|[1-9]\\\\d*|\\\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\\\.(?:0|[1-9]\\\\d*|\\\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\\\+([0-9a-zA-Z-]+(?:\\\\.[0-9a-zA-Z-]+)*))?$')\n  // the regex above is suggested by semver.org: https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string\n  // allowing the \"v\" prefix\n)\n",
+      "data": "object:\n  apiVersion: v1\n  kind: Pod\n  metadata:\n    name: nginx\n    labels:\n      app: nginx\n  spec:\n    containers:\n      - name: ok1\n        image: registry.com:80/nginx:v1.2.3-rc.1\n      - name: ok2\n        image: registry.com:80/nginx@sha256:asdf\n      - name: wrong\n        image: registry.com:80/nginx:latest  # comment the wrong container to test a success scenario\n"
+    },
+    {
+      "name": "URLs",
+      "cel": "// Examples of Kubernetes URL CEL library that is available in the playground.\n// https://kubernetes.io/docs/reference/using-api/cel/#kubernetes-url-library\n\nisURL(object.href) \n&& url(object.href).getScheme() == 'https' \n&& url(object.href).getHost() == 'example.com:80'\n&& url(object.href).getHostname() == 'example.com'\n&& url(object.href).getPort() == '80'\n&& url(object.href).getEscapedPath() == '/path'\n&& url(object.href).getQuery().size() == 1\n",
+      "data": "{\n  \"object\": {\n    \"href\": \"https://user:pass@example.com:80/path?query=val#fragment\"\n  }\n}\n"
+    },
+    {
+      "name": "Optional",
+      "cel": "object.?foo.orValue(\"fallback\")",
+      "data": "object: {}"
+    },
+    {
+      "name": "Duration and timestamp",
+      "cel": "// Validate that 'expired' date is after a 'created' date plus a 'ttl' duration\nhas(object.expired) && \ntimestamp(object.created) + duration(object.ttl) < timestamp(object.expired)\n",
+      "data": "object:\n  created: \"2023-06-14T02:00:14+00:00\"\n  ttl: \"5m\"\n  expired: \"2023-06-14T02:06:14+00:00\"\n"
     }
   ],
   "versions": {
