@@ -42,7 +42,7 @@ const SAMPLE_DATA = `{
     }
 }`;
 
-const WASM_URL = "main.wasm.gz";
+const WASM_URL = "assets/main.wasm.gz";
 
 const EXAMPLES = [
   {
