@@ -20,13 +20,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>CEL Playground</title>
-	<link rel="stylesheet" type="text/css" href="assets/nice-select2.css">
-	<link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="stylesheet" type="text/css" href="dist/nice-select2.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
-	<script src="scripts/wasm_exec.js"></script>
+	<script src="dist/wasm_exec.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 </head>
 
@@ -38,7 +38,7 @@
 			<span>Quickly test Common Expression Language</span>
 		</div>
 		<a class="nav-link" href="https://github.com/undistro/cel-playground" target="_blank">
-			<img src="assets/github.svg" alt="GitHub" />
+			<img src="assets/img/github.svg" alt="GitHub" />
 			Visit our GitHub
 		</a>
 	</nav>
@@ -55,12 +55,6 @@
 					<select id="examples" class="right">
 						<option data-display="Examples" value="" disabled selected hidden>Examples</option>
 					</select>
-					<!-- <button id="examples" class="examples__button">
-						<span id="example-name">
-							Examples
-						</span>
-						<img src="assets/caret-down.svg" alt="Arrow" />
-					</button> -->
 				</div>
 				<div id="cel-input" class="editor__input">object.replicas > 1</div>
 			</div>
@@ -98,8 +92,8 @@
 		</span>
 	</footer>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
-	<script src="scripts/nice-select2.js"></script>
-	<script type="module" src="scripts/main.js"></script>
+	<script src="dist/nice-select2.js"></script>
+	<script type="module" src="assets/js/main.js"></script>
 </body>
 
 </html>
