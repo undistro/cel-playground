@@ -215,6 +215,23 @@ footer .version {
     background-color: #dcdcdc;
 }
 
+.ace-clouds .ace_comment {
+    color: #848484
+}
+
+.ace-clouds .ace_string,
+.ace-clouds .ace_keyword,
+.ace-clouds .ace_meta.ace_tag  {
+    color: #59328B;
+}
+
+
+.ace-clouds .ace_line,
+.ace-clouds .ace_constant.ace_numeric,
+.ace-clouds .ace_constant.ace_boolean {
+    color: #0E394C
+}
+
 .tippy-tooltip {
     background-color: white;
     color: #3E525B;
@@ -264,4 +281,15 @@ footer .version {
 
 .examples__button > #example-name {
     line-height: 24px;
+}
+
+.nice-select > span.current {
+    display: block;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nice-select .list {
+    max-height: none;
 }

@@ -38,19 +38,19 @@ update-data: ## Update the web/assets/data.json file.
 .PHONY: addlicense
 addlicense: ## Add copyright license headers in source code files.
 	@test -s $(LOCALBIN)/addlicense || GOBIN=$(LOCALBIN) go install github.com/google/addlicense@latest
-	$(LOCALBIN)/addlicense -c "Undistro Authors" -l "apache" -ignore ".github/**" -ignore ".idea/**" .
+	$(LOCALBIN)/addlicense -c "Undistro Authors" -l "apache" -ignore ".github/**" -ignore ".idea/**" -ignore "web/dist/**" .
 
 .PHONY: checklicense
 checklicense: ## Check copyright license headers in source code files.
 	@test -s $(LOCALBIN)/addlicense || GOBIN=$(LOCALBIN) go install github.com/google/addlicense@latest
-	$(LOCALBIN)/addlicense -c "Undistro Authors" -l "apache" -ignore ".github/**" -ignore ".idea/**" -check .
+	$(LOCALBIN)/addlicense -c "Undistro Authors" -l "apache" -ignore ".github/**" -ignore ".idea/**" -ignore "web/dist/**" -check .
 
 ##@ Build
 
 .PHONY: build
 build: fmt update-data ## Build the wasm binary.
-	GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o web/main.wasm cmd/wasm/main.go
-	gzip --best -f web/main.wasm
+	GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o web/assets/main.wasm cmd/wasm/main.go
+	gzip --best -f web/assets/main.wasm
 
 ## Location to install dependencies to
 LOCALBIN ?= $(shell pwd)/bin

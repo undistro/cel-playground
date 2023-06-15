@@ -42,34 +42,6 @@ const SAMPLE_DATA = `{
     }
 }`;
 
-const WASM_URL = "main.wasm.gz";
+const WASM_URL = "assets/main.wasm.gz";
 
-const EXAMPLES = [
-  {
-    name: "Not allowed hostPort",
-    src: "examples/example.cel",
-    data: "examples/example.yaml",
-  },
-  {
-    name: "Not allowed seccomp profile",
-    src: "examples/example.cel",
-    data: "examples/example.yaml",
-  },
-  {
-    name: "Privileged access to the Windows node",
-    src: "examples/example.cel",
-    data: "examples/example.yaml",
-  },
-  {
-    name: "Forbidden seccomp profile",
-    src: "examples/example.cel",
-    data: "examples/example.yaml",
-  },
-  {
-    name: "Automounted service account token",
-    src: "examples/example.cel",
-    data: "examples/example.yaml",
-  },
-];
-
-export { EDITOR_ELEMENTS, EDITOR_DEFAULTS, SAMPLE_DATA, WASM_URL, EXAMPLES};
+export { EDITOR_ELEMENTS, EDITOR_DEFAULTS, SAMPLE_DATA, WASM_URL};

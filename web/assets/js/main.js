@@ -17,10 +17,11 @@
 import { AceEditor } from "./editor.js";
 import {
   EDITOR_ELEMENTS,
-  EXAMPLES,
   SAMPLE_DATA,
   WASM_URL,
 } from "./constants.js";
+
+const selectInstance = NiceSelect.bind(document.getElementById("examples"));
 
 // Add the following polyfill for Microsoft Edge 17/18 support:
 // <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
@@ -65,6 +66,7 @@ function run() {
     .then((result) => {
       go.run(result.instance);
       document.getElementById("run").disabled = false;
+      document.getElementById("output").placeholder = "Press 'Run' to evaluate your CEL expression.";
     })
     .catch((err) => {
       console.error(err);
@@ -79,23 +81,32 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-const list = document.createElement("div");
+fetch("../assets/data.json")
+  .then((response) => response.json())
+  .then(({ examples, versions }) => {
 
-EXAMPLES.forEach((example) => {
-  const button = document.createElement("button");
-  button.classList.add("example-item");
-  button.innerText = example.name;
-  list.appendChild(button);
-});
+    // Dynamically set the CEL Go version
+    document.getElementById("version").innerText = versions["cel-go"];
 
-tippy("#examples", {
-  content: list.innerHTML,
-  triggerTarget: document.getElementById("examples"),
-  placement: "bottom-end",
-  trigger: "click",
-  animation: "shift-away",
-  interactive: true,
-  interactiveBorder: 10,
-  interactiveDebounce: 0,
-  aria: null,
-});
+    // Load the examples into the select element
+    const examplesList = document.getElementById("examples");
+    examples.forEach((example) => {
+      const option = document.createElement("option");
+      option.value = example.name;
+      option.innerText = example.name;
+      examplesList.appendChild(option);
+    });
+
+    selectInstance.update();
+
+    examplesList.addEventListener("change", (event) => {
+      const example = examples.find(
+        (example) => example.name === event.target.value
+      );
+      celEditor.setValue(example.cel, -1);
+      dataEditor.setValue(example.data, -1);
+    });
+  })
+  .catch((err) => {
+    console.error(err);
+  });
