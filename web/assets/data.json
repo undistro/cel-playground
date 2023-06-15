@@ -36,6 +36,11 @@
       "data": "{\n  \"object\": {\n    \"href\": \"https://user:pass@example.com:80/path?query=val#fragment\"\n  }\n}\n"
     },
     {
+      "name": "Check JWT custom claims",
+      "cel": "// Exercise provided in CEL-Go Google Codelab.\n// https://codelabs.developers.google.com/codelabs/cel-go/index.html#10\n// \n// Determine whether the jwt.extra_claims has at least one key that starts\n// with the group prefix, and ensure that all group-like keys have list\n// values containing only strings that end with '@acme.co'.\n\njwt.extra_claims.exists(c, c.startsWith('group'))\n&& jwt.extra_claims\n  .filter(c, c.startsWith('group'))\n      .all(c, jwt.extra_claims[c]\n          .all(g, g.endsWith('@acme.co')))\n",
+      "data": "jwt: {\n  \"iss\": \"auth.acme.com:12350\",\n  \"sub\": \"serviceAccount:delegate@acme.co\",\n  \"aud\": \"my-project\",\n  \"extra_claims\": {\n    \"group1\": [\n      \"admin@acme.co\",\n      \"analyst@acme.co\"\n    ],\n    \"groupN\": [\n      \"forever@acme.co\"\n    ],\n    \"labels\": [ \"metadata\", \"prod\", \"pii\" ]\n  }\n}\n"
+    },
+    {
       "name": "Optional",
       "cel": "object.?foo.orValue(\"fallback\")",
       "data": "object: {}"
