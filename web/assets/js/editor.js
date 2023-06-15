@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
-import { EDITOR_DEFAULTS } from "./constants.js";
+const EDITOR_DEFAULTS = {
+  "cel-input": {
+    theme: "ace/theme/clouds",
+    mode: "ace/mode/javascript",
+  },
+  "data-input": {
+    theme: "ace/theme/clouds",
+    mode: "ace/mode/yaml",
+  },
+};
 
 class AceEditor {
   constructor(id) {

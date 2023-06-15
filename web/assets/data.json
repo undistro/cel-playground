@@ -1,6 +1,11 @@
 {
   "examples": [
     {
+      "name": "default",
+      "cel": "// Welcome to the CEL Playground!\n// CEL Playground is an interactive WebAssembly powered environment to explore and experiment with the Common Expression Language (CEL).\n//\n// - Write your CEL expression here\n// - Use the area on the side for input data, in YAML or JSON format\n// - Press 'Run' to evaluate your CEL expression against the input data\n// - Explore our collection of examples for inspiration\n\naccount.balance >= transaction.withdrawal\n    || (account.overdraftProtection\n    && account.overdraftLimit >= transaction.withdrawal  - account.balance)\n",
+      "data": "# Here is the input data in YAML or JSON format.\n\naccount:\n  balance: 500\n  overdraftProtection: true\n  overdraftLimit: 1000\ntransaction:\n  withdrawal: 700\n"
+    },
+    {
       "name": "Kubernetes: Check image registry",
       "cel": "object.spec.template.spec.containers.all(container,\n  params.allowedRegistries.exists(registry,\n    ((registry in ['docker.io', 'docker.io/library']) && !container.image.contains('/')) ||\n    container.image.startsWith(registry)\n  )\n)\n",
       "data": "params:\n  allowedRegistries: \n    - myregistry.com\n    - docker.io # use 'docker.io' for Docker Hub\nobject:\n  apiVersion: apps/v1\n  kind: Deployment\n  metadata:\n    name: nginx\n  spec:\n    template:\n      metadata:\n        name: nginx\n        labels:\n          app: nginx\n      spec:\n        containers:\n          - name: nginx\n            image: nginx # the expression looks for this field\n    selector:\n      matchLabels:\n        app: nginx\n"
@@ -12,7 +17,7 @@
     },
     {
       "name": "Kubernetes: Require non-root containers",
-      "cel": "// According the Pod Security Standards, Containers must be required to run as non-root users.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted\n\n// Pod or Containers must set `securityContext.runAsNonRoot`\n(\n  (has(podSpec.securityContext) && has(podSpec.securityContext.runAsNonRoot)) ||\n  object.spec.template.spec.containers.all(container,\n    has(container.securityContext) && has(container.securityContext.runAsNonRoot)\n  )\n)\n&&\n\n// Neither Pod nor Containers should set `securityContext.runAsNonRoot` to false\n(\n  (!has(podSpec.securityContext) || !has(podSpec.securityContext.runAsNonRoot) || podSpec.securityContext.runAsNonRoot != false)\n  &&\n  object.spec.template.spec.containers.all(container,\n    !has(container.securityContext) || !has(container.securityContext.runAsNonRoot) || container.securityContext.runAsNonRoot != false\n  )\n)\n",
+      "cel": "// According the Pod Security Standards, Containers must be required to run as non-root users.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted\n\n// Pod or Containers must set `securityContext.runAsNonRoot`\n(\n  (has(object.spec.template.spec.securityContext) && has(object.spec.template.spec.securityContext.runAsNonRoot)) ||\n  object.spec.template.spec.containers.all(container,\n    has(container.securityContext) && has(container.securityContext.runAsNonRoot)\n  )\n)\n&&\n\n// Neither Pod nor Containers should set `securityContext.runAsNonRoot` to false\n(\n  (!has(object.spec.template.spec.securityContext) || !has(object.spec.template.spec.securityContext.runAsNonRoot) || object.spec.template.spec.securityContext.runAsNonRoot != false)\n  &&\n  object.spec.template.spec.containers.all(container,\n    !has(container.securityContext) || !has(container.securityContext.runAsNonRoot) || container.securityContext.runAsNonRoot != false\n  )\n)\n",
       "data": "object:\n  apiVersion: apps/v1\n  kind: Deployment\n  metadata:\n    name: nginx\n  spec:\n    template:\n      metadata:\n        name: nginx\n        labels:\n          app: nginx\n      spec:\n        securityContext:\n          runAsNonRoot: true # the expression looks for this field\n        containers:\n          - name: nginx\n            image: nginx\n            securityContext:\n              runAsNonRoot: false # and this one\n    selector:\n      matchLabels:\n        app: nginx\n"
     },
     {
@@ -29,6 +34,11 @@
       "name": "URLs",
       "cel": "// Examples of Kubernetes URL CEL library that is available in the playground.\n// https://kubernetes.io/docs/reference/using-api/cel/#kubernetes-url-library\n\nisURL(object.href) \n&& url(object.href).getScheme() == 'https' \n&& url(object.href).getHost() == 'example.com:80'\n&& url(object.href).getHostname() == 'example.com'\n&& url(object.href).getPort() == '80'\n&& url(object.href).getEscapedPath() == '/path'\n&& url(object.href).getQuery().size() == 1\n",
       "data": "{\n  \"object\": {\n    \"href\": \"https://user:pass@example.com:80/path?query=val#fragment\"\n  }\n}\n"
+    },
+    {
+      "name": "Check JWT custom claims",
+      "cel": "// Exercise provided in CEL-Go Google Codelab.\n// https://codelabs.developers.google.com/codelabs/cel-go/index.html#10\n// \n// Determine whether the jwt.extra_claims has at least one key that starts\n// with the group prefix, and ensure that all group-like keys have list\n// values containing only strings that end with '@acme.co'.\n\njwt.extra_claims.exists(c, c.startsWith('group'))\n&& jwt.extra_claims\n  .filter(c, c.startsWith('group'))\n      .all(c, jwt.extra_claims[c]\n          .all(g, g.endsWith('@acme.co')))\n",
+      "data": "jwt: {\n  \"iss\": \"auth.acme.com:12350\",\n  \"sub\": \"serviceAccount:delegate@acme.co\",\n  \"aud\": \"my-project\",\n  \"extra_claims\": {\n    \"group1\": [\n      \"admin@acme.co\",\n      \"analyst@acme.co\"\n    ],\n    \"groupN\": [\n      \"forever@acme.co\"\n    ],\n    \"labels\": [ \"metadata\", \"prod\", \"pii\" ]\n  }\n}\n"
     },
     {
       "name": "Optional",

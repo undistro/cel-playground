@@ -13,6 +13,30 @@
 # limitations under the License.
 
 examples:
+  - name: "default"
+    cel: |
+      // Welcome to the CEL Playground!
+      // CEL Playground is an interactive WebAssembly powered environment to explore and experiment with the Common Expression Language (CEL).
+      //
+      // - Write your CEL expression here
+      // - Use the area on the side for input data, in YAML or JSON format
+      // - Press 'Run' to evaluate your CEL expression against the input data
+      // - Explore our collection of examples for inspiration
+      
+      account.balance >= transaction.withdrawal
+          || (account.overdraftProtection
+          && account.overdraftLimit >= transaction.withdrawal  - account.balance)
+
+    data: |
+      # Here is the input data in YAML or JSON format.
+      
+      account:
+        balance: 500
+        overdraftProtection: true
+        overdraftLimit: 1000
+      transaction:
+        withdrawal: 700
+
   - name: "Kubernetes: Check image registry"
     cel: |
       object.spec.template.spec.containers.all(container,
@@ -218,6 +242,37 @@ examples:
       {
         "object": {
           "href": "https://user:pass@example.com:80/path?query=val#fragment"
+        }
+      }
+
+  - name: "Check JWT custom claims"
+    cel: |
+      // Exercise provided in CEL-Go Google Codelab.
+      // https://codelabs.developers.google.com/codelabs/cel-go/index.html#10
+      // 
+      // Determine whether the jwt.extra_claims has at least one key that starts
+      // with the group prefix, and ensure that all group-like keys have list
+      // values containing only strings that end with '@acme.co'.
+      
+      jwt.extra_claims.exists(c, c.startsWith('group'))
+      && jwt.extra_claims
+        .filter(c, c.startsWith('group'))
+            .all(c, jwt.extra_claims[c]
+                .all(g, g.endsWith('@acme.co')))
+    data: |
+      jwt: {
+        "iss": "auth.acme.com:12350",
+        "sub": "serviceAccount:delegate@acme.co",
+        "aud": "my-project",
+        "extra_claims": {
+          "group1": [
+            "admin@acme.co",
+            "analyst@acme.co"
+          ],
+          "groupN": [
+            "forever@acme.co"
+          ],
+          "labels": [ "metadata", "prod", "pii" ]
         }
       }
 
