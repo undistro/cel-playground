@@ -13,6 +13,30 @@
 # limitations under the License.
 
 examples:
+  - name: "default"
+    cel: |
+      // Welcome to the CEL Playground!
+      // CEL Playground is an interactive WebAssembly powered environment to explore and experiment with the Common Expression Language (CEL).
+      //
+      // - Write your CEL expression here
+      // - Use the area on the side for input data, in YAML or JSON format
+      // - Press 'Run' to evaluate your CEL expression against the input data
+      // - Explore our collection of examples for inspiration
+      
+      account.balance >= transaction.withdrawal
+          || (account.overdraftProtection
+          && account.overdraftLimit >= transaction.withdrawal  - account.balance)
+
+    data: |
+      # Here is the input data in YAML or JSON format.
+      
+      account:
+        balance: 500
+        overdraftProtection: true
+        overdraftLimit: 1000
+      transaction:
+        withdrawal: 700
+
   - name: "Kubernetes: Check image registry"
     cel: |
       object.spec.template.spec.containers.all(container,
