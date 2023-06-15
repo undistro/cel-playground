@@ -17,7 +17,6 @@
 import { AceEditor } from "./editor.js";
 import {
   EDITOR_ELEMENTS,
-  EXAMPLES,
   SAMPLE_DATA,
   WASM_URL,
 } from "./constants.js";
@@ -67,6 +66,7 @@ function run() {
     .then((result) => {
       go.run(result.instance);
       document.getElementById("run").disabled = false;
+      document.getElementById("output").placeholder = "Press 'Run' to evaluate your CEL expression.";
     })
     .catch((err) => {
       console.error(err);
