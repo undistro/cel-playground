@@ -15,11 +15,6 @@
  */
 
 import { AceEditor } from "./editor.js";
-import {
-  EDITOR_ELEMENTS,
-  SAMPLE_DATA,
-  WASM_URL,
-} from "./constants.js";
 
 const selectInstance = NiceSelect.bind(document.getElementById("examples"));
 
@@ -34,9 +29,8 @@ if (!WebAssembly.instantiateStreaming) {
   };
 }
 
-const [celEditor, dataEditor] = EDITOR_ELEMENTS.map((id) => new AceEditor(id));
-
-dataEditor.setValue(SAMPLE_DATA, -1);
+const celEditor = new AceEditor("cel-input");
+const dataEditor = new AceEditor("data-input");
 
 function run() {
   const data = dataEditor.getValue();
@@ -54,7 +48,7 @@ function run() {
 (async function loadAndRunGoWasm() {
   const go = new Go();
 
-  const buffer = pako.ungzip(await (await fetch(WASM_URL)).arrayBuffer());
+  const buffer = pako.ungzip(await (await fetch("assets/main.wasm.gz")).arrayBuffer());
 
   // A fetched response might be decompressed twice on Firefox.
   // See https://bugzilla.mozilla.org/show_bug.cgi?id=610679
@@ -94,7 +88,13 @@ fetch("../assets/data.json")
       const option = document.createElement("option");
       option.value = example.name;
       option.innerText = example.name;
-      examplesList.appendChild(option);
+
+      if (example.name === "default") {
+        celEditor.setValue(example.cel, -1);
+        dataEditor.setValue(example.data, -1);
+      } else {
+        examplesList.appendChild(option);
+      }
     });
 
     selectInstance.update();
