@@ -30,6 +30,10 @@ a {
     text-decoration: underline;
 }
 
+.logo {
+    height: 24px;
+}
+
 .navbar {
     overflow: hidden;
     background-color: white;
