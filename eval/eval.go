@@ -56,7 +56,7 @@ func Eval(exp string, input map[string]any) (string, error) {
 	}
 	prog, err := env.Program(ast, celProgramOptions...)
 	if err != nil {
-		return "", fmt.Errorf("failed to intantiate CEL program: %w", err)
+		return "", fmt.Errorf("failed to instantiate CEL program: %w", err)
 	}
 	val, _, err := prog.Eval(input)
 	if err != nil {
