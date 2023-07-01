@@ -15,16 +15,17 @@
 package eval
 
 import (
-	"encoding/json"
 	"fmt"
+	"reflect"
 
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/ext"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/structpb"
 	k8s "k8s.io/apiserver/pkg/cel/library"
 )
 
 var celEnvOptions = []cel.EnvOption{
-	cel.HomogeneousAggregateLiterals(),
 	cel.EagerlyValidateDeclarations(true),
 	cel.DefaultUTCTimeZone(true),
 	ext.Strings(ext.StringsVersion(2)),
@@ -61,9 +62,10 @@ func Eval(exp string, input map[string]any) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to evaluate: %w", err)
 	}
-	b, err := json.MarshalIndent(val.Value(), "", "  ")
+	jsonData, err := val.ConvertToNative(reflect.TypeOf(&structpb.Value{}))
 	if err != nil {
 		return "", fmt.Errorf("failed to marshal the output: %w", err)
 	}
+	b := protojson.Format(jsonData.(*structpb.Value))
 	return string(b), nil
 }
