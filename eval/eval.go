@@ -66,6 +66,6 @@ func Eval(exp string, input map[string]any) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to marshal the output: %w", err)
 	}
-	b := protojson.Format(jsonData.(*structpb.Value))
-	return string(b), nil
+	out := protojson.Format(jsonData.(*structpb.Value))
+	return out, nil
 }
