@@ -14,7 +14,10 @@
 
 package eval
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 var input = map[string]any{
 	"object": map[string]any{
@@ -49,9 +52,14 @@ func TestEval(t *testing.T) {
 			want: "true",
 		},
 		{
+			name: "query",
+			exp:  "url(object.href).getQuery()",
+			want: `{"query": ["val"]}`,
+		},
+		{
 			name: "regex",
 			exp:  "object.image.find('v[0-9]+.[0-9]+.[0-9]*$')",
-			want: "\"v0.0.0\"",
+			want: `"v0.0.0"`,
 		},
 		{
 			name: "list",
@@ -60,13 +68,13 @@ func TestEval(t *testing.T) {
 		},
 		{
 			name: "optional",
-			exp:  "object.?foo.orValue(\"fallback\")",
-			want: "\"fallback\"",
+			exp:  `object.?foo.orValue("fallback")`,
+			want: `"fallback"`,
 		},
 		{
 			name: "strings",
 			exp:  "object.abc.join(', ')",
-			want: "\"a, b, c\"",
+			want: `"a, b, c"`,
 		},
 		{
 			name: "cross type numeric comparisons",
@@ -86,9 +94,16 @@ func TestEval(t *testing.T) {
 				t.Errorf("Eval() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got != tt.want {
+			if stripWhitespace(got) != stripWhitespace(tt.want) {
 				t.Errorf("Eval() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+func stripWhitespace(a string) string {
+	a = strings.ReplaceAll(a, " ", "")
+	a = strings.ReplaceAll(a, "\n", "")
+	a = strings.ReplaceAll(a, "\t", "")
+	return strings.ReplaceAll(a, "\r", "")
 }
