@@ -63,6 +63,8 @@ function share() {
 
   const url = new URL(window.location.href);
   url.searchParams.set("content", b64encoded_string);
+  window.history.pushState({}, "", url.toString());
+
   document.querySelector(".share-url__container").style.display = "flex";
   document.querySelector(".share-url__input").value = url.toString();
 }
