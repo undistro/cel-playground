@@ -72,18 +72,25 @@ function share() {
 var urlParams = new URLSearchParams(window.location.search);
 if (urlParams.has("content")) {
   const content = urlParams.get("content");
-  const decodedUint8Array = new Uint8Array(
-    atob(content)
-      .split("")
-      .map(function (char) {
-        return char.charCodeAt(0);
-      })
-  );
+  try {
+    const decodedUint8Array = new Uint8Array(
+      atob(content)
+        .split("")
+        .map(function (char) {
+          return char.charCodeAt(0);
+        })
+    );
 
-  const decompressedData = pako.ungzip(decodedUint8Array, { to: "string" });
-  const obj = JSON.parse(decompressedData);
-  celEditor.setValue(obj.expression, -1);
-  dataEditor.setValue(obj.data, -1);
+    const decompressedData = pako.ungzip(decodedUint8Array, { to: "string" });
+    if (!decompressedData) {
+      throw new Error("Invalid content parameter");
+    }
+    const obj = JSON.parse(decompressedData);
+    celEditor.setValue(obj.expression, -1);
+    dataEditor.setValue(obj.data, -1);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function copy() {
