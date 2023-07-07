@@ -153,9 +153,11 @@ fetch("../assets/data.json")
       option.value = example.name;
       option.innerText = example.name;
 
-      if (example.name === "default" && !urlParams.has("content")) {
-        celEditor.setValue(example.cel, -1);
-        dataEditor.setValue(example.data, -1);
+      if (example.name === "default") {
+        if (!urlParams.has("content")) {
+          celEditor.setValue(example.cel, -1);
+          dataEditor.setValue(example.data, -1);
+        }
       } else {
         examplesList.appendChild(option);
       }
