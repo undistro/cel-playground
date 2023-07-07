@@ -45,10 +45,74 @@ function run() {
   output.style.color = isError ? "red" : "white";
 }
 
+
+function share() {
+  const data = dataEditor.getValue();
+  const expression = celEditor.getValue();
+
+  const obj = {
+    data: data,
+    expression: expression,
+  };
+
+  const str = JSON.stringify(obj);
+  var compressed_uint8array = pako.gzip(str);
+  var b64encoded_string = btoa(
+    String.fromCharCode.apply(null, compressed_uint8array)
+  );
+
+  const url = new URL(window.location.href);
+  url.searchParams.set("content", b64encoded_string);
+  window.history.pushState({}, "", url.toString());
+
+  document.querySelector(".share-url__container").style.display = "flex";
+  document.querySelector(".share-url__input").value = url.toString();
+}
+
+var urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has("content")) {
+  const content = urlParams.get("content");
+  try {
+    const decodedUint8Array = new Uint8Array(
+      atob(content)
+        .split("")
+        .map(function (char) {
+          return char.charCodeAt(0);
+        })
+    );
+
+    const decompressedData = pako.ungzip(decodedUint8Array, { to: "string" });
+    if (!decompressedData) {
+      throw new Error("Invalid content parameter");
+    }
+    const obj = JSON.parse(decompressedData);
+    celEditor.setValue(obj.expression, -1);
+    dataEditor.setValue(obj.data, -1);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function copy() {
+  const copyText = document.querySelector(".share-url__input");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(copyText.value);
+  window.getSelection().removeAllRanges();
+
+  const tooltip = document.querySelector(".share-url__tooltip");
+  tooltip.style.opacity = 1;
+  setTimeout(() => {
+    tooltip.style.opacity = 0;
+  }, 3000);
+}
+
 (async function loadAndRunGoWasm() {
   const go = new Go();
 
-  const buffer = pako.ungzip(await (await fetch("assets/main.wasm.gz")).arrayBuffer());
+  const buffer = pako.ungzip(
+    await (await fetch("assets/main.wasm.gz")).arrayBuffer()
+  );
 
   // A fetched response might be decompressed twice on Firefox.
   // See https://bugzilla.mozilla.org/show_bug.cgi?id=610679
@@ -60,7 +124,8 @@ function run() {
     .then((result) => {
       go.run(result.instance);
       document.getElementById("run").disabled = false;
-      document.getElementById("output").placeholder = "Press 'Run' to evaluate your CEL expression.";
+      document.getElementById("output").placeholder =
+        "Press 'Run' to evaluate your CEL expression.";
     })
     .catch((err) => {
       console.error(err);
@@ -68,12 +133,18 @@ function run() {
 })();
 
 const runButton = document.getElementById("run");
+const shareButton = document.getElementById("share");
+const copyButton = document.getElementById("copy");
+
 runButton.addEventListener("click", run);
+shareButton.addEventListener("click", share);
+copyButton.addEventListener("click", copy);
 document.addEventListener("keydown", (event) => {
   if ((event.ctrlKey || event.metaKey) && event.code === "Enter") {
     run();
   }
 });
+
 
 fetch("../assets/data.json")
   .then((response) => response.json())
@@ -90,8 +161,10 @@ fetch("../assets/data.json")
       option.innerText = example.name;
 
       if (example.name === "default") {
-        celEditor.setValue(example.cel, -1);
-        dataEditor.setValue(example.data, -1);
+        if (!urlParams.has("content")) {
+          celEditor.setValue(example.cel, -1);
+          dataEditor.setValue(example.data, -1);
+        }
       } else {
         examplesList.appendChild(option);
       }
