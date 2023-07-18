@@ -12,40 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//go:build js && wasm
-
 package main
 
 import (
-	"errors"
 	"fmt"
-	"syscall/js"
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/undistro/cel-playground/eval"
+	evalcel "github.com/undistro/cel-playground/eval"
 )
 
 func main() {
-	evalFunc := js.FuncOf(evalWrapper)
-	js.Global().Set("eval", evalFunc)
-	defer evalFunc.Release()
-	<-make(chan bool)
 }
 
-// evalWrapper wraps the eval function with `syscall/js` parameters
-func evalWrapper(_ js.Value, args []js.Value) any {
-	if len(args) < 2 {
-		return response("", errors.New("invalid arguments"))
-	}
-	exp := args[0].String()
-	is := args[1].String()
-
+// export eval
+func eval(exp, is string) any {
 	var input map[string]any
 	if err := yaml.Unmarshal([]byte(is), &input); err != nil {
 		return response("", fmt.Errorf("failed to decode input: %w", err))
 	}
-	output, err := eval.Eval(exp, input)
+	output, err := evalcel.Eval(exp, input)
 	if err != nil {
 		return response("", err)
 	}

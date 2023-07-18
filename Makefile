@@ -52,6 +52,13 @@ build: fmt update-data ## Build the wasm binary.
 	GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o web/assets/main.wasm cmd/wasm/main.go
 	gzip --best -f web/assets/main.wasm
 
+MODULE ?= $(shell go list -m)
+.PHONY: tinygo-build
+tinygo-build:
+	docker run --rm -v $$(pwd):/go/src/$(MODULE) tinygo/tinygo:0.28.1 /bin/bash -c "\
+		cd /go/src/$(MODULE) && \
+    	tinygo build -o ./web/assets/main.wasm -target wasm -tags=osusergo --no-debug ./cmd/wasm/main.go"
+
 ## Location to install dependencies to
 LOCALBIN ?= $(shell pwd)/bin
 $(LOCALBIN):
