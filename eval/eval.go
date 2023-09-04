@@ -34,6 +34,7 @@ var celEnvOptions = []cel.EnvOption{
 	k8s.URLs(),
 	k8s.Regex(),
 	k8s.Lists(),
+	k8s.Quantity(),
 }
 
 var celProgramOptions = []cel.ProgramOption{
