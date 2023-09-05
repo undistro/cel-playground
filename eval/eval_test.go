@@ -26,6 +26,7 @@ var input = map[string]any{
 		"image":    "registry.com/image:v0.0.0",
 		"items":    []int{1, 2, 3},
 		"abc":      []string{"a", "b", "c"},
+		"memory":   "1.3G",
 	},
 }
 
@@ -84,6 +85,11 @@ func TestEval(t *testing.T) {
 		{
 			name: "split",
 			exp:  "object.image.split(':').size() == 2",
+			want: "true",
+		},
+		{
+			name: "quantity",
+			exp:  `isQuantity(object.memory) && quantity(object.memory).add(quantity("700M")).sub(1).isLessThan(quantity("2G"))`,
 			want: "true",
 		},
 	}
