@@ -198,7 +198,7 @@ a {
     flex-direction: column;
     border-radius: 8px;
     border: 1px solid #E3E3E3;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .editor__header {
@@ -376,5 +376,22 @@ footer .version {
 }
 
 .nice-select .list {
-    max-height: none;
+    max-height: 50vh;
+    overflow-y: scroll;
+    padding-bottom: 0 !important;
+    margin: 0;
+}
+
+.nice-select .list::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+.nice-select .list::-webkit-scrollbar-track {
+    background: #F5F5F5;
+}
+
+.nice-select .list::-webkit-scrollbar-thumb {
+    background: #E3E3E3;
+    border-radius: 4px;
 }
