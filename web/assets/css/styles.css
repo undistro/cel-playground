@@ -21,6 +21,10 @@ body {
     background-color: #FCFCFC;
 }
 
+body.dark {
+    background-color: #0f0f0f;
+}
+
 main {
     padding: 24px;
 }
@@ -43,6 +47,10 @@ a {
     border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
+.dark .navbar{
+    background-color: black;
+}
+
 .navbar .title {
     color: #243942;
     font-weight: 500;
@@ -53,6 +61,10 @@ a {
     width: 1px;
     height: 1rem;
     background: rgba(0, 0, 0, 0.12);
+}
+
+.dark .navbar .divider {
+    background-color: rgba(255, 255, 255, 0.88);
 }
 
 .navbar .logo {
@@ -74,6 +86,10 @@ a {
     font-size: 16px;
     letter-spacing: 0.01em;
     color: rgba(0, 0, 0, 0.5);
+}
+
+.dark>.navbar span {
+    color: rgb(180, 180, 180)
 }
 
 .nav-links {
@@ -99,6 +115,10 @@ a {
     height: 24px;
     border-radius: 2px;
     background: rgba(0, 0, 0, 0.16);
+}
+
+.dark .nav-divider{
+    background-color: rgba(255, 255, 255, 0.88);
 }
 
 .share-url__container {
@@ -170,6 +190,10 @@ a {
     color: #8447D1;
 }
 
+.dark .nav-link{
+    background-color: rgba(132, 71, 209, 0.25);
+}
+
 /* Containers */
 .editor-container {
     display: flex;
@@ -216,12 +240,19 @@ a {
     line-height: 40px;
 }
 
+.dark .editor__header .title {
+    color: #e7f8ff;
+}
+
 .editor__header .description {
     color: #5D7B89;
     font-weight: normal;
     font-size: 14px;
 }
 
+.dark .editor__header .description {
+    color: #92dcff;
+}
 .editor>.editor__input {
     height: 100%;
     font-size: 14px;
@@ -273,6 +304,9 @@ a {
     background: #8B8692;
 }
 
+.toggle-theme{
+    cursor: pointer;
+}
 
 /* Footer */
 
@@ -284,10 +318,18 @@ footer {
     font-size: 14px;
 }
 
+.dark footer {
+    color: rgba(255, 255, 255, 0.5);
+}
+
 footer .version {
     padding: 4px 8px;
     background: #EBEBEB;
     border-radius: 4px;
+}
+
+.dark footer .version{
+    background-color: #2c2c2c;
 }
 
 /* Ace Custom */

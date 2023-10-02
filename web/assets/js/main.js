@@ -45,6 +45,24 @@ function run() {
   output.style.color = isError ? "red" : "white";
 }
 
+const toggleBtn = document.getElementsByClassName("toggle-theme")[0];
+toggleBtn.addEventListener('click', function toggleMode() {
+  let toggleIcon = document.getElementsByClassName("toggle-theme__icon")[0];
+  let currTheme = document.body.classList.toggle('dark');
+  let celLogo = document.getElementsByClassName("cel-logo")[0];
+  if (currTheme) {
+    toggleIcon.src = "./assets/img/sun.svg";
+    celEditor.editor.setTheme("ace/theme/idle_fingers")
+    dataEditor.editor.setTheme("ace/theme/idle_fingers")
+    celLogo.src = "./assets/img/logo-dark.svg";
+  }
+  else {
+    toggleIcon.src = "./assets/img/moon.svg";
+    celEditor.editor.setTheme("ace/theme/clouds")
+    dataEditor.editor.setTheme("ace/theme/clouds")
+    celLogo.src = "./assets/img/logo.svg";
+  }
+})
 
 function share() {
   const data = dataEditor.getValue();
