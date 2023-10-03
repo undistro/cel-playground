@@ -35,7 +35,7 @@ function getRunValues() {
 
   const exprEditor = new AceEditor(currentMode);
   let values = {
-    expression: exprEditor.getValue(),
+    [currentMode]: exprEditor.getValue(),
   };
 
   document.querySelectorAll(".editor__input.data__input").forEach((editor) => {
@@ -56,17 +56,19 @@ function run() {
   output.value = "Evaluating...";
   setCost("");
   console.log({ values: getRunValues() });
-  const result = eval(values);
+  const mode = localStorage.getItem(localStorageModeKey) ?? "cel"
+  const result = eval(mode, values);
+
+  console.log({ result: result });
 
   const { output: resultOutput, isError } = result;
-
   if (isError) {
     output.value = resultOutput;
     output.style.color = "red";
   } else {
-    output.value = JSON.stringify(result);
+    const obj = JSON.parse(resultOutput);
+    output.value = JSON.stringify(obj, null, 2);
     output.style.color = "white";
-    setCost(cost);
   }
 }
 
@@ -108,7 +110,8 @@ if (urlParams.has("content")) {
     }
     const obj = JSON.parse(decompressedData);
     localStorage.setItem(localStorageModeKey, obj.mode);
-    new AceEditor(obj.mode).setValue(obj.expression, -1);
+    new AceEditor(obj.mode).setValue(obj[obj.mode], -1);
+
     document
       .querySelectorAll(".editor__input.data__input")
       .forEach((editor) => {

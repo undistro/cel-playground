@@ -25,6 +25,7 @@ import (
 	"github.com/google/cel-go/ext"
 	"github.com/google/cel-go/interpreter"
 	"google.golang.org/protobuf/types/known/structpb"
+	"gopkg.in/yaml.v2"
 	k8s "k8s.io/apiserver/pkg/cel/library"
 )
 
@@ -74,6 +75,14 @@ var celProgramOptions = []cel.ProgramOption{
 	// cel-go v0.17.7 introduced CostTrackerOptions.
 	// Previous the presence has a cost of 0 but cel fixed it to 1. We still set to 0 here to avoid breaking changes.
 	cel.CostTrackerOptions(interpreter.PresenceTestHasCost(false)),
+}
+
+func CelEval(exp []byte, input []byte) (string, error) {
+	var inputMap map[string]any
+	if err := yaml.Unmarshal(input, &inputMap); err != nil {
+		return "", fmt.Errorf("failed to decode input: %w", err)
+	}
+	return Eval(string(exp), inputMap)
 }
 
 // Eval evaluates the cel expression against the given input

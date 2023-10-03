@@ -1,0 +1,349 @@
+# Copyright 2023 Undistro Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+examples:
+  - name: "Simple Validation"
+    vap: |
+      apiVersion: admissionregistration.k8s.io/v1alpha1
+      kind: ValidatingAdmissionPolicy
+      metadata:
+        name: "force-ha-in-prod"
+      spec:
+        failurePolicy: Fail
+        matchConstraints:
+          resourceRules:
+          - apiGroups:   ["apps"]
+            apiVersions: ["v1"]
+            operations:  ["CREATE", "UPDATE"]
+            resources:   ["deployments"]
+        validations:
+          - expression: "object.spec.replicas >= 3"
+            message: "All production deployments should be HA with at least three replicas"
+
+    dataOriginal: |
+
+    dataUpdated: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        labels:
+          app: kubernetes-bootcamp
+        name: kubernetes-bootcamp
+        namespace: default
+      spec:
+        progressDeadlineSeconds: 600
+        replicas: 3
+        revisionHistoryLimit: 10
+        selector:
+          matchLabels:
+            app: kubernetes-bootcamp
+        strategy:
+          rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+          type: RollingUpdate
+        template:
+          metadata:
+            creationTimestamp: null
+            labels:
+              app: kubernetes-bootcamp
+          spec:
+            containers:
+            - image: gcr.io/google-samples/kubernetes-bootcamp:v1
+              imagePullPolicy: IfNotPresent
+              name: kubernetes-bootcamp
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+
+    dataNamespace: |
+
+    dataRequest: |
+
+    dataAuthorizer: |
+
+    category: "Validation"
+
+  - name: "Variables in Validation"
+    vap: |
+      apiVersion: admissionregistration.k8s.io/v1beta1
+      kind: ValidatingAdmissionPolicy
+      metadata:
+        name: "image-matches-namespace-environment.policy.example.com"
+      spec:
+        failurePolicy: Fail
+        matchConstraints:
+          resourceRules:
+          - apiGroups:   ["apps"]
+            apiVersions: ["v1"]
+            operations:  ["CREATE", "UPDATE"]
+            resources:   ["deployments"]
+        variables:
+        - name: environment
+          expression: "'environment' in namespaceObject.metadata.labels ? namespaceObject.metadata.labels['environment'] : 'prod'"
+        - name: exempt
+          expression: "'exempt' in object.metadata.labels && object.metadata.labels['exempt'] == true"
+        - name: containers
+          expression: "object.spec.template.spec.containers"
+        - name: containersToCheck
+          expression: "variables.containers.filter(c, c.image.contains('example.com/'))"
+        validations:
+        - expression: "variables.exempt || variables.containersToCheck.all(c, c.image.startsWith(variables.environment + '.'))"
+          messageExpression: "'only ' + variables.environment + ' images are allowed in namespace ' + namespaceObject.metadata.name"
+
+    dataOriginal: |
+
+    dataUpdated: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        labels:
+          app: kubernetes-bootcamp
+          exempt: false
+        name: kubernetes-bootcamp
+        namespace: default
+      spec:
+        progressDeadlineSeconds: 600
+        replicas: 3
+        revisionHistoryLimit: 10
+        selector:
+          matchLabels:
+            app: kubernetes-bootcamp
+        strategy:
+          rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+          type: RollingUpdate
+        template:
+          metadata:
+            creationTimestamp: null
+            labels:
+              app: kubernetes-bootcamp
+          spec:
+            containers:
+            - image: prod.policy.example.com/google-samples/kubernetes-bootcamp:v1
+              imagePullPolicy: IfNotPresent
+              name: kubernetes-bootcamp
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+
+    dataNamespace: |
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        creationTimestamp: "2023-03-10T13:50:03Z"
+        labels:
+          kubernetes.io/metadata.name: default
+          environment: prod
+        name: default
+        resourceVersion: "5932"
+        uid: 01d428dd-9515-4e9c-98a3-d8a278ee0125
+      spec:
+        finalizers:
+        - kubernetes
+      status:
+        phase: Active
+
+    dataRequest: |
+
+    dataAuthorizer: |
+
+    category: "Validation"
+
+  - name: "Match Conditions"
+    vap: |
+      apiVersion: admissionregistration.k8s.io/v1alpha1
+      kind: ValidatingAdmissionPolicy
+      metadata:
+        name: "demo-policy.example.com"
+      spec:
+        failurePolicy: Fail
+        matchConstraints:
+          resourceRules:
+            - apiGroups:   ["*"]
+              apiVersions: ["*"]
+              operations:  ["CREATE", "UPDATE"]
+              resources:   ["*"]
+        matchConditions:
+          - name: 'exclude-leases' # Each match condition must have a unique name
+            expression: '!(request.resource.group == "coordination.k8s.io" && request.resource.resource == "leases")' # Match non-lease resources.
+          - name: 'exclude-kubelet-requests'
+            expression: '!("system:nodes" in request.userInfo.groups)' # Match requests made by non-node users.
+        validations:
+          - expression: "!object.metadata.name.contains('demo') || object.metadata.namespace == 'demo'"
+
+    dataOriginal: |
+
+    dataUpdated: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        labels:
+          app: kubernetes-bootcamp
+          environment: prod
+          exempt: false
+        name: kubernetes-bootcamp
+        namespace: default
+      spec:
+        progressDeadlineSeconds: 600
+        replicas: 3
+        revisionHistoryLimit: 10
+        selector:
+          matchLabels:
+            app: kubernetes-bootcamp
+        strategy:
+          rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+          type: RollingUpdate
+        template:
+          metadata:
+            creationTimestamp: null
+            labels:
+              app: kubernetes-bootcamp
+          spec:
+            containers:
+            - image: prod.registry.io/google-samples/kubernetes-bootcamp:v1
+              imagePullPolicy: IfNotPresent
+              name: kubernetes-bootcamp
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+
+    dataNamespace: |
+
+    dataRequest: |
+      uid: 705ab4f5-6393-11e8-b7cc-42010a800002
+      kind:
+        group: apps
+        version: v1
+        resource: deployments
+      resource:
+        group: apps
+        version: v1
+        resource: deployments
+      requestKind:
+        group: apps
+        version: v1
+        resource: deployments
+      requestResource:
+        group: apps
+        version: v1
+        resource: deployments
+      name: kubernetes-bootcamp
+      namespace: default
+      operation: CREATE
+      userInfo:
+        username: admin
+        uid: 014fbff9a07c
+        groups:
+          - system:authenticated
+          - my-admin-group
+        extra:
+          some-key:
+            - some-value1
+            - some-value2
+
+    dataAuthorizer: |
+
+    category: "Conditions"
+
+  - name: "Audit Annotations"
+    vap: |
+      apiVersion: admissionregistration.k8s.io/v1alpha1
+      kind: ValidatingAdmissionPolicy
+      metadata:
+        name: "demo-policy.example.com"
+      spec:
+        failurePolicy: Fail
+        matchConstraints:
+          resourceRules:
+          - apiGroups:   ["apps"]
+            apiVersions: ["v1"]
+            operations:  ["CREATE", "UPDATE"]
+            resources:   ["deployments"]
+        validations:
+          - expression: "object.spec.replicas > 50"
+            messageExpression: "'Deployment spec.replicas set to ' + string(object.spec.replicas)"
+        auditAnnotations:
+          - key: "high-replica-count"
+            valueExpression: "'Deployment spec.replicas set to ' + string(object.spec.replicas)"
+
+    dataOriginal: |
+
+    dataUpdated: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        labels:
+          app: kubernetes-bootcamp
+          environment: prod
+          exempt: false
+        name: kubernetes-bootcamp
+        namespace: default
+      spec:
+        progressDeadlineSeconds: 600
+        replicas: 3
+        revisionHistoryLimit: 10
+        selector:
+          matchLabels:
+            app: kubernetes-bootcamp
+        strategy:
+          rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+          type: RollingUpdate
+        template:
+          metadata:
+            creationTimestamp: null
+            labels:
+              app: kubernetes-bootcamp
+          spec:
+            containers:
+            - image: prod.registry.io/google-samples/kubernetes-bootcamp:v1
+              imagePullPolicy: IfNotPresent
+              name: kubernetes-bootcamp
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+
+    dataNamespace: |
+
+    dataRequest: |
+
+    dataAuthorizer: |
+
+    category: "Audit"
+
