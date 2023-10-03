@@ -33,7 +33,9 @@ serve: ## Serve static files.
 .PHONY: update-data
 update-data: ## Update the web/assets/data.json file.
 	yq -ojson '.' examples.yaml > web/assets/data.json
+	yq -ojson '.' validating_examples.yaml > web/assets/validating_data.json
 	yq -ojson -i '.versions.cel-go = "$(CEL_GO_VERSION)"' web/assets/data.json
+	yq -ojson -i '.versions.cel-go = "$(CEL_GO_VERSION)"' web/assets/validating_data.json
 
 .PHONY: addlicense
 addlicense: ## Add copyright license headers in source code files.

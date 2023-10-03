@@ -23,6 +23,18 @@ const EDITOR_DEFAULTS = {
     theme: "ace/theme/clouds",
     mode: "ace/mode/yaml",
   },
+  "vap-input": {
+    theme: "ace/theme/clouds",
+    mode: "ace/mode/javascript",
+  },
+  "data-input-original": {
+    theme: "ace/theme/clouds",
+    mode: "ace/mode/yaml",
+  },
+  "data-input-updated": {
+    theme: "ace/theme/clouds",
+    mode: "ace/mode/yaml",
+  },
 };
 
 class AceEditor {
