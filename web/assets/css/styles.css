@@ -290,6 +290,17 @@ footer .version {
     border-radius: 4px;
 }
 
+.version a {
+    text-decoration: none;
+    color: inherit;
+}
+
+footer .langdef {
+    padding: 4px 4px;
+    border-radius: 4px;
+    margin-left: auto;
+}
+
 /* Ace Custom */
 
 .ace-clouds .ace_marker-layer .ace_active-line {
