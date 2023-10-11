@@ -65,15 +65,15 @@ function toggleMode(theme) {
 
   if (theme === "dark") {
     document.body.classList.add('dark');
-    toggleIcon.src = "./assets/img/sun.svg";
-    celEditor.editor.setTheme("ace/theme/idle_fingers")
-    dataEditor.editor.setTheme("ace/theme/idle_fingers")
+    toggleIcon.src = "./assets/img/moon.svg";
+    celEditor.editor.setTheme("ace/theme/tomorrow_night")
+    dataEditor.editor.setTheme("ace/theme/tomorrow_night")
     celLogo.src = "./assets/img/logo-dark.svg";
     localStorage.setItem("theme", "dark");
   }
   else {
     document.body.classList.remove('dark');
-    toggleIcon.src = "./assets/img/moon.svg";
+    toggleIcon.src = "./assets/img/sun.svg";
     celEditor.editor.setTheme("ace/theme/clouds")
     dataEditor.editor.setTheme("ace/theme/clouds")
     celLogo.src = "./assets/img/logo.svg";
