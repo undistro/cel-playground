@@ -287,16 +287,16 @@ a {
 }
 
 .editor.editor--output {
-    background: #1D2E35;
+    background: #25282C;
     color: white;
 }
 
 .editor.editor--output .editor__header {
-    border-color: #2D4753;
+    border-color: #33373D;
 }
 
 .editor>.editor__output {
-    background: #1D2E35;
+    background: #1D1F21;
     resize: none;
     height: 100%;
     padding: 12px;
