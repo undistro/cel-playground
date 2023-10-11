@@ -45,6 +45,41 @@ function run() {
   output.style.color = isError ? "red" : "white";
 }
 
+window.addEventListener("load", () => {
+  let theme = localStorage.getItem("theme");
+  if (theme === "dark") {
+    toggleMode("dark");
+  }
+})
+
+const toggleBtn = document.getElementsByClassName("toggle-theme")[0];
+toggleBtn.addEventListener('click', function () {
+  let currTheme = localStorage.getItem("theme")
+  if (currTheme === "dark") toggleMode("light");
+  else toggleMode("dark");
+})
+
+function toggleMode(theme) {
+  let toggleIcon = document.getElementsByClassName("toggle-theme__icon")[0];
+  let celLogo = document.getElementsByClassName("cel-logo")[0];
+
+  if (theme === "dark") {
+    document.body.classList.add('dark');
+    toggleIcon.src = "./assets/img/moon.svg";
+    celEditor.editor.setTheme("ace/theme/tomorrow_night")
+    dataEditor.editor.setTheme("ace/theme/tomorrow_night")
+    celLogo.src = "./assets/img/logo-dark.svg";
+    localStorage.setItem("theme", "dark");
+  }
+  else {
+    document.body.classList.remove('dark');
+    toggleIcon.src = "./assets/img/sun.svg";
+    celEditor.editor.setTheme("ace/theme/clouds")
+    dataEditor.editor.setTheme("ace/theme/clouds")
+    celLogo.src = "./assets/img/logo.svg";
+    localStorage.setItem("theme", "light");
+  }
+}
 
 function share() {
   const data = dataEditor.getValue();

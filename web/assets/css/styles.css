@@ -21,6 +21,10 @@ body {
     background-color: #FCFCFC;
 }
 
+body.dark {
+    background-color: #181A1B;
+}
+
 main {
     padding: 24px;
 }
@@ -28,6 +32,10 @@ main {
 a {
     color: #8447D1;
     text-decoration: underline;
+}
+
+.dark a {
+    color: #9551EC;
 }
 
 .cel-logo {
@@ -43,6 +51,10 @@ a {
     border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
+.dark .navbar{
+    background-color: #1D1F21;
+}
+
 .navbar .title {
     color: #243942;
     font-weight: 500;
@@ -53,6 +65,10 @@ a {
     width: 1px;
     height: 1rem;
     background: rgba(0, 0, 0, 0.12);
+}
+
+.dark .navbar .divider {
+    background-color: #FFFFFF1F;
 }
 
 .navbar .logo {
@@ -74,6 +90,10 @@ a {
     font-size: 16px;
     letter-spacing: 0.01em;
     color: rgba(0, 0, 0, 0.5);
+}
+
+.dark .navbar span {
+    color: rgb(255, 255, 255,0.9)
 }
 
 .nav-links {
@@ -101,6 +121,10 @@ a {
     background: rgba(0, 0, 0, 0.16);
 }
 
+.dark .nav-divider{
+    background-color: #FFFFFF1F;
+}
+
 .share-url__container {
     display: none;
     height: 40px;
@@ -114,6 +138,11 @@ a {
     position: relative;
 }
 
+.dark .share-url__container {
+    background: #212426;
+    border-color: #34383C;
+}
+
 .share-url__input {
     display: flex;
     width: 220px;
@@ -124,6 +153,11 @@ a {
     line-height: 24px;
     letter-spacing: 0.12px;
     border:none;
+}
+
+.dark .share-url__input {
+    background: #212426;
+    color: #FFFFFFE5;
 }
 
 .share-url__tooltip {
@@ -158,6 +192,10 @@ a {
     cursor: pointer;
 }
 
+.dark .share-url__copy{
+    background:#2B2E31;
+}
+
 .nav-link {
     display: flex;
     justify-content: center;
@@ -168,6 +206,11 @@ a {
     background-color: rgba(132, 71, 209, 0.08);
     text-decoration: none;
     color: #8447D1;
+}
+
+.dark .nav-link{
+    background-color: #8447D13D;
+    color: #9551EC;
 }
 
 /* Containers */
@@ -201,12 +244,21 @@ a {
     overflow: visible;
 }
 
+.dark .editor {
+    border-color: #2A2D32;
+}
+
 .editor__header {
     padding: 1rem;
     border-bottom: 1px solid #E3E3E3;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.dark .editor__header {
+    background: #25282C;
+    border-bottom-color: #33373D;
 }
 
 .editor__header .title {
@@ -216,28 +268,35 @@ a {
     line-height: 40px;
 }
 
+.dark .editor__header .title {
+    color: #FFFFFF;
+}
+
 .editor__header .description {
     color: #5D7B89;
     font-weight: normal;
     font-size: 14px;
 }
 
+.dark .editor__header .description {
+    color: #FFFFFFCC;
+}
 .editor>.editor__input {
     height: 100%;
     font-size: 14px;
 }
 
 .editor.editor--output {
-    background: #1D2E35;
+    background: #25282C;
     color: white;
 }
 
 .editor.editor--output .editor__header {
-    border-color: #2D4753;
+    border-color: #33373D;
 }
 
 .editor>.editor__output {
-    background: #1D2E35;
+    background: #1D1F21;
     resize: none;
     height: 100%;
     padding: 12px;
@@ -265,6 +324,10 @@ a {
     height: 32px;
 }
 
+.dark .button{
+    background: #9551EC;
+}
+
 .button:hover {
     background: #925CD6;
 }
@@ -273,6 +336,9 @@ a {
     background: #8B8692;
 }
 
+.toggle-theme{
+    cursor: pointer;
+}
 
 /* Footer */
 
@@ -284,10 +350,18 @@ footer {
     font-size: 14px;
 }
 
+.dark footer {
+    color: #FFFFFFE5;
+}
+
 footer .version {
     padding: 4px 8px;
     background: #EBEBEB;
     border-radius: 4px;
+}
+
+.dark footer .version{
+    background-color: #202D32;
 }
 
 .version a {
@@ -295,10 +369,18 @@ footer .version {
     color: inherit;
 }
 
+.dark .version a {
+    color: #FFFFFFE5;
+}
+
 footer .langdef {
     padding: 4px 4px;
     border-radius: 4px;
     margin-left: auto;
+}
+
+.dark footer .langdef {
+    color: #FFFFFF29;
 }
 
 /* Ace Custom */
@@ -384,6 +466,34 @@ footer .langdef {
     max-width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.dark .nice-select .option.focus, .nice-select .option.selected.focus {
+    background: #2A2D32;
+}
+
+.dark .nice-select {
+    background: #25282C;
+    color: #ffffff;
+    border-color: #383C43;
+}
+
+.dark .nice-select .nice-select-dropdown {
+    background: #2A2D32;
+    border: 1px solid #383C43;
+}
+
+.dark .nice-select .option {
+    color: #FFFFFFD9;
+
+}
+
+.dark .nice-select .option.disabled {
+    color:#ffffff;
+}
+
+.dark .nice-select .option:hover {
+    background-color: #8447D114;
 }
 
 .nice-select .list {
