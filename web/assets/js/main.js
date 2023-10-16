@@ -50,32 +50,31 @@ window.addEventListener("load", () => {
   if (theme === "dark") {
     toggleMode("dark");
   }
-})
+});
 
 const toggleBtn = document.getElementsByClassName("toggle-theme")[0];
-toggleBtn.addEventListener('click', function () {
-  let currTheme = localStorage.getItem("theme")
+toggleBtn.addEventListener("click", function () {
+  let currTheme = localStorage.getItem("theme");
   if (currTheme === "dark") toggleMode("light");
   else toggleMode("dark");
-})
+});
 
 function toggleMode(theme) {
   let toggleIcon = document.getElementsByClassName("toggle-theme__icon")[0];
   let celLogo = document.getElementsByClassName("cel-logo")[0];
 
   if (theme === "dark") {
-    document.body.classList.add('dark');
+    document.body.classList.add("dark");
     toggleIcon.src = "./assets/img/moon.svg";
-    celEditor.editor.setTheme("ace/theme/tomorrow_night")
-    dataEditor.editor.setTheme("ace/theme/tomorrow_night")
+    celEditor.editor.setTheme("ace/theme/tomorrow_night");
+    dataEditor.editor.setTheme("ace/theme/tomorrow_night");
     celLogo.src = "./assets/img/logo-dark.svg";
     localStorage.setItem("theme", "dark");
-  }
-  else {
-    document.body.classList.remove('dark');
+  } else {
+    document.body.classList.remove("dark");
     toggleIcon.src = "./assets/img/sun.svg";
-    celEditor.editor.setTheme("ace/theme/clouds")
-    dataEditor.editor.setTheme("ace/theme/clouds")
+    celEditor.editor.setTheme("ace/theme/clouds");
+    dataEditor.editor.setTheme("ace/theme/clouds");
     celLogo.src = "./assets/img/logo.svg";
     localStorage.setItem("theme", "light");
   }
@@ -180,28 +179,48 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-
 fetch("../assets/data.json")
   .then((response) => response.json())
   .then(({ examples, versions }) => {
-
     // Dynamically set the CEL Go version
     document.getElementById("version").innerText = versions["cel-go"];
 
     // Load the examples into the select element
     const examplesList = document.getElementById("examples");
-    examples.forEach((example) => {
-      const option = document.createElement("option");
-      option.value = example.name;
-      option.innerText = example.name;
 
-      if (example.name === "default") {
+    const groupByCategory = examples.reduce((acc, example) => {
+      return {
+        ...acc,
+        [example.category]: [...(acc[example.category] ?? []), example],
+      };
+    }, {});
+
+    const examplesByCategory = Object.entries(groupByCategory).map(
+      ([key, value]) => ({ label: key, value })
+    );
+
+    examplesByCategory.forEach((example) => {
+      const optGroup = document.createElement("optgroup");
+      optGroup.label = example.label;
+
+      example.value.forEach((item) => {
+        const option = document.createElement("option");
+        const itemName = item.name;
+        const [, name] = itemName.includes(":")
+          ? itemName.split(":")
+          : [, itemName];
+        option.value = itemName;
+        option.innerText = name;
+        optGroup.appendChild(option);
+      });
+
+      if (example.label === "default") {
         if (!urlParams.has("content")) {
-          celEditor.setValue(example.cel, -1);
-          dataEditor.setValue(example.data, -1);
+          celEditor.setValue(example.value[0].cel, -1);
+          dataEditor.setValue(example.value[0].data, -1);
         }
       } else {
-        examplesList.appendChild(option);
+        examplesList.appendChild(optGroup);
       }
     });
 
