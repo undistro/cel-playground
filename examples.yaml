@@ -22,22 +22,23 @@ examples:
       // - Use the area on the side for input data, in YAML or JSON format
       // - Press 'Run' to evaluate your CEL expression against the input data
       // - Explore our collection of examples for inspiration
-      
+
       account.balance >= transaction.withdrawal
           || (account.overdraftProtection
           && account.overdraftLimit >= transaction.withdrawal  - account.balance)
 
     data: |
       # Here is the input data in YAML or JSON format.
-      
+
       account:
         balance: 500
         overdraftProtection: true
         overdraftLimit: 1000
       transaction:
         withdrawal: 700
+    category: "default"
 
-  - name: "Kubernetes: Check image registry"
+  - name: "Check image registry"
     cel: |
       object.spec.template.spec.containers.all(container,
         params.allowedRegistries.exists(registry,
@@ -68,12 +69,13 @@ examples:
           selector:
             matchLabels:
               app: nginx
+    category: "Kubernetes"
 
-  - name: "Kubernetes: Disallow HostPorts"
+  - name: "Disallow HostPorts"
     cel: |
       // According the Pod Security Standards, HostPorts should be disallowed entirely.
       // https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline
-      
+
       object.spec.template.spec.containers.all(container,
         !has(container.ports) ||
         container.ports.all(port,
@@ -103,12 +105,13 @@ examples:
           selector:
             matchLabels:
               app: nginx
+    category: "Kubernetes"
 
-  - name: "Kubernetes: Require non-root containers"
+  - name: "Require non-root containers"
     cel: |
       // According the Pod Security Standards, Containers must be required to run as non-root users.
       // https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted
-      
+
       // Pod or Containers must set `securityContext.runAsNonRoot`
       (
         (has(object.spec.template.spec.securityContext) && has(object.spec.template.spec.securityContext.runAsNonRoot)) ||
@@ -117,7 +120,7 @@ examples:
         )
       )
       &&
-      
+
       // Neither Pod nor Containers should set `securityContext.runAsNonRoot` to false
       (
         (!has(object.spec.template.spec.securityContext) || !has(object.spec.template.spec.securityContext.runAsNonRoot) || object.spec.template.spec.securityContext.runAsNonRoot != false)
@@ -149,12 +152,13 @@ examples:
           selector:
             matchLabels:
               app: nginx
+    category: "Kubernetes"
 
-  - name: "Kubernetes: Drop ALL capabilities"
+  - name: "Drop ALL capabilities"
     cel: |
       // According the Pod Security Standards, Containers must drop `ALL` capabilities, and are only permitted to add back the `NET_BIND_SERVICE` capability.
       // https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted
-      
+
       // Containers must drop `ALL` capabilities,
       object.spec.template.spec.containers.all(container,
         has(container.securityContext) &&
@@ -196,8 +200,9 @@ examples:
           selector:
             matchLabels:
               app: nginx
+    category: "Kubernetes"
 
-  - name: "Kubernetes: Semantic version check for image tags (Regex)"
+  - name: "Semantic version check for image tags (Regex)"
     cel: |
       // Checks if the container images are tagged following the semantic version.
 
@@ -225,6 +230,7 @@ examples:
               image: registry.com:80/nginx@sha256:asdf
             - name: wrong
               image: registry.com:80/nginx:latest  # comment the wrong container to test a success scenario
+    category: "Kubernetes"
 
   - name: "URLs"
     cel: |
@@ -244,6 +250,7 @@ examples:
           "href": "https://user:pass@example.com:80/path?query=val#fragment"
         }
       }
+    category: "General"
 
   - name: "Check JWT custom claims"
     cel: |
@@ -253,7 +260,7 @@ examples:
       // Determine whether the jwt.extra_claims has at least one key that starts
       // with the group prefix, and ensure that all group-like keys have list
       // values containing only strings that end with '@acme.co'.
-      
+
       jwt.extra_claims.exists(c, c.startsWith('group'))
       && jwt.extra_claims
         .filter(c, c.startsWith('group'))
@@ -275,10 +282,12 @@ examples:
           "labels": [ "metadata", "prod", "pii" ]
         }
       }
+    category: "General"
 
   - name: "Optional"
     cel: 'object.?foo.orValue("fallback")'
     data: "object: {}"
+    category: "General"
 
   - name: "Duration and timestamp"
     cel: |
@@ -290,11 +299,12 @@ examples:
         created: "2023-06-14T02:00:14+00:00"
         ttl: "5m"
         expired: "2023-06-14T02:06:14+00:00"
+    category: "General"
 
   - name: "Quantity"
     cel: |
       // Quantity library introduced in Kubernetes 1.28
-      
+
       isQuantity(object.memory) && 
       quantity(object.memory)
         .add(quantity("700M"))
@@ -304,3 +314,9 @@ examples:
       object:
         memory: 1.3G
         limit: 2G
+    category: "General"
+
+  - name: "Blank"
+    cel: ""
+    data: ""
+    category: "Blank"
