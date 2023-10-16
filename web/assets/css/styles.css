@@ -471,7 +471,7 @@ footer .langdef {
 }
 
 .nice-select .list .optgroup:not(:nth-child(2)),
-.nice-select li[data-value="default"] {
+.nice-select li[data-value="Blank"] {
   border-top: 1px solid #e3e3e3;
 }
 
@@ -514,7 +514,7 @@ footer .langdef {
 }
 
 .dark .nice-select .list .optgroup:not(:nth-child(2)),
-.dark .nice-select li[data-value="default"] {
+.dark .nice-select .list li[data-value="Blank"] {
   border-top: 1px solid #383c43;
 }
 

@@ -38,7 +38,7 @@ examples:
         withdrawal: 700
     category: "default"
 
-  - name: "Kubernetes: Check image registry"
+  - name: "Check image registry"
     cel: |
       object.spec.template.spec.containers.all(container,
         params.allowedRegistries.exists(registry,
@@ -71,7 +71,7 @@ examples:
               app: nginx
     category: "Kubernetes"
 
-  - name: "Kubernetes: Disallow HostPorts"
+  - name: "Disallow HostPorts"
     cel: |
       // According the Pod Security Standards, HostPorts should be disallowed entirely.
       // https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline
@@ -107,7 +107,7 @@ examples:
               app: nginx
     category: "Kubernetes"
 
-  - name: "Kubernetes: Require non-root containers"
+  - name: "Require non-root containers"
     cel: |
       // According the Pod Security Standards, Containers must be required to run as non-root users.
       // https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted
@@ -154,7 +154,7 @@ examples:
               app: nginx
     category: "Kubernetes"
 
-  - name: "Kubernetes: Drop ALL capabilities"
+  - name: "Drop ALL capabilities"
     cel: |
       // According the Pod Security Standards, Containers must drop `ALL` capabilities, and are only permitted to add back the `NET_BIND_SERVICE` capability.
       // https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted
@@ -202,7 +202,7 @@ examples:
               app: nginx
     category: "Kubernetes"
 
-  - name: "Kubernetes: Semantic version check for image tags (Regex)"
+  - name: "Semantic version check for image tags (Regex)"
     cel: |
       // Checks if the container images are tagged following the semantic version.
 
@@ -315,3 +315,8 @@ examples:
         memory: 1.3G
         limit: 2G
     category: "General"
+
+  - name: "Blank"
+    cel: ""
+    data: ""
+    category: "Blank"

@@ -199,20 +199,16 @@ fetch("../assets/data.json")
       ([key, value]) => ({ label: key, value })
     );
 
-    examplesByCategory.forEach((example, index) => {
+    examplesByCategory.forEach((example) => {
       const optGroup = document.createElement("optgroup");
       optGroup.label = example.label;
-
-      if (index === 0) optGroup.className = "first";
 
       example.value.forEach((item) => {
         const option = document.createElement("option");
         const itemName = item.name;
-        const [, name] = itemName.includes(":")
-          ? itemName.split(":")
-          : [, itemName];
+
         option.value = itemName;
-        option.innerText = name;
+        option.innerText = itemName;
         optGroup.appendChild(option);
       });
 
@@ -221,15 +217,17 @@ fetch("../assets/data.json")
           celEditor.setValue(example.value[0].cel, -1);
           dataEditor.setValue(example.value[0].data, -1);
         }
+      } else if (example.label === "Blank") {
+        return;
       } else {
         examplesList.appendChild(optGroup);
       }
     });
 
-    const inBlankOption = document.createElement("option");
-    inBlankOption.innerText = "Blank";
-    inBlankOption.value = "default";
-    examplesList.appendChild(inBlankOption);
+    const blankOption = document.createElement("option");
+    blankOption.innerText = "Blank";
+    blankOption.value = "Blank";
+    examplesList.appendChild(blankOption);
 
     selectInstance.update();
 
