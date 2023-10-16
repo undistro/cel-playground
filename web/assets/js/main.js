@@ -199,9 +199,11 @@ fetch("../assets/data.json")
       ([key, value]) => ({ label: key, value })
     );
 
-    examplesByCategory.forEach((example) => {
+    examplesByCategory.forEach((example, index) => {
       const optGroup = document.createElement("optgroup");
       optGroup.label = example.label;
+
+      if (index === 0) optGroup.className = "first";
 
       example.value.forEach((item) => {
         const option = document.createElement("option");
@@ -223,6 +225,11 @@ fetch("../assets/data.json")
         examplesList.appendChild(optGroup);
       }
     });
+
+    const inBlankOption = document.createElement("option");
+    inBlankOption.innerText = "Blank";
+    inBlankOption.value = "default";
+    examplesList.appendChild(inBlankOption);
 
     selectInstance.update();
 

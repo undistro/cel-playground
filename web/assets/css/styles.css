@@ -470,8 +470,18 @@ footer .langdef {
   padding-left: 1rem;
 }
 
-.nice-select .option {
-  padding-left: 2rem;
+.nice-select .list .optgroup:not(:nth-child(2)),
+.nice-select li[data-value="default"] {
+  border-top: 1px solid #e3e3e3;
+}
+
+.nice-select .list .option {
+  color: #3e525b;
+}
+
+.nice-select .list .optgroup {
+  color: #3e525b;
+  font-weight: 500;
 }
 
 .nice-select .option.selected.disabled {
@@ -494,12 +504,18 @@ footer .langdef {
   border: 1px solid #383c43;
 }
 
-.dark .nice-select .option {
+.dark .nice-select .option,
+.dark .nice-select .optgroup {
   color: #ffffffd9;
 }
 
 .dark .nice-select .option.disabled {
   color: #ffffff;
+}
+
+.dark .nice-select .list .optgroup:not(:nth-child(2)),
+.dark .nice-select li[data-value="default"] {
+  border-top: 1px solid #383c43;
 }
 
 .dark .nice-select .option:hover {
