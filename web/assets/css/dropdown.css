@@ -1,3 +1,14 @@
+#libraries-select-button {
+  border-radius: 0.25rem;
+  border-width: 1px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.5;
+  color: #4b5563;
+}
+
 .container-list {
   padding: 0.75rem;
   margin-top: 0.25rem;
@@ -23,6 +34,11 @@
   font-size: 14px;
   line-height: 24px;
   font-weight: 500;
+}
+
+.list-item:not(:first-of-type) {
+  border-top: 1px solid #e3e3e3;
+  padding: 1rem 0;
 }
 
 .control {
@@ -72,4 +88,8 @@
 
 .dark .list-item span {
   color: #ffffff;
+}
+
+.dark .list-item:not(:first-of-type) {
+  border-top: 1px solid #383c43;
 }

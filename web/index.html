@@ -19,11 +19,21 @@
   <head>
     <meta charset="utf-8" />
     <title>CEL Playground</title>
+
     <link rel="stylesheet" type="text/css" href="dist/nice-select2.css" />
-    <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/dropdown.css" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Flowbite -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
 
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
@@ -33,13 +43,6 @@
     <script src="dist/wasm_exec.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
     <link rel="icon" type="image/x-icon" href="assets/img/fav.ico" />
-
-    <!-- Flowbite -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
 
     <!-- Google tag (gtag.js) -->
     <script
@@ -95,6 +98,7 @@
           </button>
           <div class="share-url__tooltip">Copied!</div>
         </div>
+
         <button class="button button-primary" id="share">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -127,10 +131,12 @@
           </svg>
           <p>Share</p>
         </button>
+
+        <div class="nav-divider"></div>
+
         <button
           id="libraries-select-button"
           data-dropdown-toggle="dropdownHelper"
-          class="text-gray-600 text-sm font-medium font-['Inter'] leading-normal tracking-tight rounded border border-neutral-200 focus:border-violet-600"
           type="button"
         >
           Libraries
