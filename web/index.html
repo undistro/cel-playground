@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <!--
  Copyright 2023 Undistro Authors
 
@@ -16,142 +16,229 @@
 -->
 
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>CEL Playground</title>
+    <link rel="stylesheet" type="text/css" href="dist/nice-select2.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/dropdown.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-<head>
-	<meta charset="utf-8">
-	<title>CEL Playground</title>
-	<link rel="stylesheet" type="text/css" href="dist/nice-select2.css">
-	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-	<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
-	<script src="dist/wasm_exec.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-	<link rel="icon" type="image/x-icon" href="assets/img/fav.ico" />
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-GV0C317DWN"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag() { dataLayer.push(arguments); }
-		gtag('js', new Date());
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
+    <script src="dist/wasm_exec.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="assets/img/fav.ico" />
 
-		gtag('config', 'G-GV0C317DWN');
-	</script>
-</head>
+    <!-- Flowbite -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
 
-<body>
-	<nav class="navbar">
-		<div href="/" class="logo">
-			<img class="cel-logo" src="assets/img/logo.svg" alt="Logo" />
-			<div class="divider"></div>
-			<span>Quickly test Common Expression Language</span>
-		</div>
-		<div class="nav-links">
-			<div class="share-url__container">
-				<input type="text" id="share-url" class="share-url__input" placeholder="Share URL" />
-				<button id="copy" class="share-url__copy">
-					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-						<g clip-path="url(#clip0_148_276)">
-							<path
-								d="M16.875 2.5H6.875C6.70924 2.5 6.55027 2.56585 6.43306 2.68306C6.31585 2.80027 6.25 2.95924 6.25 3.125V6.25H3.125C2.95924 6.25 2.80027 6.31585 2.68306 6.43306C2.56585 6.55027 2.5 6.70924 2.5 6.875V16.875C2.5 17.0408 2.56585 17.1997 2.68306 17.3169C2.80027 17.4342 2.95924 17.5 3.125 17.5H13.125C13.2908 17.5 13.4497 17.4342 13.5669 17.3169C13.6842 17.1997 13.75 17.0408 13.75 16.875V13.75H16.875C17.0408 13.75 17.1997 13.6842 17.3169 13.5669C17.4342 13.4497 17.5 13.2908 17.5 13.125V3.125C17.5 2.95924 17.4342 2.80027 17.3169 2.68306C17.1997 2.56585 17.0408 2.5 16.875 2.5ZM16.25 12.5H13.75V6.875C13.75 6.70924 13.6842 6.55027 13.5669 6.43306C13.4497 6.31585 13.2908 6.25 13.125 6.25H7.5V3.75H16.25V12.5Z"
-								fill="#8447D1" />
-						</g>
-						<defs>
-							<clipPath id="clip0_148_276">
-								<rect width="20" height="20" fill="white" />
-							</clipPath>
-						</defs>
-					</svg>
-				</button>
-				<div class="share-url__tooltip">
-					Copied!
-				</div>
-	
-			</div>
-			<button class="button button-primary" id="share">
-				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-					<g clip-path="url(#clip0_199_15)">
-						<path
-							d="M10.3031 15L9.52657 15.7765C8.82138 16.4703 7.8706 16.8574 6.88134 16.8533C5.89207 16.8493 4.94448 16.4545 4.24496 15.755C3.54544 15.0555 3.15067 14.1079 3.14664 13.1186C3.14261 12.1294 3.52965 11.1786 4.22345 10.4734L6.10704 8.59372C6.78268 7.91671 7.69148 7.52345 8.6475 7.49441C9.60353 7.46536 10.5345 7.80272 11.25 8.43747"
-							stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-						<path
-							d="M9.69688 5.00001L10.4734 4.22345C11.1786 3.52965 12.1294 3.14261 13.1187 3.14664C14.1079 3.15067 15.0555 3.54544 15.7551 4.24496C16.4546 4.94448 16.8493 5.89207 16.8534 6.88134C16.8574 7.8706 16.4704 8.82138 15.7766 9.52658L13.893 11.4102C13.2168 12.0866 12.3078 12.4792 11.3517 12.5075C10.3957 12.5358 9.465 12.1978 8.75 11.5625"
-							stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-						</g>
-						<defs>
-							<clipPath id="clip0_199_15">
-								<rect width="20" height="20" fill="white" />
-							</clipPath>
-						</defs>
-					</svg>
-					<p>Share</p>
-				</button>
-				<span class="toggle-theme">
-					  <img class="toggle-theme__icon" src="./assets/img/sun.svg" alt="Change Theme" />
-				</span>
-				<div class="nav-divider"></div>
-			<a class="nav-link" href="https://github.com/undistro/cel-playground" target="_blank">
-				<img src="assets/img/github.svg" alt="GitHub" />
-				Visit our GitHub
-			</a>
-		</div>
-	</nav>
-	<main>
-		<div class="editor-container">
-			<div class="editor">
-				<div class="editor__header">
-					<div>
-						<span class="title">
-							Expression
-						</span>
-						<span class="description">(CEL format)</span>
-					</div>
-					<select id="examples" class="right">
-						<option data-display="Examples" value="" disabled selected hidden>Examples</option>
-					</select>
-				</div>
-				<div id="cel-input" class="editor__input"></div>
-			</div>
-			<div class="output-container">
-				<div class="editor">
-					<div class="editor__header">
-						<div>
-							<span class="title">
-								Input
-							</span>
-							<span class="description">(YAML or JSON format)</span>
-						</div>
-						<button disabled id="run" class="button button-primary">
-							Run
-						</button>
-					</div>
-					<div id="data-input" class="editor__input"></div>
-				</div>
-				<div class="editor editor--output">
-					<div class="editor__header">
-						Output
-					</div>
-					<textarea id="output" class="editor__output"
-						placeholder="Loading Wasm…" disabled></textarea>
-				</div>
-			</div>
-		</div>
-	</main>
-	<footer>
-		<span>Powered by
-			<a href="https://www.getup.io/en/getup-open-source/" target="_blank">Getup</a>
-		</span>
-		<span class="langdef">
-			<a href="https://github.com/google/cel-spec/blob/master/doc/langdef.md" target="_blank">Language Definition</a> |
-		</span>
-		<span class="version">
-			<a href="https://github.com/google/cel-go" target="_blank">cel-go <span id="version">...</span></a>
-		</span>
-	</footer>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
-	<script src="dist/nice-select2.js"></script>
-	<script type="module" src="assets/js/main.js"></script>
-</body>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-GV0C317DWN"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
+      gtag("config", "G-GV0C317DWN");
+    </script>
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div href="/" class="logo">
+        <img class="cel-logo" src="assets/img/logo.svg" alt="Logo" />
+        <div class="divider"></div>
+        <span>Quickly test Common Expression Language</span>
+      </div>
+      <div class="nav-links">
+        <div class="share-url__container">
+          <input
+            type="text"
+            id="share-url"
+            class="share-url__input"
+            placeholder="Share URL"
+          />
+          <button id="copy" class="share-url__copy">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_148_276)">
+                <path
+                  d="M16.875 2.5H6.875C6.70924 2.5 6.55027 2.56585 6.43306 2.68306C6.31585 2.80027 6.25 2.95924 6.25 3.125V6.25H3.125C2.95924 6.25 2.80027 6.31585 2.68306 6.43306C2.56585 6.55027 2.5 6.70924 2.5 6.875V16.875C2.5 17.0408 2.56585 17.1997 2.68306 17.3169C2.80027 17.4342 2.95924 17.5 3.125 17.5H13.125C13.2908 17.5 13.4497 17.4342 13.5669 17.3169C13.6842 17.1997 13.75 17.0408 13.75 16.875V13.75H16.875C17.0408 13.75 17.1997 13.6842 17.3169 13.5669C17.4342 13.4497 17.5 13.2908 17.5 13.125V3.125C17.5 2.95924 17.4342 2.80027 17.3169 2.68306C17.1997 2.56585 17.0408 2.5 16.875 2.5ZM16.25 12.5H13.75V6.875C13.75 6.70924 13.6842 6.55027 13.5669 6.43306C13.4497 6.31585 13.2908 6.25 13.125 6.25H7.5V3.75H16.25V12.5Z"
+                  fill="#8447D1"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_148_276">
+                  <rect width="20" height="20" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+          <div class="share-url__tooltip">Copied!</div>
+        </div>
+        <button class="button button-primary" id="share">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <g clip-path="url(#clip0_199_15)">
+              <path
+                d="M10.3031 15L9.52657 15.7765C8.82138 16.4703 7.8706 16.8574 6.88134 16.8533C5.89207 16.8493 4.94448 16.4545 4.24496 15.755C3.54544 15.0555 3.15067 14.1079 3.14664 13.1186C3.14261 12.1294 3.52965 11.1786 4.22345 10.4734L6.10704 8.59372C6.78268 7.91671 7.69148 7.52345 8.6475 7.49441C9.60353 7.46536 10.5345 7.80272 11.25 8.43747"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9.69688 5.00001L10.4734 4.22345C11.1786 3.52965 12.1294 3.14261 13.1187 3.14664C14.1079 3.15067 15.0555 3.54544 15.7551 4.24496C16.4546 4.94448 16.8493 5.89207 16.8534 6.88134C16.8574 7.8706 16.4704 8.82138 15.7766 9.52658L13.893 11.4102C13.2168 12.0866 12.3078 12.4792 11.3517 12.5075C10.3957 12.5358 9.465 12.1978 8.75 11.5625"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_199_15">
+                <rect width="20" height="20" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+          <p>Share</p>
+        </button>
+        <button
+          id="libraries-select-button"
+          data-dropdown-toggle="dropdownHelper"
+          class="text-gray-600 text-sm font-medium font-['Inter'] leading-normal tracking-tight rounded border border-neutral-200 focus:border-violet-600"
+          type="button"
+        >
+          Libraries
+          <svg
+            class="w-2.5 h-2.5 ml-2.5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 10 6"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 4 4 4-4"
+            />
+          </svg>
+        </button>
+        <div
+          id="dropdownHelper"
+          class="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-60 dark:bg-zinc-800 dark:divide-gray-600"
+          style="min-width: 400px"
+        ></div>
+
+        <span class="toggle-theme">
+          <img
+            class="toggle-theme__icon"
+            src="./assets/img/sun.svg"
+            alt="Change Theme"
+          />
+        </span>
+        <div class="nav-divider"></div>
+        <a
+          class="nav-link"
+          href="https://github.com/undistro/cel-playground"
+          target="_blank"
+        >
+          <img src="assets/img/github.svg" alt="GitHub" />
+          Visit our GitHub
+        </a>
+      </div>
+    </nav>
+    <main>
+      <div class="editor-container">
+        <div class="editor">
+          <div class="editor__header">
+            <div>
+              <span class="title"> Expression </span>
+              <span class="description">(CEL format)</span>
+            </div>
+            <select id="examples" class="right">
+              <option data-display="Examples" value="" disabled selected hidden>
+                Examples
+              </option>
+            </select>
+          </div>
+          <div id="cel-input" class="editor__input"></div>
+        </div>
+        <div class="output-container">
+          <div class="editor">
+            <div class="editor__header">
+              <div>
+                <span class="title"> Input </span>
+                <span class="description">(YAML or JSON format)</span>
+              </div>
+              <button disabled id="run" class="button button-primary">
+                Run
+              </button>
+            </div>
+            <div id="data-input" class="editor__input"></div>
+          </div>
+          <div class="editor editor--output">
+            <div class="editor__header">Output</div>
+            <textarea
+              id="output"
+              class="editor__output"
+              placeholder="Loading Wasm…"
+              disabled
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <span
+        >Powered by
+        <a href="https://www.getup.io/en/getup-open-source/" target="_blank"
+          >Getup</a
+        >
+      </span>
+      <span class="langdef">
+        <a
+          href="https://github.com/google/cel-spec/blob/master/doc/langdef.md"
+          target="_blank"
+          >Language Definition</a
+        >
+        |
+      </span>
+      <span class="version">
+        <a href="https://github.com/google/cel-go" target="_blank"
+          >cel-go <span id="version">...</span></a
+        >
+      </span>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
+    <script src="dist/nice-select2.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+  </body>
 </html>

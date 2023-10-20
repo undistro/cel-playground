@@ -15,8 +15,12 @@
  */
 
 import { AceEditor } from "./editor.js";
+import { groupBy } from "./utils/group.js";
 
-const selectInstance = NiceSelect.bind(document.getElementById("examples"));
+const librariesSelect = document.getElementById("dropdownHelper");
+
+const exampleSelect = document.getElementById("examples");
+const exampleSelectInstance = NiceSelect.bind(exampleSelect);
 
 // Add the following polyfill for Microsoft Edge 17/18 support:
 // <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
@@ -185,19 +189,7 @@ fetch("../assets/data.json")
     // Dynamically set the CEL Go version
     document.getElementById("version").innerText = versions["cel-go"];
 
-    // Load the examples into the select element
-    const examplesList = document.getElementById("examples");
-
-    const groupByCategory = examples.reduce((acc, example) => {
-      return {
-        ...acc,
-        [example.category]: [...(acc[example.category] ?? []), example],
-      };
-    }, {});
-
-    const examplesByCategory = Object.entries(groupByCategory).map(
-      ([key, value]) => ({ label: key, value })
-    );
+    const examplesByCategory = groupBy(examples, "category");
 
     examplesByCategory.forEach((example) => {
       const optGroup = document.createElement("optgroup");
@@ -220,25 +212,90 @@ fetch("../assets/data.json")
       } else if (example.label === "Blank") {
         return;
       } else {
-        examplesList.appendChild(optGroup);
+        exampleSelect.appendChild(optGroup);
       }
     });
 
     const blankOption = document.createElement("option");
     blankOption.innerText = "Blank";
     blankOption.value = "Blank";
-    examplesList.appendChild(blankOption);
+    exampleSelect.appendChild(blankOption);
 
-    selectInstance.update();
+    exampleSelectInstance.update();
 
-    examplesList.addEventListener("change", (event) => {
+    exampleSelect.addEventListener("change", (event) => {
       const example = examples.find(
         (example) => example.name === event.target.value
       );
       celEditor.setValue(example.cel, -1);
       dataEditor.setValue(example.data, -1);
     });
+
+    loadLibrarySelect(examplesByCategory);
   })
   .catch((err) => {
     console.error(err);
   });
+
+function loadLibrarySelect(data) {
+  const list = document.createElement("ul");
+  list.className = "container-list";
+  list["aria-labelledby"] = "dropdownHelperButton";
+
+  data.forEach((item) => {
+    const listItem = document.createElement("li");
+    listItem.className = "list-item";
+    listItem.innerHTML = `<span class="list-item-label">${item.label}</span>`;
+
+    if (item.label === "default") return;
+
+    item.value.forEach((value) => {
+      const sublist = document.createElement("ul");
+      const sublistItem = document.createElement("li");
+      sublistItem.className = "sublist-item";
+
+      const control = document.createElement("label");
+      control.className = "control";
+      control.htmlFor = value.name;
+
+      const checkbox = document.createElement("input");
+      checkbox.setAttribute("type", "checkbox");
+      checkbox.setAttribute("id", value.name);
+      checkbox.className = "checkbox";
+
+      const label = document.createElement("span");
+      label.className = "label";
+      label.innerText = value.name;
+
+      control.appendChild(checkbox);
+      control.appendChild(label);
+
+      const showExampleButton = document.createElement("button");
+
+      sublistItem.onmouseover = (ev) => {
+        showExampleButton.innerText = "Show example";
+        sublistItem.appendChild(showExampleButton);
+        showExampleButton.className = "show-example-text";
+        showExampleButton.style.color = "#B076F9";
+        showExampleButton.style.fontSize = "14px";
+        showExampleButton.style.fontWeight = "500";
+
+        sublistItem.style.backgroundColor = "#8447D108";
+      };
+
+      sublistItem.onmouseleave = (ev) => {
+        sublistItem.removeChild(showExampleButton);
+        sublistItem.style.backgroundColor = "initial";
+      };
+
+      sublistItem.appendChild(control);
+
+      sublist.appendChild(sublistItem);
+      listItem.appendChild(sublist);
+    });
+
+    list.append(listItem);
+  });
+
+  librariesSelect.appendChild(list);
+}
