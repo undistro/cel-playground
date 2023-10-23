@@ -134,33 +134,37 @@
 
         <div class="nav-divider"></div>
 
-        <button
-          id="libraries-select-button"
-          data-dropdown-toggle="dropdownHelper"
-          type="button"
-        >
-          Libraries
-          <svg
-            class="w-2.5 h-2.5 ml-2.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 10 6"
+        <div class="libraries-dropdown-container">
+          <button
+            id="libraries-select-button"
+            type="button"
+            data-dropdown-toggle="dropdownHelper"
+            data-dropdown-placement="bottom-end"
+            dropwdown-open=""
           >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 4 4 4-4"
-            />
-          </svg>
-        </button>
-        <div
-          id="dropdownHelper"
-          class="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-60 dark:bg-zinc-800 dark:divide-gray-600"
-          style="min-width: 400px"
-        ></div>
+            Libraries
+            <svg
+              class="w-2.5 h-2.5 ml-2.5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 10 6"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 4 4 4-4"
+              />
+            </svg>
+          </button>
+          <div
+            id="dropdownHelper"
+            class="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-60 dark:bg-zinc-800 dark:divide-gray-600"
+            style="min-width: 400px"
+          ></div>
+        </div>
 
         <span class="toggle-theme">
           <img

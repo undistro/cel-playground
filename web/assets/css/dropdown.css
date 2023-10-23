@@ -1,3 +1,7 @@
+.libraries-dropdown-container {
+  display: flex;
+}
+
 #libraries-select-button {
   border-radius: 0.25rem;
   border-width: 1px;
@@ -7,14 +11,53 @@
   letter-spacing: -0.025em;
   line-height: 1.5;
   color: #4b5563;
+
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 1rem;
+}
+
+#libraries-select-button svg {
+  width: 7px;
+  height: 7px;
+  pointer-events: none;
+  transition: transform 150ms;
+  color: #999;
+}
+
+#libraries-select-button[data-dropdown-open="true"] svg {
+  transform: rotate(180deg);
+}
+
+#dropdownHelper {
+  overflow: hidden;
 }
 
 .container-list {
-  padding: 0.75rem;
   margin-top: 0.25rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: #374151;
+
+  overflow-y: auto;
+  max-height: 50vh;
+}
+
+.container-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.container-list::-webkit-scrollbar-thumb {
+  background: #e3e3e3;
+  border-radius: 6px;
+}
+.container-list::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+.container-list .list-item {
+  padding: 0.75rem;
 }
 
 .container-list .sublist-item {
@@ -38,7 +81,6 @@
 
 .list-item:not(:first-of-type) {
   border-top: 1px solid #e3e3e3;
-  padding: 1rem 0;
 }
 
 .control {

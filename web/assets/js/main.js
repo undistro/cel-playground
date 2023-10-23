@@ -18,6 +18,9 @@ import { AceEditor } from "./editor.js";
 import { groupBy } from "./utils/group.js";
 
 const librariesSelect = document.getElementById("dropdownHelper");
+const librariesSelectButton = document.getElementById(
+  "libraries-select-button"
+);
 
 const exampleSelect = document.getElementById("examples");
 const exampleSelectInstance = NiceSelect.bind(exampleSelect);
@@ -299,3 +302,14 @@ function loadLibrarySelect(data) {
 
   librariesSelect.appendChild(list);
 }
+
+function isDropdownOpen() {
+  return librariesSelect.classList.contains("block");
+}
+
+librariesSelectButton.addEventListener("click", (ev) => {
+  librariesSelectButton.setAttribute(
+    "data-dropdown-open",
+    String(!isDropdownOpen())
+  );
+});
