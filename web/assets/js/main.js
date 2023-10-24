@@ -283,7 +283,7 @@ function loadLibrarySelect(data) {
         showExampleButton.style.fontSize = "14px";
         showExampleButton.style.fontWeight = "500";
 
-        sublistItem.style.backgroundColor = "#8447D108";
+        sublistItem.style.backgroundColor = "#8447d114";
       };
 
       sublistItem.onmouseleave = (ev) => {

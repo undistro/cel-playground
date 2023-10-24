@@ -32,6 +32,7 @@
 
 #dropdownHelper {
   overflow: hidden;
+  border: 1px solid #e8e8e8;
 }
 
 .container-list {
@@ -61,7 +62,8 @@
 }
 
 .container-list .sublist-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 100px;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   padding-right: 1rem;
@@ -70,13 +72,18 @@
 }
 
 .container-list .sublist-item:hover {
-  background-color: #8447d108;
+  background-color: #8447d114;
+  cursor: pointer;
 }
 
 .list-item .list-item-label {
+  color: #3e525b;
+  font-family: Inter;
   font-size: 14px;
-  line-height: 24px;
+  font-style: normal;
   font-weight: 500;
+  line-height: 24px; /* 171.429% */
+  letter-spacing: 0.14px;
 }
 
 .list-item:not(:first-of-type) {
@@ -117,6 +124,7 @@
 
 .dark #dropdownHelper {
   background-color: #2a2d32;
+  border: 1px solid #383c43;
 }
 
 .dark .control .checkbox {
