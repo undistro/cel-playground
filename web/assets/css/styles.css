@@ -136,6 +136,7 @@ a {
   border: 1px solid #e6e6e6;
   background: #fff;
   position: relative;
+  overflow: hidden;
 }
 
 .dark .share-url__container {
@@ -153,6 +154,7 @@ a {
   line-height: 24px;
   letter-spacing: 0.12px;
   border: none;
+  outline: none;
 }
 
 .dark .share-url__input {
@@ -178,6 +180,7 @@ a {
 
 .share-url__input:focus {
   outline: none;
+  border: none;
 }
 
 .share-url__copy {

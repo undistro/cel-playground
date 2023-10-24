@@ -1,0 +1,145 @@
+.libraries-dropdown-container {
+  display: flex;
+}
+
+#libraries-select-button {
+  border-radius: 0.25rem;
+  border-width: 1px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.5;
+  color: #4b5563;
+
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 1rem;
+}
+
+#libraries-select-button svg {
+  width: 7px;
+  height: 7px;
+  pointer-events: none;
+  transition: transform 150ms;
+  color: #999;
+}
+
+#libraries-select-button[data-dropdown-open="true"] svg {
+  transform: rotate(180deg);
+}
+
+#dropdownHelper {
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+}
+
+.container-list {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #374151;
+
+  overflow-y: auto;
+  max-height: 50vh;
+}
+
+.container-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.container-list::-webkit-scrollbar-thumb {
+  background: #e3e3e3;
+  border-radius: 6px;
+}
+.container-list::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+.container-list .list-item {
+  padding: 0.75rem;
+}
+
+.container-list .sublist-item {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-right: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container-list .sublist-item:hover {
+  background-color: #8447d114;
+  cursor: pointer;
+}
+
+.list-item .list-item-label {
+  color: #3e525b;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 171.429% */
+  letter-spacing: 0.14px;
+}
+
+.list-item:not(:first-of-type) {
+  border-top: 1px solid #e3e3e3;
+}
+
+.control {
+  display: flex;
+  padding: 0.5rem;
+  gap: 0.5rem;
+  align-items: center;
+  border-radius: 0.25rem;
+}
+
+.control .checkbox {
+  border-radius: 0.25rem;
+  border-color: #d1d5db;
+  width: 1rem;
+  height: 1rem;
+  background-color: #f3f4f6;
+  color: #8447d1;
+}
+
+.control .checkbox:focus {
+  box-shadow: initial;
+}
+
+.control .label {
+  font-weight: 400;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.dark #libraries-select-button {
+  color: #ffffff;
+  border: 1px solid #383c43;
+}
+
+.dark #dropdownHelper {
+  background-color: #2a2d32;
+  border: 1px solid #383c43;
+}
+
+.dark .control .checkbox {
+  background-color: transparent;
+  border: 1px solid #00000060;
+}
+
+.dark .control .label {
+  color: #ffffffd9;
+}
+
+.dark .list-item span {
+  color: #ffffff;
+}
+
+.dark .list-item:not(:first-of-type) {
+  border-top: 1px solid #383c43;
+}
