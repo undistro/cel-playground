@@ -146,7 +146,7 @@ celInput.addEventListener("mouseleave", () => {
 
 celCopyIcon.addEventListener("click", () => {
   let value = celEditor.editor.getValue();
-  navigator.clipboard.writeText(value);
+  navigator.clipboard.writeText(value).catch(console.error);
   celCopyHover.style.display = "none"
   celCopyClick.style.display = "flex";
   setTimeout(() => {
