@@ -111,7 +111,14 @@
 						<option data-display="Examples" value="" disabled selected hidden>Examples</option>
 					</select>
 				</div>
-				<div id="cel-input" class="editor__input"></div>
+				<div id="cel-cont" class="editor__cont">
+					<div class="editor-copy-btn">
+						<img src="./assets/img/copy.svg" alt="copy" class="editor-copy-icon" id="cel-copy-icon">
+						<div class="copy-hover" id="cel-copy-hover">Copy to clipboard</div>
+						<div class="copy-click" id="cel-copy-click">Copied!</div>
+					</div>
+					<div id="cel-input" class="editor__input"></div>
+				</div>
 			</div>
 			<div class="output-container">
 				<div class="editor">
@@ -126,7 +133,14 @@
 							Run
 						</button>
 					</div>
-					<div id="data-input" class="editor__input"></div>
+					<div id="data-cont" class="editor__cont">
+						<div class="editor-copy-btn">
+							<img src="./assets/img/copy.svg" alt="copy" class="editor-copy-icon" id="data-copy-icon">
+							<div class="copy-hover" id="data-copy-hover">Copy to clipboard</div>
+							<div class="copy-click" id="data-copy-click">Copied!</div>
+						</div>
+						<div id="data-input" class="editor__input"></div>
+					</div>
 				</div>
 				<div class="editor editor--output">
 					<div class="editor__header">

@@ -62,6 +62,7 @@ toggleBtn.addEventListener("click", function () {
 function toggleMode(theme) {
   let toggleIcon = document.getElementsByClassName("toggle-theme__icon")[0];
   let celLogo = document.getElementsByClassName("cel-logo")[0];
+  let copyIcon = document.querySelectorAll(".editor-copy-icon");
 
   if (theme === "dark") {
     document.body.classList.add("dark");
@@ -69,6 +70,8 @@ function toggleMode(theme) {
     celEditor.editor.setTheme("ace/theme/tomorrow_night");
     dataEditor.editor.setTheme("ace/theme/tomorrow_night");
     celLogo.src = "./assets/img/logo-dark.svg";
+    copyIcon[0].src = "./assets/img/copy-dark.svg";
+    copyIcon[1].src = "./assets/img/copy-dark.svg";
     localStorage.setItem("theme", "dark");
   } else {
     document.body.classList.remove("dark");
@@ -76,6 +79,8 @@ function toggleMode(theme) {
     celEditor.editor.setTheme("ace/theme/clouds");
     dataEditor.editor.setTheme("ace/theme/clouds");
     celLogo.src = "./assets/img/logo.svg";
+    copyIcon[0].src = "./assets/img/copy.svg";
+    copyIcon[1].src = "./assets/img/copy.svg";
     localStorage.setItem("theme", "light");
   }
 }
@@ -126,6 +131,68 @@ if (urlParams.has("content")) {
     console.error(error);
   }
 }
+
+let celCopyIcon = document.getElementById("cel-copy-icon");
+let celCopyHover = document.getElementById("cel-copy-hover");
+let celCopyClick = document.getElementById("cel-copy-click");
+let celInput = document.getElementById("cel-cont");
+
+celInput.addEventListener("mouseover", () => {
+  celCopyIcon.style.display = "inline";
+})
+celInput.addEventListener("mouseleave", () => {
+  celCopyIcon.style.display = "none";
+})
+
+celCopyIcon.addEventListener("click", () => {
+  let value = celEditor.editor.getValue();
+  navigator.clipboard.writeText(value).catch(console.error);
+  celCopyHover.style.display = "none"
+  celCopyClick.style.display = "flex";
+  setTimeout(() => {
+    celCopyClick.style.display = "none";
+  }, 1000)
+})
+
+celCopyIcon.addEventListener("mouseover", () => {
+  celCopyHover.style.display = "flex"
+})
+
+celCopyIcon.addEventListener("mouseleave", () => {
+  celCopyHover.style.display = "none"
+})
+
+let dataCopyIcon = document.getElementById("data-copy-icon");
+let dataCopyHover = document.getElementById("data-copy-hover");
+let dataCopyClick = document.getElementById("data-copy-click");
+let dataInput = document.getElementById("data-cont");
+
+dataInput.addEventListener("mouseover", () => {
+  dataCopyIcon.style.display = "inline"
+})
+
+dataInput.addEventListener("mouseleave", () => {
+  dataCopyIcon.style.display = "none"
+})
+
+dataCopyIcon.addEventListener("click", () => {
+  let value = dataEditor.editor.getValue();
+  navigator.clipboard.writeText(value);
+  dataCopyHover.style.display = "none";
+  dataCopyClick.style.display = "flex";
+  setTimeout(() => {
+    dataCopyClick.style.display = "none";
+  }, 1000);
+})
+
+dataCopyIcon.addEventListener("mouseover", () => {
+  dataCopyHover.style.display = "flex";
+})
+
+dataCopyIcon.addEventListener("mouseleave", () => {
+  dataCopyHover.style.display = "none";
+})
+
 
 function copy() {
   const copyText = document.querySelector(".share-url__input");
