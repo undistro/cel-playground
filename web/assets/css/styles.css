@@ -517,6 +517,10 @@ footer .langdef {
   text-overflow: ellipsis;
 }
 
+.nice-select.right {
+  transition: none;
+}
+
 .nice-select .optgroup {
   padding-left: 1rem;
 }
