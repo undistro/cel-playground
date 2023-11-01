@@ -316,10 +316,22 @@ examples:
         limit: 2G
     category: "General"
 
-  - name: "Istio: Access Log Filtering"
+  - name: "Access Log Filtering"
     cel: |
       // Use CEL to filter access logs in Istio by response code or target cluster.
       // https://istio.io/latest/docs/tasks/observability/logs/telemetry-api/#get-started-with-telemetry-api
+      //
+      // apiVersion: telemetry.istio.io/v1alpha1
+      // kind: Telemetry
+      // metadata:
+      //   name: default-exception-logging
+      //   namespace: istio-system
+      // spec:
+      //   accessLogging:
+      //     - providers:
+      //         - name: otel
+      //       filter:
+      //         expression: "response.code >= 400 || xds.cluster_name == 'BlackHoleCluster' ||  xds.cluster_name == 'PassthroughCluster' "
       
       response.code >= 400 || (xds.cluster_name == 'BlackHoleCluster' || xds.cluster_name == 'PassthroughCluster')
     data: |
@@ -367,7 +379,98 @@ examples:
         route_metadata: ""
         route_name: "allow_any"
         upstream_host_metadata: "NULL"
-    category: "General"
+    category: "Istio"
+
+  - name: "Custom Metrics"
+    cel: |
+      // Use CEL to customize the metrics that Istio generates
+      // https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values
+      // 
+      // apiVersion: telemetry.istio.io/v1alpha1
+      // kind: Telemetry
+      // metadata:
+      //   name: namespace-metrics
+      // spec:
+      //   metrics:
+      //   - providers:
+      //     - name: prometheus
+      //     overrides:
+      //     - match:
+      //         metric: REQUEST_COUNT
+      //       tagOverrides:
+      //         destination_port:
+      //           value: "string(destination.port)"   # <--- CEL
+      //         request_host:
+      //           value: "request.host"               # <--- CEL
+      
+      has(request.host) ? request.host : "unknown"
+    data: |
+      request:
+        duration: "4.144461ms"
+        headers:
+          x-request-id: "7a61a297-e508-43b7-94e8-b3919367e2d2"
+        host: "echo"
+        id: "7a61a297-e508-43b7-94e8-b3919367e2d2"
+        method: "GET"
+        path: "/"
+        protocol: "HTTP/1.1"
+        query: ""
+        referer: null
+        scheme: "http"
+        size: 0
+        time: "2023-10-13T20:30:38.106932+00:00"
+        total_size: 478
+        url_path: "/"
+        useragent: "curl/8.2.1"
+      response:
+        code: "200"
+        code_details: "via_upstream"
+        flags: "0"
+        grpc_status: "2"
+        headers:
+          content-type: "application/json"
+        size: 714
+        total_size: 1594
+      connection:
+        id: 36
+        mtls: true
+        dns_san_local_certificate: null
+        dns_san_peer_certificate: null
+        requested_server_name: "outbound_.80_._.echo.default.svc.cluster.local"
+        sha256_peer_certificate_digest: "1386a353d125910412d0ecfa7abb2f3fbee9ff3c77dd4d5c19312a8d51e27557"
+        subject_local_certificate: ""
+        subject_peer_certificate: ""
+        termination_details: null
+        tls_version: "TLSv1.3"
+        uri_san_local_certificate: "spiffe://cluster.local/ns/default/sa/default"
+        uri_san_peer_certificate: "spiffe://cluster.local/ns/default/sa/default"
+      upstream:
+        address: "10.244.0.38:80"
+        dns_san_local_certificate: null
+        dns_san_peer_certificate: null
+        local_address: "127.0.0.6:58023"
+        port: 80
+        sha256_peer_certificate_digest: null
+        subject_local_certificate: null
+        subject_peer_certificate: null
+        tls_version: null
+        transport_failure_reason: ""
+        uri_san_local_certificate: null
+        uri_san_peer_certificate: null
+      xds:
+        cluster_metadata:
+          filter_metadata:
+            istio:
+              services:
+                - host: "echo.default.svc.cluster.local"
+                  name: "echo"
+                  namespace: "default"
+        cluster_name: "inbound|80||"
+        filter_chain_name: "0.0.0.0_80"
+        route_metadata: ""
+        route_name: "default"
+        upstream_host_metadata: "NULL"
+    category: "Istio"
 
   - name: "Blank"
     cel: ""
