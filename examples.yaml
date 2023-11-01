@@ -316,6 +316,59 @@ examples:
         limit: 2G
     category: "General"
 
+  - name: "Istio: Access Log Filtering"
+    cel: |
+      // Use CEL to filter access logs in Istio by response code or target cluster.
+      // https://istio.io/latest/docs/tasks/observability/logs/telemetry-api/#get-started-with-telemetry-api
+      
+      response.code >= 400 || (xds.cluster_name == 'BlackHoleCluster' || xds.cluster_name == 'PassthroughCluster')
+    data: |
+      # The following configuration is true access logs only when the response code is greater or equal to 400
+      # or the request went to the BlackHoleCluster or the PassthroughCluster
+      request:
+        duration: "173.403244ms"
+        headers:
+          x-request-id: "e8e687ab-fbbd-4662-8416-11761a29de36"
+        host: "httpbin.org"
+        id: "e8e687ab-fbbd-4662-8416-11761a29de36"
+        method: "GET"
+        path: "/get"
+        protocol: "HTTP/1.1"
+        query: ""
+        referer: null
+        scheme: "http"
+        size: 0
+        time: "2023-10-13T20:32:04.7006+00:00"
+        total_size: 1000
+        url_path: "/get"
+        useragent: "curl/8.2.1"
+      response:
+        code: 200
+        code_details: "via_upstream"
+        flags: 0
+        grpc_status: 2
+        headers:
+          content-type: "application/json"
+        size: 1181
+        total_size: 1377
+      connection:
+        id: 269
+        mtls: false
+        requested_server_name: ""
+      upstream:
+        address: "54.80.46.162:80"
+        local_address: "10.244.0.37:51128"
+        port: 80
+        transport_failure_reason: ""
+      xds:
+        cluster_metadata: ""
+        cluster_name: "PassthroughCluster"
+        filter_chain_name: ""
+        route_metadata: ""
+        route_name: "allow_any"
+        upstream_host_metadata: "NULL"
+    category: "General"
+
   - name: "Blank"
     cel: ""
     data: ""
