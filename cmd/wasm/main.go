@@ -24,13 +24,20 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/undistro/cel-playground/eval"
+	"github.com/undistro/cel-playground/k8s"
 )
 
 func main() {
-	evalFunc := js.FuncOf(evalWrapper)
-	js.Global().Set("eval", evalFunc)
-	defer evalFunc.Release()
+
+	defer addFunction("eval", evalWrapper).Release()
+	defer addFunction("vapEval", validatingAdmissionPolicyWrapper).Release()
 	<-make(chan bool)
+}
+
+func addFunction(name string, fn func(js.Value, []js.Value) any) js.Func {
+	function := js.FuncOf(fn)
+	js.Global().Set(name, function)
+	return function
 }
 
 // evalWrapper wraps the eval function with `syscall/js` parameters
@@ -46,6 +53,22 @@ func evalWrapper(_ js.Value, args []js.Value) any {
 		return response("", fmt.Errorf("failed to decode input: %w", err))
 	}
 	output, err := eval.Eval(exp, input)
+	if err != nil {
+		return response("", err)
+	}
+	return response(output, nil)
+}
+
+// ValidatingAdmissionPolicy functionality
+func validatingAdmissionPolicyWrapper(_ js.Value, args []js.Value) any {
+	if len(args) < 3 {
+		return response("", errors.New("invalid arguments"))
+	}
+	policy := []byte(args[0].String())
+	originalValue := []byte(args[1].String())
+	updatedValue := []byte(args[2].String())
+
+	output, err := k8s.EvalValidatingAdmissionPolicy(policy, originalValue, updatedValue)
 	if err != nil {
 		return response("", err)
 	}

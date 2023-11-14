@@ -1,0 +1,459 @@
+/**
+ * Copyright 2023 Undistro Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ .tab {
+    background-color: #f0f0f0;
+    border: 1px solid #e3e3e3;
+    border-radius: 8px;
+    flex: none;
+    overflow: hidden;
+}
+
+.tab-links {
+    background-color: inherit;
+    border: none;
+    cursor: pointer;
+    float: left;
+    outline: none;
+    padding: 8px 24px;
+}
+
+.tabcontainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.tab-content-container {
+    display: flex;
+    flex: auto;
+}
+
+.tab > button {
+    align-items: center;
+    display:flex;
+    gap: 8px;
+    height: 40px;
+    line-height: 18px;
+    padding: 8px 24px;
+    white-space: nowrap;
+}
+
+.tab button:hover {
+    background-color: #cccccc;
+}
+
+.tab button.button-primary:hover {
+    background-color: #925CD6;
+}
+
+.tab button.active {
+    background-color: #aaaaaa;
+}
+
+.tab-content {
+    display: none;
+    border: 1px solid #e3e3e3;
+    flex: auto;
+    border-radius: 8px;
+}
+
+.tab-content > div {
+    flex: auto;
+    width: 100%;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #FCFCFC;
+}
+
+main {
+    padding: 24px;
+}
+
+a {
+    color: #8447D1;
+    text-decoration: underline;
+}
+
+.cel-logo {
+    height: 24px;
+}
+
+.navbar {
+    background-color: white;
+    width: 100%;
+    height: 72px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.navbar .title {
+    color: #243942;
+    font-weight: 500;
+    font-size: 1.125rem;
+}
+
+.navbar .divider {
+    width: 1px;
+    height: 1rem;
+    background: rgba(0, 0, 0, 0.12);
+}
+
+.navbar .logo {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    padding: 1.5rem;
+    text-decoration: none;
+}
+
+.navbar .logo>*+* {
+    margin-left: 1rem;
+}
+
+.navbar span {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 0.01em;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: right;
+    gap: 16px;
+}
+
+.nav-links > button {
+    height: 40px;
+    white-space: nowrap;
+    display:flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 24px;
+}
+
+.nav-divider {
+    content: '';
+    width: 1px;
+    height: 24px;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.16);
+}
+
+.share-url__container {
+    display: none;
+    height: 40px;
+    padding-left: 8px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    border-radius: 4px;
+    border: 1px solid #E6E6E6;
+    background: #FFF;
+    position: relative;
+}
+
+.share-url__input {
+    display: flex;
+    width: 220px;
+    flex-direction: column;
+    color: rgba(0, 0, 0, 0.60);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.12px;
+    border:none;
+}
+
+.share-url__tooltip {
+    color: #3EAA63;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 120%;
+    letter-spacing: 0.12px;
+    padding: 4px 8px;
+    position: absolute;
+    border-radius: 4px;
+    background: #E6EBE8;
+    right: 0;
+    bottom: -30px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.share-url__input:focus {
+    outline: none;
+}
+
+.share-url__copy {
+    display: flex;
+    height: 100%;
+    padding: 8px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background: #F5F5F5;
+    border:none;
+    cursor: pointer;
+}
+
+.nav-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    gap: 8px;
+
+    background-color: rgba(132, 71, 209, 0.08);
+    text-decoration: none;
+    color: #8447D1;
+}
+
+/* Containers */
+.editor-container {
+    display: flex;
+    flex-direction: row;
+    /* 3 * 24px = 72px for padding, 72px for navbar, 32px for footer */
+    height: calc(100vh - (3 * 24px) - 72px - 32px);
+    gap: 24px;
+}
+
+.editor-container>div {
+    flex: 1;
+}
+
+.output-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.output-container>* {
+    flex: 1;
+}
+
+.editor {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    border: 1px solid #E3E3E3;
+    overflow: visible;
+}
+
+.editor__header {
+    padding: 1rem;
+    border-bottom: 1px solid #E3E3E3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.editor__header .title {
+    color: #34454C;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 40px;
+}
+
+.editor__header .description {
+    color: #5D7B89;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.editor>.editor__input {
+    height: 100%;
+    width: 100%;
+    font-size: 14px;
+}
+
+.editor.editor--output {
+    background: #1D2E35;
+    color: white;
+}
+
+.editor.editor--output .editor__header {
+    border-color: #2D4753;
+}
+
+.editor>.editor__output {
+    background: #1D2E35;
+    resize: none;
+    height: 100%;
+    padding: 12px;
+    font-size: 14px;
+}
+
+.editor>.editor__output::placeholder {
+    color: #E1E7EA;
+}
+
+
+/* Buttons and Inputs */
+
+.button {
+    padding: 4px 24px;
+    border-radius: 4px;
+    background-color: #8447D1;
+    color: white;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    border: none;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    height: 32px;
+}
+
+.button:hover {
+    background: #925CD6;
+}
+
+.button:disabled {
+    background: #8B8692;
+}
+
+
+/* Footer */
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    color: rgba(0, 0, 0, 0.5);
+    margin: 0 24px;
+    font-size: 14px;
+}
+
+footer .version {
+    padding: 4px 8px;
+    background: #EBEBEB;
+    border-radius: 4px;
+}
+
+/* Ace Custom */
+
+.ace-clouds .ace_marker-layer .ace_active-line {
+    background: rgba(0, 0, 0, 0.07);
+}
+
+.ace-clouds .ace_gutter-active-line {
+    background-color: #dcdcdc;
+}
+
+.ace-clouds .ace_comment {
+    color: #848484
+}
+
+.ace-clouds .ace_string,
+.ace-clouds .ace_keyword,
+.ace-clouds .ace_meta.ace_tag  {
+    color: #59328B;
+}
+
+
+.ace-clouds .ace_line,
+.ace-clouds .ace_constant.ace_numeric,
+.ace-clouds .ace_constant.ace_boolean {
+    color: #0E394C
+}
+
+.tippy-tooltip {
+    background-color: white;
+    color: #3E525B;
+    padding: 0;
+}
+
+.tippy-backdrop {
+    background-color: white;
+}
+
+.tippy-content {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #E3E3E3;
+    overflow: hidden;
+    border-radius: 0.25rem;
+}
+
+.example-item {
+    min-width: 280px;
+    background-color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    text-align: left;
+    line-height: 24px;
+    font-size: 14px;
+    color: #3E525B;
+    transition: all 0.2s;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.example-item:hover {
+    background-color: rgba(132, 71, 209, 0.08);
+}
+
+.examples__button {
+    padding: 8px 16px;
+    background-color: #FAFAFA;
+    border: 1px solid #E3E3E3;
+    border-radius: 4px;
+    color: #3E525B;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.examples__button > #example-name {
+    line-height: 24px;
+}
+
+.nice-select > span.current {
+    display: block;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nice-select .list {
+    max-height: 50vh;
+    overflow-y: scroll;
+    padding-bottom: 0 !important;
+    margin: 0;
+}
+
+.nice-select .list::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+.nice-select .list::-webkit-scrollbar-track {
+    background: #F5F5F5;
+}
+
+.nice-select .list::-webkit-scrollbar-thumb {
+    background: #E3E3E3;
+    border-radius: 4px;
+}
