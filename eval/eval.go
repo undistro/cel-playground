@@ -15,15 +15,21 @@
 package eval
 
 import (
+	"encoding/json"
 	"fmt"
 	"reflect"
 
 	"github.com/google/cel-go/cel"
+	"github.com/google/cel-go/common/types/ref"
 	"github.com/google/cel-go/ext"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/structpb"
 	k8s "k8s.io/apiserver/pkg/cel/library"
 )
+
+type EvalResponse struct {
+	Result any     `json:"result"`
+	Cost   *uint64 `json:"cost, omitempty"`
+}
 
 var celEnvOptions = []cel.EnvOption{
 	cel.EagerlyValidateDeclarations(true),
@@ -59,14 +65,39 @@ func Eval(exp string, input map[string]any) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to instantiate CEL program: %w", err)
 	}
-	val, _, err := prog.Eval(input)
+	val, costTracker, err := prog.Eval(input)
 	if err != nil {
 		return "", fmt.Errorf("failed to evaluate: %w", err)
 	}
-	jsonData, err := val.ConvertToNative(reflect.TypeOf(&structpb.Value{}))
+
+	response, err := generateResponse(val, costTracker)
+	if err != nil {
+		return "", fmt.Errorf("failed to generate the response: %w", err)
+	}
+
+	out, err := json.Marshal(response)
 	if err != nil {
 		return "", fmt.Errorf("failed to marshal the output: %w", err)
 	}
-	out := protojson.Format(jsonData.(*structpb.Value))
-	return out, nil
+	return string(out), nil
+}
+
+func getResults(val *ref.Val) (any, error) {
+	if value, err := (*val).ConvertToNative(reflect.TypeOf(&structpb.Value{})); err != nil {
+		return nil, err
+	} else {
+		return value, nil
+	}
+}
+
+func generateResponse(val ref.Val, costTracker *cel.EvalDetails) (*EvalResponse, error) {
+	result, evalError := getResults(&val)
+	if evalError != nil {
+		return nil, evalError
+	}
+	cost := costTracker.ActualCost()
+	return &EvalResponse{
+		Result: result,
+		Cost:   cost,
+	}, nil
 }

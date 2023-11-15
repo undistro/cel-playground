@@ -31,17 +31,29 @@ if (!WebAssembly.instantiateStreaming) {
 
 const celEditor = new AceEditor("cel-input");
 const dataEditor = new AceEditor("data-input");
+const output = document.getElementById("output");
+const costElem = document.getElementById("cost");
+
+function setCost(cost) {
+  costElem.innerText = costElem.textContent = cost;
+}
 
 function run() {
   const data = dataEditor.getValue();
   const expression = celEditor.getValue();
-  const output = document.getElementById("output");
+  const cost = document.getElementById("cost");
 
   output.value = "Evaluating...";
+  setCost("")
+
   const result = eval(expression, data);
 
   const { output: resultOutput, isError } = result;
-  output.value = `${resultOutput}`;
+  var response = JSON.parse(resultOutput);
+
+  output.value = JSON.stringify(response.result);
+  setCost(response.cost);
+
   output.style.color = isError ? "red" : "white";
 }
 
@@ -304,6 +316,8 @@ fetch("../assets/data.json")
       );
       celEditor.setValue(example.cel, -1);
       dataEditor.setValue(example.data, -1);
+      setCost("");
+      output.value = "";
     });
   })
   .catch((err) => {
