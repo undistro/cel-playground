@@ -15,7 +15,8 @@
 package eval
 
 import (
-	"strings"
+	"encoding/json"
+	"reflect"
 	"testing"
 )
 
@@ -34,13 +35,13 @@ func TestEval(t *testing.T) {
 	tests := []struct {
 		name    string
 		exp     string
-		want    string
+		want    any
 		wantErr bool
 	}{
 		{
 			name: "lte",
 			exp:  "object.replicas <= 5",
-			want: "true",
+			want: true,
 		},
 		{
 			name:    "error",
@@ -50,66 +51,73 @@ func TestEval(t *testing.T) {
 		{
 			name: "url",
 			exp:  "isURL(object.href) && url(object.href).getScheme() == 'https' && url(object.href).getEscapedPath() == '/path'",
-			want: "true",
+			want: true,
 		},
 		{
 			name: "query",
 			exp:  "url(object.href).getQuery()",
-			want: `{"query": ["val"]}`,
+			want: map[string]any{
+				"query": []any{"val"},
+			},
 		},
 		{
 			name: "regex",
 			exp:  "object.image.find('v[0-9]+.[0-9]+.[0-9]*$')",
-			want: `"v0.0.0"`,
+			want: "v0.0.0",
 		},
 		{
 			name: "list",
 			exp:  "object.items.isSorted() && object.items.sum() == 6 && object.items.max() == 3 && object.items.indexOf(1) == 0",
-			want: "true",
+			want: true,
 		},
 		{
 			name: "optional",
 			exp:  `object.?foo.orValue("fallback")`,
-			want: `"fallback"`,
+			want: "fallback",
 		},
 		{
 			name: "strings",
 			exp:  "object.abc.join(', ')",
-			want: `"a, b, c"`,
+			want: "a, b, c",
 		},
 		{
 			name: "cross type numeric comparisons",
 			exp:  "object.replicas > 1.4",
-			want: "true",
+			want: true,
 		},
 		{
 			name: "split",
 			exp:  "object.image.split(':').size() == 2",
-			want: "true",
+			want: true,
 		},
 		{
 			name: "quantity",
 			exp:  `isQuantity(object.memory) && quantity(object.memory).add(quantity("700M")).sub(1).isLessThan(quantity("2G"))`,
-			want: "true",
+			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Eval(tt.exp, input)
+
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Eval() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if stripWhitespace(got) != stripWhitespace(tt.want) {
-				t.Errorf("Eval() got = %v, want %v", got, tt.want)
+
+			if !tt.wantErr {
+				evalResponse := EvalResponse{}
+				if err := json.Unmarshal([]byte(got), &evalResponse); err != nil {
+					t.Errorf("Eval() error = %v", err)
+				}
+
+				if !reflect.DeepEqual(tt.want, evalResponse.Result) {
+					t.Errorf("Expected %v\n, received %v", tt.want, evalResponse.Result)
+				}
+				if evalResponse.Cost == nil || *evalResponse.Cost <= 0 {
+					t.Errorf("Expected Cost, returned %v", evalResponse.Cost)
+				}
 			}
 		})
 	}
-}
-
-func stripWhitespace(a string) string {
-	a = strings.ReplaceAll(a, " ", "")
-	a = strings.ReplaceAll(a, "\n", "")
-	a = strings.ReplaceAll(a, "\t", "")
-	return strings.ReplaceAll(a, "\r", "")
 }

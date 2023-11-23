@@ -598,3 +598,8 @@ footer .langdef {
   background: #e3e3e3;
   border-radius: 4px;
 }
+
+.cost__header {
+  width: 25%;
+  text-align: left;
+}
