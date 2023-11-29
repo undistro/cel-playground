@@ -35,7 +35,7 @@ const output = document.getElementById("output");
 const costElem = document.getElementById("cost");
 
 function setCost(cost) {
-  costElem.innerText = costElem.textContent = cost;
+  costElem.innerText = cost || "-";
 }
 
 function run() {
@@ -54,12 +54,11 @@ function run() {
     output.value = resultOutput;
     output.style.color = "red";
   } else {
-    const { result } = JSON.parse(resultOutput);
+    const { result, cost } = JSON.parse(resultOutput);
     output.value = JSON.stringify(result);
     output.style.color = "white";
+    setCost(cost);
   }
-
-  setCost(response.cost);
 }
 
 window.addEventListener("load", () => {
