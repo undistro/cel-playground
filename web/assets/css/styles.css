@@ -268,6 +268,13 @@ a {
   line-height: 40px;
 }
 
+.editor__header .output-title {
+  color: #fff;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 40px;
+}
+
 .dark .editor__header .title {
   color: #ffffff;
 }
@@ -378,7 +385,7 @@ a {
 
 .copy-click {
   display: none;
-  background-color: #69C98A;
+  background-color: #69c98a;
   font-size: 14px;
   font-weight: 500;
   border-radius: 4px;
@@ -600,6 +607,56 @@ footer .langdef {
 }
 
 .cost__header {
-  width: 25%;
-  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cost__header__icon__text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.cost__header__icon__text .text {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 40px;
+}
+
+.cost__header a {
+  text-decoration: none;
+  font-size: 24px;
+  line-height: 0;
+  color: #8c97a6;
+}
+
+.cost__header a:hover {
+  color: #b9c0ca;
+}
+
+.cost__header #cost {
+  color: #bdcdd5;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 40px;
+}
+
+.cost-tooltip {
+  display: none;
+  position: absolute;
+  right: 50px;
+  top: 38px;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.cost-tooltip span {
+  color: #000000;
+  font-size: 14px;
+  font-weight: 500;
 }

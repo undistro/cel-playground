@@ -35,7 +35,7 @@ const output = document.getElementById("output");
 const costElem = document.getElementById("cost");
 
 function setCost(cost) {
-  costElem.innerText = costElem.textContent = cost;
+  costElem.innerText = cost || "-";
 }
 
 function run() {
@@ -44,17 +44,21 @@ function run() {
   const cost = document.getElementById("cost");
 
   output.value = "Evaluating...";
-  setCost("")
+  setCost("");
 
   const result = eval(expression, data);
 
   const { output: resultOutput, isError } = result;
-  var response = JSON.parse(resultOutput);
 
-  output.value = JSON.stringify(response.result);
-  setCost(response.cost);
-
-  output.style.color = isError ? "red" : "white";
+  if (isError) {
+    output.value = resultOutput;
+    output.style.color = "red";
+  } else {
+    const { result, cost } = JSON.parse(resultOutput);
+    output.value = JSON.stringify(result);
+    output.style.color = "white";
+    setCost(cost);
+  }
 }
 
 window.addEventListener("load", () => {
@@ -151,28 +155,28 @@ let celInput = document.getElementById("cel-cont");
 
 celInput.addEventListener("mouseover", () => {
   celCopyIcon.style.display = "inline";
-})
+});
 celInput.addEventListener("mouseleave", () => {
   celCopyIcon.style.display = "none";
-})
+});
 
 celCopyIcon.addEventListener("click", () => {
   let value = celEditor.editor.getValue();
   navigator.clipboard.writeText(value).catch(console.error);
-  celCopyHover.style.display = "none"
+  celCopyHover.style.display = "none";
   celCopyClick.style.display = "flex";
   setTimeout(() => {
     celCopyClick.style.display = "none";
-  }, 1000)
-})
+  }, 1000);
+});
 
 celCopyIcon.addEventListener("mouseover", () => {
-  celCopyHover.style.display = "flex"
-})
+  celCopyHover.style.display = "flex";
+});
 
 celCopyIcon.addEventListener("mouseleave", () => {
-  celCopyHover.style.display = "none"
-})
+  celCopyHover.style.display = "none";
+});
 
 let dataCopyIcon = document.getElementById("data-copy-icon");
 let dataCopyHover = document.getElementById("data-copy-hover");
@@ -180,12 +184,12 @@ let dataCopyClick = document.getElementById("data-copy-click");
 let dataInput = document.getElementById("data-cont");
 
 dataInput.addEventListener("mouseover", () => {
-  dataCopyIcon.style.display = "inline"
-})
+  dataCopyIcon.style.display = "inline";
+});
 
 dataInput.addEventListener("mouseleave", () => {
-  dataCopyIcon.style.display = "none"
-})
+  dataCopyIcon.style.display = "none";
+});
 
 dataCopyIcon.addEventListener("click", () => {
   let value = dataEditor.editor.getValue();
@@ -195,16 +199,15 @@ dataCopyIcon.addEventListener("click", () => {
   setTimeout(() => {
     dataCopyClick.style.display = "none";
   }, 1000);
-})
+});
 
 dataCopyIcon.addEventListener("mouseover", () => {
   dataCopyHover.style.display = "flex";
-})
+});
 
 dataCopyIcon.addEventListener("mouseleave", () => {
   dataCopyHover.style.display = "none";
-})
-
+});
 
 function copy() {
   const copyText = document.querySelector(".share-url__input");
