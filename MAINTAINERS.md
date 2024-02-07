@@ -4,7 +4,7 @@ Maintainers are approvers who have shown good technical judgement in guiding fea
 displayed overall knowledge of the project and features in the project, and are nurturing and receptive to everyone in 
 the community.
 
-The following table lists the Zora project core maintainers:
+The following table lists the CEL Playground project core maintainers:
 
 | Name                                                              | GitHub ID                                        | Affiliation                |
 |-------------------------------------------------------------------|--------------------------------------------------|----------------------------|
