@@ -326,24 +326,3 @@ fetch("../assets/data.json")
   .catch((err) => {
     console.error(err);
   });
-
-const toggleModeButton = document.getElementById("toggle-mode");
-const playgroundModesModalEl = document.getElementById(
-  "playground-modes__modal"
-);
-const closePlaygroundModesModalButton = document.querySelector(
-  ".playground-modes__modal-close-btn"
-);
-toggleModeButton.addEventListener("click", () => {
-  playgroundModesModalEl.style.display = "block";
-});
-
-closePlaygroundModesModalButton.addEventListener("click", () => {
-  playgroundModesModalEl.style.display = "none";
-});
-
-window.onclick = function (event) {
-  if (event.target === playgroundModesModalEl) {
-    playgroundModesModalEl.style.display = "none";
-  }
-};
