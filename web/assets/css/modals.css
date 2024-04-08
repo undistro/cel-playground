@@ -16,7 +16,7 @@
   border-radius: 8px;
   border: 1px solid #e0e0e0;
   background-color: #fefefe;
-
+  z-index: 11;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -95,11 +95,22 @@
   cursor: pointer;
 }
 
+.playground-modes__options--option:not(.active) label:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+  transition: background-color 300ms;
+}
+
+.dark .playground-modes__options--option:not(.active) label:hover {
+  background-color: #26292c;
+  transition: background-color 300ms;
+}
+
 .playground-modes__options--option.active label {
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: #8447d1;
+  cursor: default;
 }
 
 .dark .playground-modes__options--option.active label {

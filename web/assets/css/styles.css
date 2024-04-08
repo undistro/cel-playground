@@ -75,6 +75,7 @@ a {
   border-radius: 1.5rem;
   border: 1px solid #e0e0e0;
   height: 40px;
+  min-width: 270px;
 }
 
 .dark .navbar .modes__container {
@@ -90,6 +91,7 @@ a {
 }
 
 .modes__container span {
+  display: flex;
   padding: 0.5rem 1rem;
 }
 
