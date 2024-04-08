@@ -21,6 +21,7 @@
     <title>CEL Playground</title>
     <link rel="stylesheet" type="text/css" href="dist/nice-select2.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/modals.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -55,8 +56,10 @@
     <nav class="navbar">
       <div href="/" class="logo">
         <img class="cel-logo" src="assets/img/logo.svg" alt="Logo" />
-        <div class="divider"></div>
-        <span>Quickly test Common Expression Language</span>
+        <div class="modes__container">
+          <span>Common Expression Language (CEL)</span>
+          <button id="toggle-mode">Modes</button>
+        </div>
       </div>
       <div class="nav-links">
         <div class="share-url__container">
@@ -228,9 +231,7 @@
     <footer>
       <span
         >Powered by
-        <a href="https://getup.io/en/opensource" target="_blank"
-          >Getup</a
-        >
+        <a href="https://getup.io/en/opensource" target="_blank">Getup</a>
       </span>
       <span class="langdef">
         <a
@@ -246,6 +247,30 @@
         >
       </span>
     </footer>
+
+    <div id="playground-modes__modal" class="playground-modes__modal">
+      <div class="modal-content">
+        <header>
+          <h1>Playground modes</h1>
+          <button class="playground-modes__modal-close-btn">
+            <i class="ph ph-bold ph-x"></i>
+          </button>
+        </header>
+        <div class="playground-modes__container">
+          <div class="playground-modes__options">
+            <div class="playground-modes__options--option active">
+              <label for="CEL">Common Expression Language (CEL)</label>
+              <input type="radio" name="CEL" id="CEL" value="CEL" />
+            </div>
+            <div class="playground-modes__options--option">
+              <label for="CEL">Validating Admission Policy</label>
+              <input type="radio" name="VAP" id="VAP" value="VAP" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
     <script src="dist/nice-select2.js"></script>
     <script type="module" src="assets/js/main.js"></script>
