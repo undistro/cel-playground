@@ -67,6 +67,49 @@ a {
   background: rgba(0, 0, 0, 0.12);
 }
 
+.navbar .modes__container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  border: 1px solid #e0e0e0;
+  height: 40px;
+  min-width: 270px;
+}
+
+.dark .navbar .modes__container {
+  border-color: #3b3d3f;
+}
+
+.modes__container span,
+.modes__container button {
+  font-weight: 500;
+  font-size: 0.875rem !important;
+  line-height: 23.8px;
+  font-family: Inter;
+}
+
+.modes__container span {
+  display: flex;
+  padding: 0.5rem 1rem;
+}
+
+.modes__container button {
+  height: 100%;
+  border: none;
+  border-left: 1px solid #e0e0e0;
+  background-color: rgba(132, 71, 209, 0.04);
+  color: #8447d1;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.dark .modes__container button {
+  border-left: 1px solid#3B3D3F;
+  color: #b27ef4;
+}
+
 .dark .navbar .divider {
   background-color: #ffffff1f;
 }
