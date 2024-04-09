@@ -1,21 +1,3 @@
-const localStorageKey = "@cel-playground:mode";
-
-const MODES = Object.freeze({
-  CEL: { value: "CEL", title: "CEL Expression", html: "" },
-  VAP: {
-    value: "VAP",
-    title: "Validating Admission Policy",
-    html: [{ selector: "", string: "" }],
-  },
-  WEB_HOOKS: { value: "WEB_HOOKS", title: "Web Hooks", html: "" },
-  AUTH_CMAPPING: {
-    value: "AUTH_CMAPPING",
-    title: "Authentication Claim Mapping",
-    html: "",
-  },
-  AUTH: { value: "AUTH", title: "Authentication", html: "" },
-});
-
 const toggleModeButton = document.getElementById("toggle-mode");
 const playgroundModesModalEl = document.getElementById(
   "playground-modes__modal"
@@ -55,6 +37,8 @@ playgroundModeOptions.forEach((option, _, self) => {
     renderUIChanges(currentMode);
   }
 
+  renderVAPTabs();
+
   const input = option.querySelector("input[type=radio]");
 
   input.addEventListener("click", (e) => {
@@ -67,6 +51,7 @@ playgroundModeOptions.forEach((option, _, self) => {
       renderUIChanges(currentMode);
     }
     localStorage.setItem(localStorageKey, value);
+    renderVAPTabs();
     setTimeout(() => closeModal(), 1000);
   });
 });

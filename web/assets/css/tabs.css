@@ -1,0 +1,62 @@
+.vap__tabs {
+  --purple: #8447d1;
+  --purple-dark: #ab75f0;
+
+  display: none;
+  align-items: center;
+}
+
+.vap__tabs button {
+  background-color: transparent;
+  border: none;
+  width: 93px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #8b8692;
+  cursor: pointer;
+}
+
+.dark .vap__tabs button {
+  color: white;
+}
+
+.vap__tabs button:not(.active):hover {
+  background-color: rgba(132, 71, 209, 0.08);
+  color: var(--purple);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.dark .vap__tabs button:not(.active):hover {
+  color: var(--purple-dark);
+}
+
+.vap__tabs button.active {
+  color: var(--purple);
+}
+
+.dark .vap__tabs button.active {
+  color: var(--purple-dark);
+}
+
+.vap__tabs button.active::after {
+  content: "";
+  width: 93px;
+  height: 2px;
+
+  background-color: var(--purple);
+
+  position: absolute;
+  bottom: 0;
+}
+
+.dark .vap__tabs button.active::after {
+  background-color: var(--purple-dark);
+}

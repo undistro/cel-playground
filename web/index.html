@@ -22,6 +22,7 @@
     <link rel="stylesheet" type="text/css" href="dist/nice-select2.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
     <link rel="stylesheet" href="assets/css/modals.css" />
+    <link rel="stylesheet" href="assets/css/tabs.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -146,7 +147,7 @@
     </nav>
     <main>
       <div class="editor-container">
-        <div class="editor">
+        <div class="editor editor-examples">
           <div class="editor__header">
             <div>
               <span class="title"></span>
@@ -174,12 +175,16 @@
           </div>
         </div>
         <div class="output-container">
-          <div class="editor">
-            <div class="editor__header">
-              <div>
+          <div class="editor editor-input">
+            <div class="editor__header" style="position: relative">
+              <div style="display: flex; align-items: center; gap: 1rem">
                 <span class="title"> Input </span>
-                <span class="description">(YAML or JSON format)</span>
+                <div class="vap__tabs" id="vap__tabs">
+                  <button class="vap__tabs-button active">Original</button>
+                  <button class="vap__tabs-button">Update</button>
+                </div>
               </div>
+
               <button disabled id="run" class="button button-primary">
                 Run
               </button>
@@ -201,7 +206,7 @@
             </div>
           </div>
           <div class="editor editor--output">
-            <div class="editor__header">
+            <div class="editor__header editor-output">
               <span class="output-title"> Output </span>
               <span class="cost__header">
                 <span class="cost__header__icon__text">
@@ -265,7 +270,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
     <script src="dist/nice-select2.js"></script>
+    <script src="assets/js/constants.js"></script>
     <script type="module" src="assets/js/main.js"></script>
+    <script src="assets/js/tabs/vap.js"></script>
     <script type="module" src="assets/js/modals/playground-mode.js"></script>
     <script type="module" src="assets/js/tooltips/cost.js"></script>
   </body>
