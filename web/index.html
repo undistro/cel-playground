@@ -179,7 +179,7 @@
             <div class="editor__header" style="position: relative">
               <div style="display: flex; align-items: center; gap: 1rem">
                 <span class="title"> Input </span>
-                <div class="vap__tabs" id="vap__tabs">
+                <div class="vap__tabs" id="vap__tabs" role="tab">
                   <button class="vap__tabs-button active">Original</button>
                   <button class="vap__tabs-button">Update</button>
                 </div>
@@ -224,12 +224,130 @@
                 <span id="cost"> - </span>
               </span>
             </div>
-            <textarea
-              id="output"
-              class="editor__output"
-              placeholder="Loading Wasm…"
-              disabled
-            ></textarea>
+            <div class="editor__output-holder">
+              <textarea
+                id="output"
+                class="editor__output"
+                placeholder="Loading Wasm…"
+                disabled
+              ></textarea>
+              <ul class="editor__output-result">
+                <li class="editor__output-result-accordion" data-open="false">
+                  <div class="result-accordion-content">
+                    <div
+                      style="display: flex; align-items: center; gap: 0.5rem"
+                    >
+                      <i class="ph ph-caret-right ph-bold result-arrow"></i>
+                      <i
+                        class="ph ph-x-circle ph-fill"
+                        style="color: #e01e5a"
+                      ></i>
+                      <span>validations[0]</span>
+                    </div>
+
+                    <span>Cost: 12</span>
+                  </div>
+                  <div class="result-accordion-expansible-content">
+                    <span>true</span>
+                  </div>
+                </li>
+                <li class="editor__output-result-accordion" data-open="false">
+                  <div class="result-accordion-content">
+                    <div
+                      style="display: flex; align-items: center; gap: 0.5rem"
+                    >
+                      <i class="ph ph-caret-right ph-bold result-arrow"></i>
+                      <i
+                        class="ph ph-x-circle ph-fill"
+                        style="color: #e01e5a"
+                      ></i>
+                      <span>validations[0]</span>
+                    </div>
+
+                    <span>Cost: 12</span>
+                  </div>
+                  <div class="result-accordion-expansible-content">
+                    <span>true</span>
+                  </div>
+                </li>
+                <li class="editor__output-result-accordion" data-open="false">
+                  <div class="result-accordion-content">
+                    <div
+                      style="display: flex; align-items: center; gap: 0.5rem"
+                    >
+                      <i class="ph ph-caret-right ph-bold result-arrow"></i>
+                      <i
+                        class="ph ph-x-circle ph-fill"
+                        style="color: #e01e5a"
+                      ></i>
+                      <span>validations[0]</span>
+                    </div>
+
+                    <span>Cost: 12</span>
+                  </div>
+                  <div class="result-accordion-expansible-content">
+                    <span>true</span>
+                  </div>
+                </li>
+                <li class="editor__output-result-accordion" data-open="false">
+                  <div class="result-accordion-content">
+                    <div
+                      style="display: flex; align-items: center; gap: 0.5rem"
+                    >
+                      <i class="ph ph-caret-right ph-bold result-arrow"></i>
+                      <i
+                        class="ph ph-x-circle ph-fill"
+                        style="color: #e01e5a"
+                      ></i>
+                      <span>validations[0]</span>
+                    </div>
+
+                    <span>Cost: 12</span>
+                  </div>
+                  <div class="result-accordion-expansible-content">
+                    <span>true</span>
+                  </div>
+                </li>
+                <li class="editor__output-result-accordion" data-open="false">
+                  <div class="result-accordion-content">
+                    <div
+                      style="display: flex; align-items: center; gap: 0.5rem"
+                    >
+                      <i class="ph ph-caret-right ph-bold result-arrow"></i>
+                      <i
+                        class="ph ph-x-circle ph-fill"
+                        style="color: #e01e5a"
+                      ></i>
+                      <span>validations[0]</span>
+                    </div>
+
+                    <span>Cost: 12</span>
+                  </div>
+                  <div class="result-accordion-expansible-content">
+                    <span>true</span>
+                  </div>
+                </li>
+                <li class="editor__output-result-accordion" data-open="false">
+                  <div class="result-accordion-content">
+                    <div
+                      style="display: flex; align-items: center; gap: 0.5rem"
+                    >
+                      <i class="ph ph-caret-right ph-bold result-arrow"></i>
+                      <i
+                        class="ph ph-x-circle ph-fill"
+                        style="color: #e01e5a"
+                      ></i>
+                      <span>validations[0]</span>
+                    </div>
+
+                    <span>Cost: 12</span>
+                  </div>
+                  <div class="result-accordion-expansible-content">
+                    <span>true</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -275,5 +393,6 @@
     <script src="assets/js/tabs/vap.js"></script>
     <script type="module" src="assets/js/modals/playground-mode.js"></script>
     <script type="module" src="assets/js/tooltips/cost.js"></script>
+    <script type="module" src="assets/js/accordions/result.js"></script>
   </body>
 </html>
