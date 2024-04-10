@@ -1,0 +1,6 @@
+{
+  "code": "// Quantity library introduced in Kubernetes 1.28\n\nisQuantity(object.memory) && \nquantity(object.memory)\n  .add(quantity(\"700M\"))\n  .sub(1) // test without this subtraction\n  .isLessThan(quantity(object.limit))\n",
+  "inputs": {
+    "input": "object:\n  memory: 1.3G\n  limit: 2G\n"
+  }
+}

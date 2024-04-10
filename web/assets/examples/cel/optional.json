@@ -1,0 +1,6 @@
+{
+  "code": "object.?foo.orValue(\"fallback\")",
+  "inputs": {
+    "input": "object: {}"
+  }
+}

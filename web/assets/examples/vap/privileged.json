@@ -1,0 +1,8 @@
+{
+  "code": "apiVersion: admissionregistration.k8s.io/v1beta1\nkind: ValidatingAdmissionPolicy\nmetadata:\n  name: \"privileged-container\"\nspec:\n  failurePolicy: Fail\n  matchConstraints:\n    resourceRules:\n      - apiGroups:   [\"\", \"apps\", \"batch\"]\n        apiVersions: [\"v1\"]\n        operations:  [\"CREATE\", \"UPDATE\"]\n        resources:   [\"pods\", \"deployments\", \"daemonsets\", \"statefulsets\", \"replicasets\", \"cronjobs\", \"jobs\"]\n  variables:\n    - name: podSpec\n      expression: >\n        object.kind == \"Pod\" ? object.spec : (\n            object.kind in [\"ReplicaSet\", \"Deployment\", \"DaemonSet\", \"StatefulSet\", \"Job\"] ? object.spec.template.spec : (\n                object.kind == \"CronJob\" ? object.spec.jobTemplate.spec.template.spec : null)\n        )\n    - name: allContainers\n      expression: 'variables.podSpec.containers + variables.podSpec.?initContainers.orValue([])'\n  validations:\n    - expression: >\n        variables.allContainers.all(c,\n            c.?securityContext.?privileged.orValue(false) == false\n        )\n",
+  "inputs": {
+    "object": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: nginx\n  labels:\n    app: nginx\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: nginx\n  template:\n    metadata:\n      name: nginx\n      labels:\n        app: nginx\n    spec:\n      containers:\n        - name: nginx\n          image: nginx\n#          image: cgr.dev/chainguard/nginx\n          imagePullPolicy: IfNotPresent\n      restartPolicy: Always",
+    "oldObject": "",
+    "params": ""
+  }
+}
