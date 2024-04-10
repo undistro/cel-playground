@@ -1,4 +1,4 @@
-import { renderExamplesInSelectInstance } from "../../utils/render-functions.js";
+import { renderExamplesInSelectInstance } from "../utils/render-functions.js";
 import { AceEditor } from "../editor.js";
 
 const celEditor = new AceEditor("cel-input");

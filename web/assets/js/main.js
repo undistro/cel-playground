@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { setCost } from "./utils/render-functions.js";
 import { AceEditor } from "./editor.js";
 
 // Add the following polyfill for Microsoft Edge 17/18 support:
@@ -30,11 +31,6 @@ if (!WebAssembly.instantiateStreaming) {
 const celEditor = new AceEditor("cel-input");
 const dataEditor = new AceEditor("data-input");
 const output = document.getElementById("output");
-const costElem = document.getElementById("cost");
-
-function setCost(cost) {
-  costElem.innerText = cost || "-";
-}
 
 function run() {
   const data = dataEditor.getValue();

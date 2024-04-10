@@ -105,11 +105,13 @@
       {
         "id": "registries",
         "name": "Allowed Registries",
+        "data": "",
         "category": "Custom"
       },
       {
         "id": "privileged",
         "name": "Privileged container",
+        "data": "",
         "category": "PSS Baseline"
       }
     ],

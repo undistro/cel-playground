@@ -38,8 +38,8 @@ export function renderExamplesInSelectInstance(
 
     if (example.label === "default") {
       if (!urlParams.has("content")) {
-        // celEditor.setValue(example.value[0].cel, -1);
-        // dataEditor.setValue(example.value[0].data, -1);
+        celEditor.setValue(example.value[0]?.id ?? "", -1);
+        dataEditor.setValue(example.value[0]?.data ?? "", -1);
       }
     } else if (example.label === "Blank") {
       return;
@@ -59,9 +59,16 @@ export function renderExamplesInSelectInstance(
     const example = examples.find(
       (example) => example.name === event.target.value
     );
-    // celEditor.setValue(example.cel, -1);
-    // dataEditor.setValue(example.data, -1);
-    // setCost("");
-    // output.value = "";
+    if (example) {
+      celEditor.setValue(example.id, -1);
+      dataEditor.setValue(example.data, -1);
+    }
+    setCost("");
+    output.value = "";
   });
+}
+
+export function setCost(cost) {
+  const costElem = document.getElementById("cost");
+  costElem.innerText = cost || "-";
 }
