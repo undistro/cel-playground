@@ -1,4 +1,5 @@
 const toggleModeButton = document.getElementById("toggle-mode");
+
 const playgroundModesModalEl = document.getElementById(
   "playground-modes__modal"
 );
@@ -19,79 +20,88 @@ window.onclick = function (event) {
   }
 };
 
-const playgroundModeOptions = document.querySelectorAll(
-  ".playground-modes__options--option"
-);
-playgroundModeOptions.forEach((option, _, self) => {
-  const modeSaved = localStorage.getItem(localStorageKey);
-  const dataModeOption = option.getAttribute("data-mode");
-  const currentMode = MODES[dataModeOption];
+function handleModeClick(event, mode, element) {
+  const { value } = event.target;
 
-  if (!modeSaved) {
-    self[0].classList.add("active");
-    renderUIChanges(MODES["CEL"]);
-  }
+  document
+    .querySelectorAll(".playground-modes__options--option")
+    .forEach((option) => option.classList.remove("active"));
 
-  if (modeSaved === dataModeOption) {
-    option.classList.add("active");
-    renderUIChanges(currentMode);
-  }
-
+  element.classList.add("active");
+  renderUIChangesByMode(mode);
+  localStorage.setItem(localStorageKey, value);
+  setTimeout(() => closeModal(), 1000);
   renderVAPTabs();
-
-  const input = option.querySelector("input[type=radio]");
-
-  input.addEventListener("click", (e) => {
-    playgroundModeOptions.forEach((option) => {
-      option.classList.remove("active");
-    });
-    const { value } = e.target;
-    if (value === dataModeOption) {
-      option.classList.add("active");
-      renderUIChanges(currentMode);
-    }
-    localStorage.setItem(localStorageKey, value);
-    renderVAPTabs();
-    setTimeout(() => closeModal(), 1000);
-  });
-});
+}
 
 function renderModeOptions() {
   const el = document.querySelector(".playground-modes__options");
-  const playCelModeKeys = Object.keys(MODES);
-  playCelModeKeys.forEach((key) => {
-    const { value: modeValue, title } = MODES[key];
 
-    const divOption = document.createElement("div");
-    divOption.className = "playground-modes__options--option";
-    divOption.setAttribute("data-mode", modeValue);
+  getModes()
+    .then((modes) => {
+      modes.forEach((mode, i) => {
+        const divOption = createParentElement(mode);
+        const label = createLabelElement(mode);
+        const input = createInputElement(mode);
+        input.onclick = (e) => handleModeClick(e, mode, divOption);
 
-    const label = document.createElement("label");
-    label.htmlFor = modeValue;
-    label.innerHTML = title;
+        const modeSaved = localStorage.getItem(localStorageKey);
 
-    const input = document.createElement("input");
-    input.className = "playground-modes__options--option-input";
-    input.type = "radio";
-    input.name = modeValue;
-    input.id = modeValue;
-    input.value = modeValue;
+        if (!modeSaved && i === 0) {
+          divOption.classList.add("active");
+          renderUIChangesByMode(modes.find((mode) => mode.id === "cel"));
+        }
+        if (modeSaved === mode.id) {
+          divOption.classList.add("active");
+          renderUIChangesByMode(mode);
+        }
 
-    divOption.appendChild(label);
-    divOption.appendChild(input);
+        divOption.appendChild(label);
+        divOption.appendChild(input);
+        el.appendChild(divOption);
+      });
+    })
+    .catch((err) => console.log(err));
+}
 
-    el.appendChild(divOption);
-  });
+function createParentElement(mode) {
+  const divOption = document.createElement("div");
+  divOption.className = "playground-modes__options--option";
+  divOption.setAttribute("data-mode", mode.id);
+  return divOption;
+}
+
+function createLabelElement(mode) {
+  const label = document.createElement("label");
+  label.htmlFor = mode.id;
+  label.innerHTML = mode.name;
+  return label;
+}
+
+function createInputElement(mode) {
+  const input = document.createElement("input");
+  input.className = "playground-modes__options--option-input";
+  input.type = "radio";
+  input.name = mode.id;
+  input.id = mode.id;
+  input.value = mode.id;
+  return input;
+}
+
+async function getModes() {
+  const response = await fetch("../../assets/modes.json");
+  const modes = await response.json();
+  return modes;
 }
 
 function closeModal() {
   playgroundModesModalEl.style.display = "none";
 }
 
-function renderUIChanges(changes) {
+function renderUIChangesByMode(mode) {
   const titleEl = document.querySelector(".title");
   const toggleModeHolder = document.querySelector(".modes__container-holder");
 
-  titleEl.innerHTML = changes.title;
-  toggleModeHolder.innerHTML = changes.title;
+  titleEl.innerHTML = mode.name;
+  toggleModeHolder.innerHTML = mode.name;
 }
