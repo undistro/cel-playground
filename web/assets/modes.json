@@ -1,0 +1,65 @@
+[
+  {
+    "id": "cel",
+    "name": "CEL Expression",
+    "syntax": "javascript",
+    "examples": [
+      {
+        "id": "optional",
+        "name": "Optional values",
+        "category": "General"
+      },
+      {
+        "id": "duration",
+        "name": "Duration and timestamp",
+        "category": "General"
+      },
+      {
+        "id": "quantity",
+        "name": "Quantity",
+        "category": "General"
+      }
+    ],
+    "inputs": [
+      {
+        "id": "input",
+        "name": "Input",
+        "syntax": "yaml"
+      }
+    ]
+  },
+  {
+    "id": "vap",
+    "name": "ValidatingAdmissionPolicy",
+    "syntax": "yaml",
+    "examples": [
+      {
+        "id": "registries",
+        "name": "Allowed Registries",
+        "category": "Custom"
+      },
+      {
+        "id": "privileged",
+        "name": "Privileged container",
+        "category": "PSS Baseline"
+      }
+    ],
+    "inputs": [
+      {
+        "id": "object",
+        "name": "Updated Content",
+        "syntax": "yaml"
+      },
+      {
+        "id": "oldObject",
+        "name": "Original Content",
+        "syntax": "yaml"
+      },
+      {
+        "id": "params",
+        "name": "Parameters",
+        "syntax": "yaml"
+      }
+    ]
+  }
+]
