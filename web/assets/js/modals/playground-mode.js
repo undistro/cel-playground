@@ -1,3 +1,9 @@
+import { renderExamplesInSelectInstance } from "../../utils/render-functions.js";
+import { AceEditor } from "../editor.js";
+
+const celEditor = new AceEditor("cel-input");
+const dataEditor = new AceEditor("data-input");
+
 const toggleModeButton = document.getElementById("toggle-mode");
 
 const playgroundModesModalEl = document.getElementById(
@@ -104,4 +110,5 @@ function renderUIChangesByMode(mode) {
 
   titleEl.innerHTML = mode.name;
   toggleModeHolder.innerHTML = mode.name;
+  renderExamplesInSelectInstance(mode.examples, celEditor, dataEditor);
 }
