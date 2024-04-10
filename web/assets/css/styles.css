@@ -369,7 +369,7 @@ a {
 
 .editor__output-holder .editor__output-result {
   list-style: none;
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 1rem;
   position: absolute;
