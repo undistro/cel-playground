@@ -179,7 +179,13 @@
           <div class="editor editor-input">
             <div class="editor__header" style="position: relative">
               <div style="display: flex; align-items: center; gap: 1rem">
-                <span class="title"> Input </span>
+                <div class="tooltip__container">
+                  <i id="tooltip__trigger" class="ph-fill ph-info icon"></i>
+                  <span class="title"> Input </span>
+                  <div id="tooltip__content" class="tooltip">
+                    <span>Write in YAML or JSON format.</span>
+                  </div>
+                </div>
                 <div class="vap__tabs" id="vap__tabs" role="tab">
                   <button class="vap__tabs-button active">Original</button>
                   <button class="vap__tabs-button">Update</button>
@@ -211,15 +217,17 @@
               <span class="output-title"> Output </span>
               <span class="cost__header">
                 <span class="cost__header__icon__text">
-                  <a
-                    href="https://kubernetes.io/docs/reference/using-api/cel/#resource-constraints"
-                    target="_blank"
-                    referrerpolicy="no-referrer"
-                    ><i id="cost-info" class="ph-fill ph-info"></i
-                  ></a>
-                  <span class="text">Cost:</span>
-                  <div id="cost-tooltip" class="cost-tooltip">
-                    <span>Click to see more about costs.</span>
+                  <div class="tooltip__container">
+                    <a
+                      href="https://kubernetes.io/docs/reference/using-api/cel/#resource-constraints"
+                      target="_blank"
+                      referrerpolicy="no-referrer"
+                      ><i id="tooltip__trigger" class="ph-fill ph-info icon"></i
+                    ></a>
+                    <span class="text">Cost:</span>
+                    <div id="tooltip__content" class="tooltip">
+                      <span>Click to see more about costs.</span>
+                    </div>
                   </div>
                 </span>
                 <span id="cost"> - </span>
@@ -393,7 +401,7 @@
     <script type="module" src="assets/js/main.js"></script>
     <script src="assets/js/tabs/validating-admission-policy.js"></script>
     <script type="module" src="assets/js/modals/playground-mode.js"></script>
-    <script type="module" src="assets/js/tooltips/cost.js"></script>
+    <script type="module" src="assets/js/tooltips/index.js"></script>
     <script type="module" src="assets/js/accordions/result.js"></script>
   </body>
 </html>

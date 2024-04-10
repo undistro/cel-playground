@@ -764,21 +764,3 @@ footer .langdef {
   font-weight: 500;
   line-height: 40px;
 }
-
-.cost-tooltip {
-  display: none;
-  position: absolute;
-  right: 50px;
-  top: 38px;
-  white-space: nowrap;
-  background-color: #fff;
-  border-radius: 4px;
-  padding: 8px;
-  z-index: 20;
-}
-
-.cost-tooltip span {
-  color: #000000;
-  font-size: 14px;
-  font-weight: 500;
-}
