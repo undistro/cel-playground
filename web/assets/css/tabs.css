@@ -2,14 +2,14 @@
   --purple: #8447d1;
   --purple-dark: #ab75f0;
 
-  display: none;
+  display: flex;
   align-items: center;
 }
 
 .vap__tabs button {
   background-color: transparent;
   border: none;
-  width: 93px;
+  width: 150px;
 
   display: flex;
   flex-direction: column;
@@ -48,7 +48,7 @@
 
 .vap__tabs button.active::after {
   content: "";
-  width: 93px;
+  width: 150px;
   height: 2px;
 
   background-color: var(--purple);

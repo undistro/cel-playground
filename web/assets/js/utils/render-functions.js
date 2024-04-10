@@ -4,7 +4,8 @@ const selectInstance = NiceSelect.bind(examplesList);
 export function renderExamplesInSelectInstance(
   examples,
   celEditor,
-  dataEditor
+  dataEditor,
+  callbackFn
 ) {
   examplesList.innerHTML = `<option data-display="Examples" value="" disabled selected hidden>
       Examples
@@ -63,6 +64,7 @@ export function renderExamplesInSelectInstance(
       celEditor.setValue(example.id, -1);
       dataEditor.setValue(example.data, -1);
     }
+    callbackFn();
     setCost("");
     output.value = "";
   });
@@ -71,4 +73,38 @@ export function renderExamplesInSelectInstance(
 export function setCost(cost) {
   const costElem = document.getElementById("cost");
   costElem.innerText = cost || "-";
+}
+
+export function renderTabs(inputs) {
+  const holderElement = document.getElementById("tab");
+  holderElement.innerHTML = "";
+
+  const divParent = document.createElement("div");
+  divParent.className = "vap__tabs";
+  divParent.id = "vap__tabs";
+
+  inputs.forEach((input, idx) => {
+    const buttonTab = document.createElement("button");
+    buttonTab.innerHTML = input.name;
+    buttonTab.className = "vap__tabs-button";
+    buttonTab.onclick = () => {
+      const allButtons = divParent?.querySelectorAll(".vap__tabs-button");
+      allButtons.forEach(removeActiveClass);
+      if (buttonTab.classList.contains("active")) removeActiveClass(buttonTab);
+      else addActiveClass(buttonTab);
+    };
+    if (idx === 0) addActiveClass(buttonTab);
+    divParent.appendChild(buttonTab);
+  });
+
+  holderElement.appendChild(divParent);
+  if (inputs.length === 1) holderElement.innerHTML = "";
+
+  function removeActiveClass(element) {
+    element.classList.remove("active");
+  }
+
+  function addActiveClass(element) {
+    element.classList.add("active");
+  }
 }

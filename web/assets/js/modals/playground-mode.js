@@ -1,4 +1,7 @@
-import { renderExamplesInSelectInstance } from "../utils/render-functions.js";
+import {
+  renderExamplesInSelectInstance,
+  renderTabs,
+} from "../utils/render-functions.js";
 import { AceEditor } from "../editor.js";
 
 const celEditor = new AceEditor("cel-input");
@@ -37,7 +40,6 @@ function handleModeClick(event, mode, element) {
   renderUIChangesByMode(mode);
   localStorage.setItem(localStorageKey, value);
   setTimeout(() => closeModal(), 1000);
-  renderVAPTabs();
 }
 
 function renderModeOptions() {
@@ -105,10 +107,23 @@ function closeModal() {
 }
 
 function renderUIChangesByMode(mode) {
-  const titleEl = document.querySelector(".title");
+  const titleEl = document.querySelector(".title.expression__square");
   const toggleModeHolder = document.querySelector(".modes__container-holder");
+  const titleInputSquareEl = document.querySelector(".title.input__square");
 
   titleEl.innerHTML = mode.name;
   toggleModeHolder.innerHTML = mode.name;
-  renderExamplesInSelectInstance(mode.examples, celEditor, dataEditor);
+  titleInputSquareEl.innerHTML = mode.inputs > 1 ? "Inputs: " : "Input";
+
+  renderExamplesInSelectInstance(
+    mode.examples,
+    celEditor,
+    dataEditor,
+    callbackFns
+  );
+  callbackFns();
+
+  function callbackFns() {
+    renderTabs(mode.inputs);
+  }
 }
