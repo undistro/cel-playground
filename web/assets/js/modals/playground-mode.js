@@ -2,10 +2,6 @@ import {
   renderExamplesInSelectInstance,
   renderTabs,
 } from "../utils/render-functions.js";
-import { AceEditor } from "../editor.js";
-
-const celEditor = new AceEditor("cel-input");
-const dataEditor = new AceEditor("data-input");
 
 const toggleModeButton = document.getElementById("toggle-mode");
 
@@ -115,15 +111,10 @@ function renderUIChangesByMode(mode) {
   toggleModeHolder.innerHTML = mode.name;
   titleInputSquareEl.innerHTML = mode.inputs > 1 ? "Inputs: " : "Input";
 
-  renderExamplesInSelectInstance(
-    mode.examples,
-    celEditor,
-    dataEditor,
-    callbackFns
-  );
+  renderExamplesInSelectInstance(mode, callbackFns);
   callbackFns();
 
   function callbackFns() {
-    renderTabs(mode.inputs);
+    renderTabs(mode);
   }
 }

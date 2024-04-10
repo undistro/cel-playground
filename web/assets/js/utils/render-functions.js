@@ -1,18 +1,17 @@
+import { AceEditor } from "../editor.js";
+
+const celEditor = new AceEditor("cel-input");
+const dataEditor = new AceEditor("data-input");
 const examplesList = document.getElementById("examples");
 const selectInstance = NiceSelect.bind(examplesList);
 
-export function renderExamplesInSelectInstance(
-  examples,
-  celEditor,
-  dataEditor,
-  callbackFn
-) {
+export function renderExamplesInSelectInstance(mode, callbackFn) {
   examplesList.innerHTML = `<option data-display="Examples" value="" disabled selected hidden>
       Examples
     </option>`;
 
   const urlParams = new URLSearchParams(window.location.search);
-
+  const examples = mode.examples;
   const groupByCategory = examples.reduce((acc, example) => {
     return {
       ...acc,
@@ -60,9 +59,14 @@ export function renderExamplesInSelectInstance(
     const example = examples.find(
       (example) => example.name === event.target.value
     );
+
     if (example) {
-      celEditor.setValue(example.id, -1);
-      dataEditor.setValue(example.data, -1);
+      localStorage.setItem("example-selected", example.id);
+      const tabButtonActived = document.querySelector(
+        "#tab .vap__tabs-button.active"
+      );
+      console.log(tabButtonActived);
+      fetchTabData(mode, example.id, tabButtonActived);
     }
     callbackFn();
     setCost("");
@@ -75,7 +79,8 @@ export function setCost(cost) {
   costElem.innerText = cost || "-";
 }
 
-export function renderTabs(inputs) {
+export function renderTabs(mode) {
+  const { inputs } = mode;
   const holderElement = document.getElementById("tab");
   holderElement.innerHTML = "";
 
@@ -84,17 +89,20 @@ export function renderTabs(inputs) {
   divParent.id = "vap__tabs";
 
   inputs.forEach((input, idx) => {
-    const buttonTab = document.createElement("button");
-    buttonTab.innerHTML = input.name;
-    buttonTab.className = "vap__tabs-button";
-    buttonTab.onclick = () => {
+    const tabButton = document.createElement("button");
+    tabButton.innerHTML = input.name;
+    tabButton.className = "vap__tabs-button";
+    tabButton.id = input.id;
+    tabButton.onclick = () => {
       const allButtons = divParent?.querySelectorAll(".vap__tabs-button");
       allButtons.forEach(removeActiveClass);
-      if (buttonTab.classList.contains("active")) removeActiveClass(buttonTab);
-      else addActiveClass(buttonTab);
+      if (tabButton.classList.contains("active")) removeActiveClass(tabButton);
+      else addActiveClass(tabButton);
+      const savedExample = localStorage.getItem("example-selected");
+      fetchTabData(mode, savedExample, tabButton);
     };
-    if (idx === 0) addActiveClass(buttonTab);
-    divParent.appendChild(buttonTab);
+    if (idx === 0) addActiveClass(tabButton);
+    divParent.appendChild(tabButton);
   });
 
   holderElement.appendChild(divParent);
@@ -107,4 +115,15 @@ export function renderTabs(inputs) {
   function addActiveClass(element) {
     element.classList.add("active");
   }
+}
+
+function fetchTabData(mode, exampleID, tabButton) {
+  fetch(`../../assets/examples/${mode.id}/${exampleID}.json`)
+    .then((response) => response.json())
+    .then(({ code, inputs }) => {
+      celEditor.setValue(code, -1);
+      if (tabButton) {
+        dataEditor.setValue(inputs[tabButton.id], -1);
+      }
+    });
 }
