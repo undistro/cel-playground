@@ -181,11 +181,17 @@
               <div style="display: flex; align-items: center; gap: 1rem">
                 <div class="tooltip__container">
                   <i id="tooltip__trigger" class="ph-fill ph-info icon"></i>
-                  <span class="title"> Input </span>
-                  <div id="tooltip__content" class="tooltip">
-                    <span>Write in YAML or JSON format.</span>
+                  <div
+                    id="tooltip__content"
+                    class="tooltip"
+                    style="left: 0; top: 50px"
+                  >
+                    <span class="tooltip__content--text"
+                      >Write in YAML or JSON format.</span
+                    >
                   </div>
                 </div>
+                <span class="title"> Input </span>
                 <div class="vap__tabs" id="vap__tabs" role="tab">
                   <button class="vap__tabs-button active">Original</button>
                   <button class="vap__tabs-button">Update</button>
@@ -224,11 +230,13 @@
                       referrerpolicy="no-referrer"
                       ><i id="tooltip__trigger" class="ph-fill ph-info icon"></i
                     ></a>
-                    <span class="text">Cost:</span>
                     <div id="tooltip__content" class="tooltip">
-                      <span>Click to see more about costs.</span>
+                      <span class="tooltip__content--text"
+                        >Click to see more about costs.</span
+                      >
                     </div>
                   </div>
+                  <span class="text">Cost:</span>
                 </span>
                 <span id="cost"> - </span>
               </span>

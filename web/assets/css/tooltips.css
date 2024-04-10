@@ -15,16 +15,21 @@
   border-radius: 4px;
   padding: 8px;
   z-index: 20;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.12);
+  width: max-content;
 }
 
-.tooltip span {
+.tooltip .tooltip__content--text {
   color: #000000;
   font-size: 14px;
   font-weight: 500;
 }
 
-.tooltip .icon {
+.tooltip__container .icon {
   font-size: 24px;
   line-height: 0;
   color: #8c97a6;
+
+  display: flex;
+  justify-content: center;
 }
