@@ -96,6 +96,7 @@ export function renderTabs(mode) {
       allButtons.forEach(removeActiveClass);
       if (tabButton.classList.contains("active")) removeActiveClass(tabButton);
       else addActiveClass(tabButton);
+      divParent.setAttribute("style", `--current-tab: ${idx}`);
       const savedExample = localStorage.getItem("example-selected");
       fetchTabData(mode, savedExample, tabButton);
     };

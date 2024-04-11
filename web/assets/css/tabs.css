@@ -1,15 +1,29 @@
 .vap__tabs {
   --purple: #8447d1;
   --purple-dark: #ab75f0;
+  --tab-button-width: 150px;
 
   display: flex;
   align-items: center;
 }
 
+.vap__tabs::after {
+  content: "";
+  width: var(--tab-button-width);
+  height: 2px;
+
+  background-color: var(--purple);
+
+  position: absolute;
+  bottom: 0;
+  transform: translateX(calc(var(--current-tab) * var(--tab-button-width)));
+  transition: transform 300ms;
+}
+
 .vap__tabs button {
   background-color: transparent;
   border: none;
-  width: 150px;
+  width: var(--tab-button-width);
 
   display: flex;
   flex-direction: column;
@@ -46,7 +60,7 @@
   color: var(--purple-dark);
 }
 
-.vap__tabs button.active::after {
+/* .vap__tabs button.active::after {
   content: "";
   width: 150px;
   height: 2px;
@@ -55,7 +69,7 @@
 
   position: absolute;
   bottom: 0;
-}
+} */
 
 .dark .vap__tabs button.active::after {
   background-color: var(--purple-dark);
