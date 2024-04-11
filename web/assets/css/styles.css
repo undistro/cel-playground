@@ -682,6 +682,10 @@ footer .langdef {
   border-color: #383c43;
 }
 
+.nice-select-dropdown {
+  min-width: 300px !important;
+}
+
 .dark .nice-select .nice-select-dropdown {
   background: #2a2d32;
   border: 1px solid #383c43;

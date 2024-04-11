@@ -106,10 +106,6 @@
   opacity: 0;
 }
 
-.nice-select-dropdown {
-  min-width: 300px;
-}
-
 .nice-select .list {
   border-radius: 5px;
   box-sizing: border-box;
