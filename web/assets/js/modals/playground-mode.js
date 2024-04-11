@@ -23,10 +23,14 @@ renderModeOptions();
 
 closePlaygroundModesModalButton.addEventListener("click", closeModal);
 
-window.onclick = function (event) {
+window.onclick = (event) => {
   if (event.target === playgroundModesModalEl) {
     closeModal();
   }
+};
+
+window.onkeydown = (ev) => {
+  if (ev.key === "Escape") closeModal();
 };
 
 function handleModeClick(event, mode, element) {
