@@ -1,8 +1,9 @@
 import {
   renderExamplesInSelectInstance,
   renderTabs,
-} from "../utils/render-functions.js";
-import { AceEditor } from "../editor.js";
+} from "../../utils/render-functions.js";
+import { AceEditor } from "../../editor.js";
+import { ModesService } from "../../services/modes.js";
 
 const celEditor = new AceEditor("cel-input");
 const dataEditor = new AceEditor("data-input");
@@ -51,7 +52,7 @@ function handleModeClick(event, mode, element) {
 function renderModeOptions() {
   const el = document.querySelector(".playground-modes__options");
 
-  getModes()
+  ModesService.getModes()
     .then((modes) => {
       modes.forEach((mode, i) => {
         const divOption = createParentElement(mode);
@@ -100,12 +101,6 @@ function createInputElement(mode) {
   input.id = mode.id;
   input.value = mode.id;
   return input;
-}
-
-async function getModes() {
-  const response = await fetch("../../assets/modes.json");
-  const modes = await response.json();
-  return modes;
 }
 
 function closeModal() {

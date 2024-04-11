@@ -1,4 +1,5 @@
 import { AceEditor } from "../editor.js";
+import { ExampleService } from "../services/examples.js";
 
 const celEditor = new AceEditor("cel-input");
 const dataEditor = new AceEditor("data-input");
@@ -119,12 +120,12 @@ export function renderTabs(mode) {
 }
 
 function fetchTabData(mode, exampleID, tabButton) {
-  fetch(`../../assets/examples/${mode.id}/${exampleID}.json`)
-    .then((response) => response.json())
-    .then(({ code, inputs }) => {
+  ExampleService.getExampleContentById(mode, exampleID).then(
+    ({ code, inputs }) => {
       celEditor.setValue(code, -1);
       if (tabButton) {
         dataEditor.setValue(inputs[tabButton.id], -1);
       }
-    });
+    }
+  );
 }
