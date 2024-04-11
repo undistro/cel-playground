@@ -130,6 +130,11 @@
         "id": "params",
         "name": "Parameters",
         "syntax": "yaml"
+      },
+      {
+        "id": "params2",
+        "name": "Parameters 2",
+        "syntax": "yaml"
       }
     ]
   },
