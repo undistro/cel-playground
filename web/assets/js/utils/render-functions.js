@@ -62,10 +62,7 @@ export function renderExamplesInSelectInstance(mode, callbackFn) {
 
     if (example) {
       localStorage.setItem("example-selected", example.id);
-      const tabButtonActived = document.querySelector(
-        "#tab .vap__tabs-button.active"
-      );
-      console.log(tabButtonActived);
+      const tabButtonActived = document.querySelector("#tab .vap__tabs-button");
       fetchTabData(mode, example.id, tabButtonActived);
     }
     callbackFn();
