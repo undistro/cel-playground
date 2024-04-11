@@ -61,6 +61,7 @@ export function renderExamplesInSelectInstance(mode, callbackFn) {
     );
 
     if (example) {
+      celEditor.setExpressionSyntax(mode.syntax);
       localStorage.setItem("example-selected", example.id);
       const tabButtonActived = document.querySelector("#tab .vap__tabs-button");
       fetchTabData(mode, example.id, tabButtonActived);
@@ -99,6 +100,8 @@ export function renderTabs(mode) {
       fetchTabData(mode, savedExample, tabButton);
     };
     if (idx === 0) addActiveClass(tabButton);
+    dataEditor.setExpressionSyntax(input.syntax);
+
     divParent.appendChild(tabButton);
   });
 

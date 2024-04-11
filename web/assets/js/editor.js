@@ -41,6 +41,10 @@ class AceEditor {
   getValue() {
     return this.editor.getValue();
   }
+
+  setExpressionSyntax(syntax) {
+    this.editor.getSession().setMode(`ace/mode/${syntax ?? "javascript"}`);
+  }
 }
 
 export { AceEditor };
