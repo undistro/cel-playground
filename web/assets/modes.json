@@ -132,5 +132,26 @@
         "syntax": "yaml"
       }
     ]
+  },
+  {
+    "id": "web_hooks",
+    "name": "Web Hooks",
+    "syntax": "yaml",
+    "examples": [],
+    "inputs": []
+  },
+  {
+    "id": "auth_cmapping",
+    "name": "Auth Claim Mapping",
+    "syntax": "javascript",
+    "examples": [],
+    "inputs": []
+  },
+  {
+    "id": "auth",
+    "name": "Authentication",
+    "syntax": "javascript",
+    "examples": [],
+    "inputs": []
   }
 ]

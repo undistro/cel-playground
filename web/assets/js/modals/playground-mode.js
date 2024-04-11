@@ -2,6 +2,10 @@ import {
   renderExamplesInSelectInstance,
   renderTabs,
 } from "../utils/render-functions.js";
+import { AceEditor } from "../editor.js";
+
+const celEditor = new AceEditor("cel-input");
+const dataEditor = new AceEditor("data-input");
 
 const toggleModeButton = document.getElementById("toggle-mode");
 
@@ -35,6 +39,8 @@ function handleModeClick(event, mode, element) {
   element.classList.add("active");
   renderUIChangesByMode(mode);
   localStorage.setItem(localStorageKey, value);
+  celEditor.setValue("", -1);
+  dataEditor.setValue("", -1);
   setTimeout(() => closeModal(), 1000);
 }
 
