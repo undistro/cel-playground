@@ -124,7 +124,7 @@ export function renderTabs(mode) {
   });
 
   holderElement.appendChild(divParent);
-  if (inputs.length === 1) holderElement.innerHTML = "";
+  if (inputs.length <= 1) holderElement.innerHTML = "";
 
   function removeActiveClass(element) {
     element.classList.remove("active");
