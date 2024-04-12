@@ -1,25 +1,15 @@
-@keyframes position {
-  0% {
-    top: 0;
-  }
-  25% {
-    top: 15%;
-  }
-  50% {
-    top: 30%;
-  }
-  75% {
-    top: 40%;
-  }
-  100% {
-    top: 50%;
-  }
+.has-modal {
+  overflow: hidden;
+}
+
+.modal-show {
+  display: block !important;
 }
 
 .playground-modes__modal {
   display: none;
   position: fixed;
-  z-index: 10;
+  z-index: 1000;
   left: 0;
   top: 0;
   width: 100vw;
@@ -34,9 +24,8 @@
   border-radius: 8px;
   border: 1px solid #e0e0e0;
   background-color: #fefefe;
-  z-index: 11;
+  z-index: 1001;
   position: absolute;
-  animation: 3s ease-in linear position;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
