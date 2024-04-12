@@ -109,7 +109,7 @@ function handleModeClick(event, mode, element) {
   localStorage.setItem(localStorageKey, value);
   celEditor.setValue("", -1);
   dataEditor.setValue("", -1);
-  setTimeout(() => closeModal(), 1000);
+  setTimeout(() => modal.hide(), 1000);
 }
 
 function renderModeOptions() {
@@ -164,10 +164,6 @@ function createInputElement(mode) {
   input.id = mode.id;
   input.value = mode.id;
   return input;
-}
-
-function closeModal() {
-  playgroundModesModalEl.style.display = "none";
 }
 
 function renderUIChangesByMode(mode) {
