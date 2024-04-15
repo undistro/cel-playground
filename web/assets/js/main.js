@@ -255,7 +255,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-fetch("../assets/data.json")
+fetch("../assets/examples/cel.json")
   .then((response) => response.json())
   .then(({ versions }) => {
     document.getElementById("version").innerText = versions["cel-go"];

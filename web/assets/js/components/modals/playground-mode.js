@@ -189,7 +189,7 @@ function renderUIChangesByMode(mode) {
 
   titleEl.innerHTML = mode.name;
   toggleModeHolder.innerHTML = mode.name;
-  titleInputSquareEl.innerHTML = mode.inputs.length > 1 ? "Inputs: " : "Input";
+  // titleInputSquareEl.innerHTML = mode.inputs.length > 1 ? "Inputs: " : "Input";
 
   renderExamplesInSelectInstance(mode, callbackFns);
   callbackFns();
