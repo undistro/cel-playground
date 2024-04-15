@@ -79,11 +79,10 @@ export function renderExamplesInSelectInstance(examples, callbackFn) {
     const example = examples.find(
       (example) => example.name === event.target.value
     );
-
-    if (example) {
-      setEditors(example.data, example.inputs[0].data);
-      callbackFn(example);
-    }
+    if (event.target.value === "Blank") setEditors("", "");
+    if (!example) return;
+    setEditors(example.data, example.inputs[0].data);
+    callbackFn(example);
     setCost("");
     output.value = "";
   });
