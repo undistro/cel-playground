@@ -15,7 +15,6 @@
  */
 
 import { AceEditor } from "../editor.js";
-import { ExampleService } from "../services/examples.js";
 
 const celEditor = new AceEditor("cel-input");
 const dataEditor = new AceEditor("data-input");
