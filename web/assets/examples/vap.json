@@ -5,7 +5,10 @@
       "data": "apiVersion: admissionregistration.k8s.io/v1alpha1\nkind: ValidatingAdmissionPolicy\nmetadata:\n  name: \"force-ha-in-prod\"\nspec:\n  failurePolicy: Fail\n  matchConstraints:\n    resourceRules:\n    - apiGroups:   [\"apps\"]\n      apiVersions: [\"v1\"]\n      operations:  [\"CREATE\", \"UPDATE\"]\n      resources:   [\"deployments\"]\n  validations:\n    - expression: \"object.spec.replicas >= 3\"\n      message: \"All production deployments should be HA with at least three replicas\"\n",
       "category": "Validation",
       "inputs": [
-        { "name": "Original", "data": "" },
+        {
+          "name": "Original",
+          "data": ""
+        },
         {
           "name": "Updated",
           "data": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  labels:\n    app: kubernetes-bootcamp\n  name: kubernetes-bootcamp\n  namespace: default\nspec:\n  progressDeadlineSeconds: 600\n  replicas: 3\n  revisionHistoryLimit: 10\n  selector:\n    matchLabels:\n      app: kubernetes-bootcamp\n  strategy:\n    rollingUpdate:\n      maxSurge: 25%\n      maxUnavailable: 25%\n    type: RollingUpdate\n  template:\n    metadata:\n      creationTimestamp: null\n      labels:\n        app: kubernetes-bootcamp\n    spec:\n      containers:\n      - image: gcr.io/google-samples/kubernetes-bootcamp:v1\n        imagePullPolicy: IfNotPresent\n        name: kubernetes-bootcamp\n        resources: {}\n        terminationMessagePath: /dev/termination-log\n        terminationMessagePolicy: File\n      dnsPolicy: ClusterFirst\n      restartPolicy: Always\n      schedulerName: default-scheduler\n      securityContext: {}\n      terminationGracePeriodSeconds: 30\n"

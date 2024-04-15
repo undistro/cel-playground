@@ -2,7 +2,7 @@
   "examples": [
     {
       "name": "default",
-      "cel": "// Welcome to the CEL Playground!\n// CEL Playground is an interactive WebAssembly powered environment to explore and experiment with the Common Expression Language (CEL).\n//\n// - Write your CEL expression here\n// - Use the area on the side for input data, in YAML or JSON format\n// - Press 'Run' to evaluate your CEL expression against the input data\n// - Explore our collection of examples for inspiration\n\naccount.balance >= transaction.withdrawal\n    || (account.overdraftProtection\n    && account.overdraftLimit >= transaction.withdrawal  - account.balance)\n",
+      "data": "// Welcome to the CEL Playground!\n// CEL Playground is an interactive WebAssembly powered environment to explore and experiment with the Common Expression Language (CEL).\n//\n// - Write your CEL expression here\n// - Use the area on the side for input data, in YAML or JSON format\n// - Press 'Run' to evaluate your CEL expression against the input data\n// - Explore our collection of examples for inspiration\n\naccount.balance >= transaction.withdrawal\n    || (account.overdraftProtection\n    && account.overdraftLimit >= transaction.withdrawal  - account.balance)\n",
       "inputs": [
         {
           "name": "Input",
@@ -13,7 +13,7 @@
     },
     {
       "name": "Check image registry",
-      "cel": "object.spec.template.spec.containers.all(container,\n  params.allowedRegistries.exists(registry,\n    ((registry in ['docker.io', 'docker.io/library']) && !container.image.contains('/')) ||\n    container.image.startsWith(registry)\n  )\n)\n",
+      "data": "object.spec.template.spec.containers.all(container,\n  params.allowedRegistries.exists(registry,\n    ((registry in ['docker.io', 'docker.io/library']) && !container.image.contains('/')) ||\n    container.image.startsWith(registry)\n  )\n)\n",
       "inputs": [
         {
           "name": "Input",
@@ -24,7 +24,7 @@
     },
     {
       "name": "Disallow HostPorts",
-      "cel": "// According the Pod Security Standards, HostPorts should be disallowed entirely.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline\n\nobject.spec.template.spec.containers.all(container,\n  !has(container.ports) ||\n  container.ports.all(port,\n    !has(port.hostPort) ||\n    port.hostPort == 0\n  )\n)\n",
+      "data": "// According the Pod Security Standards, HostPorts should be disallowed entirely.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline\n\nobject.spec.template.spec.containers.all(container,\n  !has(container.ports) ||\n  container.ports.all(port,\n    !has(port.hostPort) ||\n    port.hostPort == 0\n  )\n)\n",
       "inputs": [
         {
           "name": "Input",
@@ -35,7 +35,7 @@
     },
     {
       "name": "Require non-root containers",
-      "cel": "// According the Pod Security Standards, Containers must be required to run as non-root users.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted\n\n// Pod or Containers must set `securityContext.runAsNonRoot`\n(\n  (has(object.spec.template.spec.securityContext) && has(object.spec.template.spec.securityContext.runAsNonRoot)) ||\n  object.spec.template.spec.containers.all(container,\n    has(container.securityContext) && has(container.securityContext.runAsNonRoot)\n  )\n)\n&&\n\n// Neither Pod nor Containers should set `securityContext.runAsNonRoot` to false\n(\n  (!has(object.spec.template.spec.securityContext) || !has(object.spec.template.spec.securityContext.runAsNonRoot) || object.spec.template.spec.securityContext.runAsNonRoot != false)\n  &&\n  object.spec.template.spec.containers.all(container,\n    !has(container.securityContext) || !has(container.securityContext.runAsNonRoot) || container.securityContext.runAsNonRoot != false\n  )\n)\n",
+      "data": "// According the Pod Security Standards, Containers must be required to run as non-root users.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted\n\n// Pod or Containers must set `securityContext.runAsNonRoot`\n(\n  (has(object.spec.template.spec.securityContext) && has(object.spec.template.spec.securityContext.runAsNonRoot)) ||\n  object.spec.template.spec.containers.all(container,\n    has(container.securityContext) && has(container.securityContext.runAsNonRoot)\n  )\n)\n&&\n\n// Neither Pod nor Containers should set `securityContext.runAsNonRoot` to false\n(\n  (!has(object.spec.template.spec.securityContext) || !has(object.spec.template.spec.securityContext.runAsNonRoot) || object.spec.template.spec.securityContext.runAsNonRoot != false)\n  &&\n  object.spec.template.spec.containers.all(container,\n    !has(container.securityContext) || !has(container.securityContext.runAsNonRoot) || container.securityContext.runAsNonRoot != false\n  )\n)\n",
       "inputs": [
         {
           "name": "Input",
@@ -46,7 +46,7 @@
     },
     {
       "name": "Drop ALL capabilities",
-      "cel": "// According the Pod Security Standards, Containers must drop `ALL` capabilities, and are only permitted to add back the `NET_BIND_SERVICE` capability.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted\n\n// Containers must drop `ALL` capabilities,\nobject.spec.template.spec.containers.all(container,\n  has(container.securityContext) &&\n  has(container.securityContext.capabilities) &&\n  has(container.securityContext.capabilities.drop) &&\n  size(container.securityContext.capabilities.drop) >= 1 &&\n  container.securityContext.capabilities.drop.exists(c, c == 'ALL')\n)\n&&\n// and are only permitted to add back the `NET_BIND_SERVICE` capability\nobject.spec.template.spec.containers.all(container,\n  !has(container.securityContext) ||\n  !has(container.securityContext.capabilities) ||\n  !has(container.securityContext.capabilities.add) ||\n  container.securityContext.capabilities.add.all(cap, cap in params.allowedCapabilities)\n)\n",
+      "data": "// According the Pod Security Standards, Containers must drop `ALL` capabilities, and are only permitted to add back the `NET_BIND_SERVICE` capability.\n// https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted\n\n// Containers must drop `ALL` capabilities,\nobject.spec.template.spec.containers.all(container,\n  has(container.securityContext) &&\n  has(container.securityContext.capabilities) &&\n  has(container.securityContext.capabilities.drop) &&\n  size(container.securityContext.capabilities.drop) >= 1 &&\n  container.securityContext.capabilities.drop.exists(c, c == 'ALL')\n)\n&&\n// and are only permitted to add back the `NET_BIND_SERVICE` capability\nobject.spec.template.spec.containers.all(container,\n  !has(container.securityContext) ||\n  !has(container.securityContext.capabilities) ||\n  !has(container.securityContext.capabilities.add) ||\n  container.securityContext.capabilities.add.all(cap, cap in params.allowedCapabilities)\n)\n",
       "inputs": [
         {
           "name": "Input",
@@ -57,7 +57,7 @@
     },
     {
       "name": "Semantic version check for image tags (Regex)",
-      "cel": "// Checks if the container images are tagged following the semantic version.\n\nobject.spec.containers.all(container,\n  container.image.contains(\"@sha256\") || // allow digest\n  container.image.lastIndexOf(\":\") > -1 &&\n  container.image.substring(container.image.lastIndexOf(\":\") + 1)\n    .matches('^v?(0|[1-9]\\\\d*)\\\\.(0|[1-9]\\\\d*)\\\\.(0|[1-9]\\\\d*)(?:-((?:0|[1-9]\\\\d*|\\\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\\\.(?:0|[1-9]\\\\d*|\\\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\\\+([0-9a-zA-Z-]+(?:\\\\.[0-9a-zA-Z-]+)*))?$')\n  // the regex above is suggested by semver.org: https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string\n  // allowing the \"v\" prefix\n)\n",
+      "data": "// Checks if the container images are tagged following the semantic version.\n\nobject.spec.containers.all(container,\n  container.image.contains(\"@sha256\") || // allow digest\n  container.image.lastIndexOf(\":\") > -1 &&\n  container.image.substring(container.image.lastIndexOf(\":\") + 1)\n    .matches('^v?(0|[1-9]\\\\d*)\\\\.(0|[1-9]\\\\d*)\\\\.(0|[1-9]\\\\d*)(?:-((?:0|[1-9]\\\\d*|\\\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\\\.(?:0|[1-9]\\\\d*|\\\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\\\+([0-9a-zA-Z-]+(?:\\\\.[0-9a-zA-Z-]+)*))?$')\n  // the regex above is suggested by semver.org: https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string\n  // allowing the \"v\" prefix\n)\n",
       "inputs": [
         {
           "name": "Input",
@@ -68,7 +68,7 @@
     },
     {
       "name": "URLs",
-      "cel": "// Examples of Kubernetes URL CEL library that is available in the playground.\n// https://kubernetes.io/docs/reference/using-api/cel/#kubernetes-url-library\n\nisURL(object.href) \n&& url(object.href).getScheme() == 'https' \n&& url(object.href).getHost() == 'example.com:80'\n&& url(object.href).getHostname() == 'example.com'\n&& url(object.href).getPort() == '80'\n&& url(object.href).getEscapedPath() == '/path'\n&& url(object.href).getQuery().size() == 1\n",
+      "data": "// Examples of Kubernetes URL CEL library that is available in the playground.\n// https://kubernetes.io/docs/reference/using-api/cel/#kubernetes-url-library\n\nisURL(object.href) \n&& url(object.href).getScheme() == 'https' \n&& url(object.href).getHost() == 'example.com:80'\n&& url(object.href).getHostname() == 'example.com'\n&& url(object.href).getPort() == '80'\n&& url(object.href).getEscapedPath() == '/path'\n&& url(object.href).getQuery().size() == 1\n",
       "inputs": [
         {
           "name": "Input",
@@ -79,7 +79,7 @@
     },
     {
       "name": "Check JWT custom claims",
-      "cel": "// Exercise provided in CEL-Go Google Codelab.\n// https://codelabs.developers.google.com/codelabs/cel-go/index.html#10\n// \n// Determine whether the jwt.extra_claims has at least one key that starts\n// with the group prefix, and ensure that all group-like keys have list\n// values containing only strings that end with '@acme.co'.\n\njwt.extra_claims.exists(c, c.startsWith('group'))\n&& jwt.extra_claims\n  .filter(c, c.startsWith('group'))\n      .all(c, jwt.extra_claims[c]\n          .all(g, g.endsWith('@acme.co')))\n",
+      "data": "// Exercise provided in CEL-Go Google Codelab.\n// https://codelabs.developers.google.com/codelabs/cel-go/index.html#10\n// \n// Determine whether the jwt.extra_claims has at least one key that starts\n// with the group prefix, and ensure that all group-like keys have list\n// values containing only strings that end with '@acme.co'.\n\njwt.extra_claims.exists(c, c.startsWith('group'))\n&& jwt.extra_claims\n  .filter(c, c.startsWith('group'))\n      .all(c, jwt.extra_claims[c]\n          .all(g, g.endsWith('@acme.co')))\n",
       "inputs": [
         {
           "name": "Input",
@@ -91,13 +91,13 @@
 
     {
       "name": "Optional",
-      "cel": "object.?foo.orValue(\"fallback\")",
+      "data": "object.?foo.orValue(\"fallback\")",
       "inputs": [{ "name": "Input", "data": "object: {}" }],
       "category": "General"
     },
     {
       "name": "Duration and timestamp",
-      "cel": "// Validate that 'expired' date is after a 'created' date plus a 'ttl' duration\nhas(object.expired) && \ntimestamp(object.created) + duration(object.ttl) < timestamp(object.expired)\n",
+      "data": "// Validate that 'expired' date is after a 'created' date plus a 'ttl' duration\nhas(object.expired) && \ntimestamp(object.created) + duration(object.ttl) < timestamp(object.expired)\n",
       "inputs": [
         {
           "name": "Input",
@@ -108,7 +108,7 @@
     },
     {
       "name": "Quantity",
-      "cel": "// Quantity library introduced in Kubernetes 1.28\n\nisQuantity(object.memory) && \nquantity(object.memory)\n  .add(quantity(\"700M\"))\n  .sub(1) // test without this subtraction\n  .isLessThan(quantity(object.limit))\n",
+      "data": "// Quantity library introduced in Kubernetes 1.28\n\nisQuantity(object.memory) && \nquantity(object.memory)\n  .add(quantity(\"700M\"))\n  .sub(1) // test without this subtraction\n  .isLessThan(quantity(object.limit))\n",
       "inputs": [
         { "name": "Input", "data": "object:\n  memory: 1.3G\n  limit: 2G\n" }
       ],
@@ -116,7 +116,7 @@
     },
     {
       "name": "Access Log Filtering",
-      "cel": "// Use CEL to filter access logs in Istio by response code or target cluster.\n// https://istio.io/latest/docs/tasks/observability/logs/telemetry-api/#get-started-with-telemetry-api\n//\n// apiVersion: telemetry.istio.io/v1alpha1\n// kind: Telemetry\n// metadata:\n//   name: default-exception-logging\n//   namespace: istio-system\n// spec:\n//   accessLogging:\n//     - providers:\n//         - name: otel\n//       filter:\n//         expression: \"response.code >= 400 || xds.cluster_name == 'BlackHoleCluster' ||  xds.cluster_name == 'PassthroughCluster' \"\n\nresponse.code >= 400 || (xds.cluster_name == 'BlackHoleCluster' || xds.cluster_name == 'PassthroughCluster')\n",
+      "data": "// Use CEL to filter access logs in Istio by response code or target cluster.\n// https://istio.io/latest/docs/tasks/observability/logs/telemetry-api/#get-started-with-telemetry-api\n//\n// apiVersion: telemetry.istio.io/v1alpha1\n// kind: Telemetry\n// metadata:\n//   name: default-exception-logging\n//   namespace: istio-system\n// spec:\n//   accessLogging:\n//     - providers:\n//         - name: otel\n//       filter:\n//         expression: \"response.code >= 400 || xds.cluster_name == 'BlackHoleCluster' ||  xds.cluster_name == 'PassthroughCluster' \"\n\nresponse.code >= 400 || (xds.cluster_name == 'BlackHoleCluster' || xds.cluster_name == 'PassthroughCluster')\n",
       "inputs": [
         {
           "name": "Input",
@@ -127,7 +127,7 @@
     },
     {
       "name": "Custom Metrics",
-      "cel": "// Use CEL to customize the metrics that Istio generates\n// https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values\n// \n// apiVersion: telemetry.istio.io/v1alpha1\n// kind: Telemetry\n// metadata:\n//   name: namespace-metrics\n// spec:\n//   metrics:\n//   - providers:\n//     - name: prometheus\n//     overrides:\n//     - match:\n//         metric: REQUEST_COUNT\n//       tagOverrides:\n//         destination_port:\n//           value: \"string(destination.port)\"   # <--- CEL\n//         request_host:\n//           value: \"request.host\"               # <--- CEL\n\nhas(request.host) ? request.host : \"unknown\"\n",
+      "data": "// Use CEL to customize the metrics that Istio generates\n// https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values\n// \n// apiVersion: telemetry.istio.io/v1alpha1\n// kind: Telemetry\n// metadata:\n//   name: namespace-metrics\n// spec:\n//   metrics:\n//   - providers:\n//     - name: prometheus\n//     overrides:\n//     - match:\n//         metric: REQUEST_COUNT\n//       tagOverrides:\n//         destination_port:\n//           value: \"string(destination.port)\"   # <--- CEL\n//         request_host:\n//           value: \"request.host\"               # <--- CEL\n\nhas(request.host) ? request.host : \"unknown\"\n",
       "inputs": [
         {
           "name": "Input",
@@ -138,7 +138,7 @@
     },
     {
       "name": "Blank",
-      "cel": "",
+      "data": "",
       "inputs": [{ "name": "Input", "data": "" }],
       "category": "Blank"
     }

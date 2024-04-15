@@ -31,7 +31,7 @@ resultAccordionEl.forEach((accordion) => {
 render();
 
 function render() {
-  const savedMode = localStorage.getItem(localStorageKey) ?? "CEL";
+  const savedMode = localStorage.getItem(localStorageModeKey) ?? "cel";
   if (savedMode === "VAP") outputResultEl.style.display = "flex";
   else outputResultEl.style.display = "none";
 }

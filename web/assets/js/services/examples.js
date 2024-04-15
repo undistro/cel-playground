@@ -17,7 +17,7 @@
 async function getExampleContentById(mode) {
   const response = await fetch(`../../assets/examples/${mode.id}.json`);
   const data = await response.json();
-  return data;
+  return data.examples;
 }
 
 export const ExampleService = {

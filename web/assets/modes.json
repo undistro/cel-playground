@@ -10,13 +10,5 @@
   {
     "id": "web_hooks",
     "name": "Web Hooks"
-  },
-  {
-    "id": "auth_cmapping",
-    "name": "Auth Claim Mapping"
-  },
-  {
-    "id": "auth",
-    "name": "Authentication"
   }
 ]

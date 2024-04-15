@@ -20,6 +20,7 @@ import {
 } from "../../utils/render-functions.js";
 import { AceEditor } from "../../editor.js";
 import { ModesService } from "../../services/modes.js";
+import { ExampleService } from "../../services/examples.js";
 
 const celEditor = new AceEditor("cel-input");
 const dataEditor = new AceEditor("data-input");
@@ -122,7 +123,7 @@ function handleModeClick(event, mode, element) {
 
   element.classList.add("active");
   renderUIChangesByMode(mode);
-  localStorage.setItem(localStorageKey, value);
+  localStorage.setItem(localStorageModeKey, value);
   celEditor.setValue("", -1);
   dataEditor.setValue("", -1);
   setTimeout(() => modal.hide(), 1000);
@@ -139,7 +140,7 @@ function renderModeOptions() {
         const input = createInputElement(mode);
         input.onclick = (e) => handleModeClick(e, mode, divOption);
 
-        const modeSaved = localStorage.getItem(localStorageKey);
+        const modeSaved = localStorage.getItem(localStorageModeKey);
 
         if (!modeSaved && i === 0) {
           divOption.classList.add("active");
@@ -185,16 +186,15 @@ function createInputElement(mode) {
 function renderUIChangesByMode(mode) {
   const titleEl = document.querySelector(".title.expression__square");
   const toggleModeHolder = document.querySelector(".modes__container-holder");
-  const titleInputSquareEl = document.querySelector(".title.input__square");
 
   titleEl.innerHTML = mode.name;
   toggleModeHolder.innerHTML = mode.name;
-  // titleInputSquareEl.innerHTML = mode.inputs.length > 1 ? "Inputs: " : "Input";
 
-  renderExamplesInSelectInstance(mode, callbackFns);
-  callbackFns();
+  ExampleService.getExampleContentById(mode).then((examples) => {
+    renderExamplesInSelectInstance(examples, callbackFns);
 
-  function callbackFns() {
-    renderTabs(mode);
-  }
+    function callbackFns(example) {
+      renderTabs(example);
+    }
+  });
 }

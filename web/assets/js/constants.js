@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-const localStorageKey = "mode";
+const localStorageModeKey = "mode";
