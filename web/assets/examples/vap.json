@@ -3,6 +3,7 @@
     {
       "name": "Simple Validation",
       "data": "apiVersion: admissionregistration.k8s.io/v1alpha1\nkind: ValidatingAdmissionPolicy\nmetadata:\n  name: \"force-ha-in-prod\"\nspec:\n  failurePolicy: Fail\n  matchConstraints:\n    resourceRules:\n    - apiGroups:   [\"apps\"]\n      apiVersions: [\"v1\"]\n      operations:  [\"CREATE\", \"UPDATE\"]\n      resources:   [\"deployments\"]\n  validations:\n    - expression: \"object.spec.replicas >= 3\"\n      message: \"All production deployments should be HA with at least three replicas\"\n",
+      "category": "Validation",
       "inputs": [
         { "name": "Original", "data": "" },
         {
@@ -17,6 +18,7 @@
     {
       "name": "Variables in Validation",
       "data": "apiVersion: admissionregistration.k8s.io/v1beta1\nkind: ValidatingAdmissionPolicy\nmetadata:\n  name: \"image-matches-namespace-environment.policy.example.com\"\nspec:\n  failurePolicy: Fail\n  matchConstraints:\n    resourceRules:\n    - apiGroups:   [\"apps\"]\n      apiVersions: [\"v1\"]\n      operations:  [\"CREATE\", \"UPDATE\"]\n      resources:   [\"deployments\"]\n  variables:\n  - name: environment\n    expression: \"'environment' in namespaceObject.metadata.labels ? namespaceObject.metadata.labels['environment'] : 'prod'\"\n  - name: exempt\n    expression: \"'exempt' in object.metadata.labels && object.metadata.labels['exempt'] == true\"\n  - name: containers\n    expression: \"object.spec.template.spec.containers\"\n  - name: containersToCheck\n    expression: \"variables.containers.filter(c, c.image.contains('example.com/'))\"\n  validations:\n  - expression: \"variables.exempt || variables.containersToCheck.all(c, c.image.startsWith(variables.environment + '.'))\"\n    messageExpression: \"'only ' + variables.environment + ' images are allowed in namespace ' + namespaceObject.metadata.name\"\n",
+      "category": "Validation",
       "inputs": [
         { "name": "Original", "data": "" },
         {
@@ -34,6 +36,7 @@
     {
       "name": "Match Conditions",
       "data": "apiVersion: admissionregistration.k8s.io/v1alpha1\nkind: ValidatingAdmissionPolicy\nmetadata:\n  name: \"demo-policy.example.com\"\nspec:\n  failurePolicy: Fail\n  matchConstraints:\n    resourceRules:\n      - apiGroups:   [\"*\"]\n        apiVersions: [\"*\"]\n        operations:  [\"CREATE\", \"UPDATE\"]\n        resources:   [\"*\"]\n  matchConditions:\n    - name: 'exclude-leases' # Each match condition must have a unique name\n      expression: '!(request.resource.group == \"coordination.k8s.io\" && request.resource.resource == \"leases\")' # Match non-lease resources.\n    - name: 'exclude-kubelet-requests'\n      expression: '!(\"system:nodes\" in request.userInfo.groups)' # Match requests made by non-node users.\n  validations:\n    - expression: \"!object.metadata.name.contains('demo') || object.metadata.namespace == 'demo'\"\n",
+      "category": "Conditions",
       "inputs": [
         { "name": "Original", "data": "" },
         {
@@ -51,6 +54,7 @@
     {
       "name": "Audit Annotations",
       "data": "apiVersion: admissionregistration.k8s.io/v1alpha1\nkind: ValidatingAdmissionPolicy\nmetadata:\n  name: \"demo-policy.example.com\"\nspec:\n  failurePolicy: Fail\n  matchConstraints:\n    resourceRules:\n    - apiGroups:   [\"apps\"]\n      apiVersions: [\"v1\"]\n      operations:  [\"CREATE\", \"UPDATE\"]\n      resources:   [\"deployments\"]\n  validations:\n    - expression: \"object.spec.replicas > 50\"\n      messageExpression: \"'Deployment spec.replicas set to ' + string(object.spec.replicas)\"\n  auditAnnotations:\n    - key: \"high-replica-count\"\n      valueExpression: \"'Deployment spec.replicas set to ' + string(object.spec.replicas)\"\n",
+      "category": "Audit",
       "inputs": [
         { "name": "Original", "data": "" },
         {

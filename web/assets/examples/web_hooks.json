@@ -3,6 +3,7 @@
     {
       "name": "Request Accept",
       "data": "apiVersion: admissionregistration.k8s.io/v1\nkind: ValidatingWebhookConfiguration\nwebhooks:\n  - name: my-webhook.example.com\n    matchPolicy: Equivalent\n    rules:\n      - operations: ['CREATE','UPDATE']\n        apiGroups: ['*']\n        apiVersions: ['*']\n        resources: ['*']\n    failurePolicy: 'Ignore' # Fail-open (optional)\n    sideEffects: None\n    clientConfig:\n      service:\n        namespace: my-namespace\n        name: my-webhook\n      caBundle: 'PGNhYnVuZGxlPgo='\n    # You can have up to 64 matchConditions per webhook\n    matchConditions:\n      - name: 'exclude-leases' # Each match condition must have a unique name\n        expression: '!(request.resource.group == \"coordination.k8s.io\" && request.resource.resource == \"leases\")' # Match non-lease resources.\n      - name: 'exclude-kubelet-requests'\n        expression: '!(\"system:nodes\" in request.userInfo.groups)' # Match requests made by non-node users.\n",
+      "category": "Request",
       "inputs": [
         { "name": "Original", "data": "" },
         {
@@ -19,6 +20,7 @@
     {
       "name": "Request Ignore Leases",
       "data": "apiVersion: admissionregistration.k8s.io/v1\nkind: ValidatingWebhookConfiguration\nwebhooks:\n  - name: my-webhook.example.com\n    matchPolicy: Equivalent\n    rules:\n      - operations: ['CREATE','UPDATE']\n        apiGroups: ['*']\n        apiVersions: ['*']\n        resources: ['*']\n    failurePolicy: 'Ignore' # Fail-open (optional)\n    sideEffects: None\n    clientConfig:\n      service:\n        namespace: my-namespace\n        name: my-webhook\n      caBundle: 'PGNhYnVuZGxlPgo='\n    # You can have up to 64 matchConditions per webhook\n    matchConditions:\n      - name: 'exclude-leases' # Each match condition must have a unique name\n        expression: '!(request.resource.group == \"coordination.k8s.io\" && request.resource.resource == \"leases\")' # Match non-lease resources.\n      - name: 'exclude-kubelet-requests'\n        expression: '!(\"system:nodes\" in request.userInfo.groups)' # Match requests made by non-node users.\n",
+      "category": "Request",
       "inputs": [
         { "name": "Original", "data": "" },
         {
@@ -35,6 +37,7 @@
     {
       "name": "Request Ignore Kubelet",
       "data": "apiVersion: admissionregistration.k8s.io/v1\nkind: ValidatingWebhookConfiguration\nwebhooks:\n  - name: my-webhook.example.com\n    matchPolicy: Equivalent\n    rules:\n      - operations: ['CREATE','UPDATE']\n        apiGroups: ['*']\n        apiVersions: ['*']\n        resources: ['*']\n    failurePolicy: 'Ignore' # Fail-open (optional)\n    sideEffects: None\n    clientConfig:\n      service:\n        namespace: my-namespace\n        name: my-webhook\n      caBundle: 'PGNhYnVuZGxlPgo='\n    # You can have up to 64 matchConditions per webhook\n    matchConditions:\n      - name: 'exclude-leases' # Each match condition must have a unique name\n        expression: '!(request.resource.group == \"coordination.k8s.io\" && request.resource.resource == \"leases\")' # Match non-lease resources.\n      - name: 'exclude-kubelet-requests'\n        expression: '!(\"system:nodes\" in request.userInfo.groups)' # Match requests made by non-node users.\n",
+      "category": "Request",
       "inputs": [
         { "name": "Original", "data": "" },
         {
@@ -51,6 +54,7 @@
     {
       "name": "Authorizer Accept",
       "data": "apiVersion: admissionregistration.k8s.io/v1\nkind: ValidatingWebhookConfiguration\nwebhooks:\n  - name: rbac.my-webhook.example.com\n    matchPolicy: Equivalent\n    rules:\n      - operations: ['CREATE','UPDATE']\n        apiGroups: ['apps']\n        apiVersions: ['*']\n        resources: ['*']\n    failurePolicy: 'Fail' # Fail-closed (the default)\n    sideEffects: None\n    clientConfig:\n      service:\n        namespace: my-namespace\n        name: my-webhook\n      caBundle: 'PGNhYnVuZGxlPgo='\n    # You can have up to 64 matchConditions per webhook\n    matchConditions:\n      - name: 'breakglass'\n        # Skip requests made by users authorized to 'breakglass' on this webhook.\n        # The 'breakglass' API verb does not need to exist outside this check.\n        expression: '!authorizer.group(\"admissionregistration.k8s.io\").resource(\"validatingwebhookconfigurations\").name(\"rbac.my-webhook.example.com\").check(\"breakglass\").allowed()'\n",
+      "category": "Authorizer",
       "inputs": [
         { "name": "Original", "data": "" },
         {
@@ -67,6 +71,7 @@
     {
       "name": "Authorizer Ignore breakglass",
       "data": "apiVersion: admissionregistration.k8s.io/v1\nkind: ValidatingWebhookConfiguration\nwebhooks:\n  - name: rbac.my-webhook.example.com\n    matchPolicy: Equivalent\n    rules:\n      - operations: ['CREATE','UPDATE']\n        apiGroups: ['apps']\n        apiVersions: ['*']\n        resources: ['*']\n    failurePolicy: 'Fail' # Fail-closed (the default)\n    sideEffects: None\n    clientConfig:\n      service:\n        namespace: my-namespace\n        name: my-webhook\n      caBundle: 'PGNhYnVuZGxlPgo='\n    # You can have up to 64 matchConditions per webhook\n    matchConditions:\n      - name: 'breakglass'\n        # Skip requests made by users authorized to 'breakglass' on this webhook.\n        # The 'breakglass' API verb does not need to exist outside this check.\n        expression: '!authorizer.group(\"admissionregistration.k8s.io\").resource(\"validatingwebhookconfigurations\").name(\"rbac.my-webhook.example.com\").check(\"breakglass\").allowed()'\n",
+      "category": "Authorizer",
       "inputs": [
         { "name": "Original", "data": "" },
         {
