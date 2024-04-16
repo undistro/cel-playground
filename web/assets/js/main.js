@@ -16,6 +16,7 @@
 
 import { setCost } from "./utils/render-functions.js";
 import { AceEditor } from "./editor.js";
+import { renderResultAccordions } from "./components/accordions/result.js";
 
 // Add the following polyfill for Microsoft Edge 17/18 support:
 // <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
@@ -40,19 +41,30 @@ function run() {
   output.value = "Evaluating...";
   setCost("");
 
-  const result = eval(expression, data);
+  // const result = eval(expression, data);
+  const result = {
+    output: {
+      validations: [
+        { cost: 8, result: true, isError: false },
+        { cost: 18, result: false, isError: false },
+        { cost: 9, result: null, isError: true },
+      ],
+    },
+    isError: false,
+  };
 
   const { output: resultOutput, isError } = result;
 
-  if (isError) {
-    output.value = resultOutput;
-    output.style.color = "red";
-  } else {
-    const { result, cost } = JSON.parse(resultOutput);
-    output.value = JSON.stringify(result);
-    output.style.color = "white";
-    setCost(cost);
-  }
+  // if (isError) {
+  //   output.value = resultOutput;
+  //   output.style.color = "red";
+  // } else {
+  const [firstOutputKey] = Object.keys(resultOutput);
+  renderResultAccordions(result.output[firstOutputKey], firstOutputKey);
+  // output.value = JSON.stringify(result);
+  // output.style.color = "white";
+  // setCost(cost);
+  // }
 }
 
 window.addEventListener("load", () => {

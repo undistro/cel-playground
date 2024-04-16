@@ -16,22 +16,54 @@
 
 const outputResultEl = document.getElementById("editor__output-result");
 
-const resultAccordionEl = document.querySelectorAll(
-  ".editor__output-result-accordion"
-);
+function createAccordionItemsByResults(results, name) {
+  results.forEach((result, i) => {
+    const listItem = document.createElement("li");
+    listItem.className = "editor__output-result-accordion";
+    listItem.setAttribute("data-open", "false");
+    listItem.onclick = (e) => {
+      const isAccordionOpen = listItem.getAttribute("data-open") === "true";
+      if (isAccordionOpen) listItem.setAttribute("data-open", "false");
+      else listItem.setAttribute("data-open", "true");
+    };
 
-resultAccordionEl.forEach((accordion) => {
-  accordion.addEventListener("click", () => {
-    const isAccordionOpen = accordion.getAttribute("data-open") === "true";
-    if (isAccordionOpen) accordion.setAttribute("data-open", "false");
-    else accordion.setAttribute("data-open", "true");
+    const accordionContent = document.createElement("div");
+    accordionContent.className = "result-accordion-content";
+    accordionContent.innerHTML = `<div
+                                    style="display: flex; align-items: center; gap: 0.5rem; position:relative"
+                                  >
+                                    <i class="ph ph-caret-right ph-bold result-arrow"></i>
+                                    <div class="tooltip__container">
+                                            ${
+                                              result.isError
+                                                ? `<i class="ph ph-x-circle ph-fill" style="color: #e01e5a; z-index:999999" id="tooltip__trigger"></i>`
+                                                : ""
+                                            }
+                                            <div id="tooltip__content" class="tooltip" style="right:0; top:0">
+                                              <span class="tooltip__content--text">
+                                                Validation compilation failed.
+                                              </span>
+                                            </div>
+                                          </div>
+                                                
+                                    <span>${name}[${i}]</span>
+                                  </div>`;
+    const costSpan = document.createElement("span");
+    costSpan.innerHTML = `Cost: ${result.cost}`;
+    accordionContent.appendChild(costSpan);
+
+    const expansibleContent = document.createElement("div");
+    expansibleContent.className = "result-accordion-expansible-content";
+    expansibleContent.innerHTML = `<span>${result.result}</span>`;
+
+    listItem.appendChild(accordionContent);
+    listItem.appendChild(expansibleContent);
+
+    outputResultEl.appendChild(listItem);
   });
-});
+}
 
-render();
-
-function render() {
-  const savedMode = localStorage.getItem(localStorageModeKey) ?? "cel";
-  if (savedMode === "VAP") outputResultEl.style.display = "flex";
-  else outputResultEl.style.display = "none";
+export function renderResultAccordions(results, name) {
+  outputResultEl.style.display = "flex";
+  createAccordionItemsByResults(results, name);
 }

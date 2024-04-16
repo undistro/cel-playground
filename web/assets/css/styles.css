@@ -394,7 +394,10 @@ a {
   background-color: #25282c;
   border-radius: 8px;
   cursor: pointer;
-  height: 54px;
+}
+
+.editor__output-result .editor__output-result-accordion[data-open="false"] {
+  height: 24px;
 }
 
 .editor__output-result .editor__output-result-accordion[data-open="true"] {
@@ -411,6 +414,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 
 .editor__output-result-accordion .result-arrow {
@@ -418,7 +422,7 @@ a {
 }
 
 .editor__output-result-accordion .result-accordion-expansible-content {
-  transition: max-height 400ms, visibility 400ms;
+  transition: max-height 400ms, visibility 50ms;
 }
 
 .editor__output-result-accordion[data-open="false"]
