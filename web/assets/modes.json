@@ -1,14 +1,60 @@
 [
   {
     "id": "cel",
-    "name": "CEL Expression"
+    "name": "CEL Expression",
+    "tabs": [
+      {
+        "id": "dataInput",
+        "Name": "Input"
+      }
+    ]
   },
   {
     "id": "vap",
-    "name": "ValidatingAdmissionPolicy"
+    "name": "Validating Admission Policy",
+    "tabs": [
+      {
+        "id": "dataOriginal",
+        "Name": "Original"
+      },
+      {
+        "id": "dataUpdated",
+        "Name": "Updated"
+      },
+      {
+        "id": "dataNamespace",
+        "Name": "Namespace"
+      },
+      {
+        "id": "dataRequest",
+        "Name": "Request"
+      },
+      {
+        "id": "dataAuthorizer",
+        "Name": "Authorizer"
+      }
+    ]
   },
   {
-    "id": "web_hooks",
-    "name": "Web Hooks"
+    "id": "webhooks",
+    "name": "Web Hooks",
+    "tabs": [
+      {
+        "id": "dataOriginal",
+        "Name": "Original"
+      },
+      {
+        "id": "dataUpdated",
+        "Name": "Updated"
+      },
+      {
+        "id": "dataRequest",
+        "Name": "Request"
+      },
+      {
+        "id": "dataAuthorizer",
+        "Name": "Authorizer"
+      }
+    ]
   }
 ]
