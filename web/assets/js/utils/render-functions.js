@@ -16,12 +16,10 @@
 
 import { AceEditor } from "../editor.js";
 
-const celEditor = new AceEditor("cel-input");
-const dataEditor = new AceEditor("data-input");
 const examplesList = document.getElementById("examples");
 const selectInstance = NiceSelect.bind(examplesList);
 
-export function renderExamplesInSelectInstance(examples, callbackFn) {
+export function renderExamplesInSelectInstance(mode, examples, callbackFn) {
   examplesList.innerHTML = `<option data-display="Examples" value="" disabled selected hidden>
       Examples
     </option>`;
@@ -39,12 +37,6 @@ export function renderExamplesInSelectInstance(examples, callbackFn) {
   );
 
   examplesByCategory.forEach((example, i) => {
-    if (i === 0) {
-      const [firstValue] = example.value;
-      setEditors(firstValue.data, firstValue.inputs[0].data);
-      renderTabs(firstValue);
-    }
-
     const optGroup = document.createElement("optgroup");
     optGroup.label = example.label;
 
@@ -58,8 +50,9 @@ export function renderExamplesInSelectInstance(examples, callbackFn) {
     });
 
     if (example.label === "default") {
-      if (!urlParams.has("content"))
-        setEditors(example.value[0].data, example.value[0].inputs[0].data);
+      if (!urlParams.has("content")) {
+      }
+      // setEditors(example.value[0].data, example.value[0].inputs[0].data);
     } else if (example.label === "Blank") {
       return;
     } else {
@@ -73,15 +66,16 @@ export function renderExamplesInSelectInstance(examples, callbackFn) {
   examplesList.appendChild(blankOption);
 
   selectInstance.update();
-
   examplesList.addEventListener("change", (event) => {
     const example = examples.find(
       (example) => example.name === event.target.value
     );
-    if (event.target.value === "Blank") setEditors("", "");
+    if (event.target.value === "Blank") return;
     if (!example) return;
-    setEditors(example.data, example.inputs[0].data);
-    callbackFn(example);
+
+    handleFillExpressionContent(mode, example);
+    handleFillTabContent(mode, example);
+    callbackFn(mode, example);
     setCost("");
     output.value = "";
   });
@@ -92,27 +86,60 @@ export function setCost(cost) {
   costElem.innerText = cost || "-";
 }
 
-export function renderTabs(example) {
-  const { inputs } = example;
+export function handleFillExpressionContent(mode, example) {
+  const exprEditor = new AceEditor(mode.id, mode.mode);
+  exprEditor.setValue(example[mode.id], -1);
+}
+
+export function handleFillTabContent(mode, example) {
+  mode.tabs.forEach((tab) => {
+    const containerId = tab.id;
+    const inputEditor = new AceEditor(containerId, mode.mode);
+    inputEditor.setValue(example[containerId], -1);
+  });
+}
+
+export function renderExpressionContent(mode, examples) {
+  const exprInput = document.querySelector(".editor__input.expr__input");
+  exprInput.id = mode.id;
+
+  const currentExample = getCurrentExample(mode, examples);
+
+  const exprEditor = new AceEditor(mode.id, mode.mode);
+  exprEditor.setValue(currentExample?.[mode.id] ?? mode[mode.id], -1);
+}
+
+export function renderTabs(mode, examples) {
+  const { tabs } = mode;
+
+  const dataInput = document.querySelector(".editor__input.data__input");
+
   const holderElement = document.getElementById("tab");
   holderElement.innerHTML = "";
 
   const divParent = document.createElement("div");
-  divParent.className = "vap__tabs";
-  divParent.id = "vap__tabs";
+  divParent.className = "tabs";
+  divParent.id = "tabs";
 
-  inputs.forEach((input, idx) => {
+  tabs.forEach((tab, idx) => {
+    const currentExample = getCurrentExample(mode, examples);
+
+    if (!currentExample) return;
+
+    dataInput.id = tab.id;
+    const inputEditor = new AceEditor(tab.id, mode.mode);
     const tabButton = document.createElement("button");
-    tabButton.innerHTML = input.name;
-    tabButton.className = "vap__tabs-button";
-    tabButton.id = input.id;
+    tabButton.innerHTML = tab.name;
+    tabButton.className = "tabs-button";
+    tabButton.id = tab.id;
     tabButton.onclick = () => {
-      const allButtons = divParent?.querySelectorAll(".vap__tabs-button");
+      const allButtons = divParent?.querySelectorAll(".tabs-button");
       allButtons.forEach(removeActiveClass);
       if (tabButton.classList.contains("active")) removeActiveClass(tabButton);
       else addActiveClass(tabButton);
       divParent.setAttribute("style", `--current-tab: ${idx}`);
-      setEditors(example.data, input.data);
+
+      inputEditor.setValue(currentExample[tab.id], -1);
     };
     if (idx === 0) addActiveClass(tabButton);
 
@@ -120,7 +147,9 @@ export function renderTabs(example) {
   });
 
   holderElement.appendChild(divParent);
-  if (inputs.length <= 1) holderElement.innerHTML = "";
+  // handleFillTabContent(mode, examples[0]);
+
+  if (tabs.length <= 1) holderElement.innerHTML = "";
 
   function removeActiveClass(element) {
     element.classList.remove("active");
@@ -131,7 +160,10 @@ export function renderTabs(example) {
   }
 }
 
-function setEditors(expressionEditorValue, inputEditorValue) {
-  celEditor.setValue(expressionEditorValue, -1);
-  dataEditor.setValue(inputEditorValue, -1);
+function getCurrentExample(mode, examples) {
+  const currentExample = examples.find((example) =>
+    Object.keys(example).includes(mode.id)
+  );
+
+  return currentExample;
 }

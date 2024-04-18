@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-.vap__tabs {
+.tabs {
   --purple: #8447d1;
   --purple-dark: #ab75f0;
   --tab-button-width: 150px;
@@ -23,7 +23,7 @@
   align-items: center;
 }
 
-.vap__tabs::after {
+.tabs::after {
   content: "";
   width: var(--tab-button-width);
   height: 2px;
@@ -36,7 +36,7 @@
   transition: transform 300ms;
 }
 
-.vap__tabs button {
+.tabs button {
   background-color: transparent;
   border: none;
   width: var(--tab-button-width);
@@ -53,30 +53,30 @@
   cursor: pointer;
 }
 
-.dark .vap__tabs button {
+.dark .tabs button {
   color: white;
 }
 
-.vap__tabs button:not(.active):hover {
+.tabs button:not(.active):hover {
   background-color: rgba(132, 71, 209, 0.08);
   color: var(--purple);
   padding: 4px 8px;
   border-radius: 4px;
 }
 
-.dark .vap__tabs button:not(.active):hover {
+.dark .tabs button:not(.active):hover {
   color: var(--purple-dark);
 }
 
-.vap__tabs button.active {
+.tabs button.active {
   color: var(--purple);
 }
 
-.dark .vap__tabs button.active {
+.dark .tabs button.active {
   color: var(--purple-dark);
 }
 
-/* .vap__tabs button.active::after {
+/* .tabs button.active::after {
   content: "";
   width: 150px;
   height: 2px;
@@ -87,6 +87,6 @@
   bottom: 0;
 } */
 
-.dark .vap__tabs button.active::after {
+.dark .tabs button.active::after {
   background-color: var(--purple-dark);
 }

@@ -15,8 +15,8 @@
  */
 
 import { setCost } from "./utils/render-functions.js";
+import { StorageValues } from "./StorageValues.js";
 import { AceEditor } from "./editor.js";
-import { renderResultAccordions } from "./components/accordions/result.js";
 
 // Add the following polyfill for Microsoft Edge 17/18 support:
 // <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
@@ -29,59 +29,68 @@ if (!WebAssembly.instantiateStreaming) {
   };
 }
 
-const celEditor = new AceEditor("cel-input");
-const dataEditor = new AceEditor("data-input");
 const output = document.getElementById("output");
 
-function run() {
-  const data = dataEditor.getValue();
-  const expression = celEditor.getValue();
-  const cost = document.getElementById("cost");
+function getRunValues() {
+  const storageValues = new StorageValues();
+  return storageValues.getValues();
+}
 
+function run() {
+  const cost = document.getElementById("cost");
+  const values = getRunValues();
   output.value = "Evaluating...";
   setCost("");
-
-  // const result = eval(expression, data);
-  const result = {
-    output: {
-      validations: [
-        { cost: 8, result: true, isError: false },
-        { cost: 18, result: false, isError: false },
-        { cost: 9, result: null, isError: true },
-      ],
-    },
-    isError: false,
-  };
+  const result = eval(values);
 
   const { output: resultOutput, isError } = result;
 
-  // if (isError) {
-  //   output.value = resultOutput;
-  //   output.style.color = "red";
-  // } else {
-  const [firstOutputKey] = Object.keys(resultOutput);
-  renderResultAccordions(result.output[firstOutputKey], firstOutputKey);
-  // output.value = JSON.stringify(result);
-  // output.style.color = "white";
-  // setCost(cost);
-  // }
+  if (isError) {
+    output.value = resultOutput;
+    output.style.color = "red";
+  } else {
+    output.value = JSON.stringify(result);
+    output.style.color = "white";
+    setCost(cost);
+  }
 }
 
 window.addEventListener("load", () => {
   let theme = localStorage.getItem("theme");
   if (theme === "dark") {
-    toggleMode("dark");
+    toggleTheme("dark");
   }
 });
 
 const toggleBtn = document.getElementsByClassName("toggle-theme")[0];
 toggleBtn.addEventListener("click", function () {
   let currTheme = localStorage.getItem("theme");
-  if (currTheme === "dark") toggleMode("light");
-  else toggleMode("dark");
+  if (currTheme === "dark") toggleTheme("light");
+  else toggleTheme("dark");
 });
 
-function toggleMode(theme) {
+export function loadCurrentTheme() {
+  const theme = localStorage.getItem("theme");
+  const exprEditor = new AceEditor(
+    localStorage.getItem(localStorageModeKey) ?? "cel",
+    "ace/theme/clouds"
+  );
+  const editorsInputEl = document.querySelectorAll(".tabs-button");
+
+  if (theme === "dark") {
+    exprEditor.editor.setTheme("ace/theme/tomorrow_night");
+    editorsInputEl.forEach((editor) => {
+      new AceEditor(editor.id, "ace/theme/tomorrow_night");
+    });
+  } else {
+    exprEditor.editor.setTheme("ace/theme/clouds");
+    editorsInputEl.forEach((editor) => {
+      new AceEditor(editor.id, "ace/theme/clouds");
+    });
+  }
+}
+
+function toggleTheme(theme) {
   let toggleIcon = document.getElementsByClassName("toggle-theme__icon")[0];
   let celLogo = document.getElementsByClassName("cel-logo")[0];
   let copyIcon = document.querySelectorAll(".editor-copy-icon");
@@ -89,22 +98,17 @@ function toggleMode(theme) {
   if (theme === "dark") {
     document.body.classList.add("dark");
     toggleIcon.src = "./assets/img/moon.svg";
-    celEditor.editor.setTheme("ace/theme/tomorrow_night");
-    dataEditor.editor.setTheme("ace/theme/tomorrow_night");
     celLogo.src = "./assets/img/logo-dark.svg";
     copyIcon[0].src = "./assets/img/copy-dark.svg";
     copyIcon[1].src = "./assets/img/copy-dark.svg";
-    localStorage.setItem("theme", "dark");
   } else {
     document.body.classList.remove("dark");
     toggleIcon.src = "./assets/img/sun.svg";
-    celEditor.editor.setTheme("ace/theme/clouds");
-    dataEditor.editor.setTheme("ace/theme/clouds");
     celLogo.src = "./assets/img/logo.svg";
     copyIcon[0].src = "./assets/img/copy.svg";
     copyIcon[1].src = "./assets/img/copy.svg";
-    localStorage.setItem("theme", "light");
   }
+  localStorage.setItem("theme", theme);
 }
 
 function share() {

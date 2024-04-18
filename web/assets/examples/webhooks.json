@@ -6,7 +6,8 @@
       "dataOriginal": "",
       "dataUpdated": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  labels:\n    app: kubernetes-bootcamp\n  name: kubernetes-bootcamp\n  namespace: default\nspec:\n  progressDeadlineSeconds: 600\n  replicas: 1\n  revisionHistoryLimit: 10\n  selector:\n    matchLabels:\n      app: kubernetes-bootcamp\n  strategy:\n    rollingUpdate:\n      maxSurge: 25%\n      maxUnavailable: 25%\n    type: RollingUpdate\n  template:\n    metadata:\n      creationTimestamp: null\n      labels:\n        app: kubernetes-bootcamp\n    spec:\n      containers:\n      - image: gcr.io/google-samples/kubernetes-bootcamp:v1\n        imagePullPolicy: IfNotPresent\n        name: kubernetes-bootcamp\n        resources: {}\n        terminationMessagePath: /dev/termination-log\n        terminationMessagePolicy: File\n      dnsPolicy: ClusterFirst\n      restartPolicy: Always\n      schedulerName: default-scheduler\n      securityContext: {}\n      terminationGracePeriodSeconds: 30\n",
       "dataRequest": "uid: 705ab4f5-6393-11e8-b7cc-42010a800002\nkind:\n  group: apps\n  version: v1\n  resource: deployments\nresource:\n  group: apps\n  version: v1\n  resource: deployments\nrequestKind:\n  group: apps\n  version: v1\n  resource: deployments\nrequestResource:\n  group: apps\n  version: v1\n  resource: deployments\nname: kubernetes-bootcamp\nnamespace: default\noperation: CREATE\nuserInfo:\n  username: admin\n  uid: 014fbff9a07c\n  groups:\n    - system:authenticated\n    - my-admin-group\n  extra:\n    some-key:\n      - some-value1\n      - some-value2\n",
-      "dataAuthorizer": ""
+      "dataAuthorizer": "",
+      "category": "Request"
     },
     {
       "name": "Request Ignore Leases",
@@ -14,7 +15,8 @@
       "dataOriginal": "",
       "dataUpdated": "apiVersion: coordination.k8s.io/v1\nkind: Lease\nmetadata:\n  name: ingress-nginx-leader\n  namespace: ingress-nginx\nspec:\n  acquireTime: \"2023-11-24T16:51:02.229818Z\"\n  holderIdentity: ingress-nginx-controller-6597456577-s5h9w\n  leaseDurationSeconds: 30\n  leaseTransitions: 7\n  renewTime: \"2024-04-09T21:59:30.694589Z\"\n",
       "dataRequest": "uid: 705ab4f5-6393-11e8-b7cc-42010a800002\nkind:\n  group: coordination.k8s.io\n  version: v1\n  resource: leases\nresource:\n  group: coordination.k8s.io\n  version: v1\n  resource: leases\nrequestKind:\n  group: coordination.k8s.io\n  version: v1\n  resource: leases\nrequestResource:\n  group: coordination.k8s.io\n  version: v1\n  resource: leases\nname: ingress-nginx-leader\nnamespace: ingress-nginx\noperation: CREATE\nuserInfo:\n  username: admin\n  uid: 014fbff9a07c\n  groups:\n    - system:authenticated\n    - my-admin-group\n  extra:\n    some-key:\n      - some-value1\n      - some-value2\n",
-      "dataAuthorizer": ""
+      "dataAuthorizer": "",
+      "category": "Request"
     },
     {
       "name": "Request Ignore Kubelet",
@@ -22,7 +24,8 @@
       "dataOriginal": "",
       "dataUpdated": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  labels:\n    app: kubernetes-bootcamp\n  name: kubernetes-bootcamp\n  namespace: default\nspec:\n  progressDeadlineSeconds: 600\n  replicas: 1\n  revisionHistoryLimit: 10\n  selector:\n    matchLabels:\n      app: kubernetes-bootcamp\n  strategy:\n    rollingUpdate:\n      maxSurge: 25%\n      maxUnavailable: 25%\n    type: RollingUpdate\n  template:\n    metadata:\n      creationTimestamp: null\n      labels:\n        app: kubernetes-bootcamp\n    spec:\n      containers:\n      - image: gcr.io/google-samples/kubernetes-bootcamp:v1\n        imagePullPolicy: IfNotPresent\n        name: kubernetes-bootcamp\n        resources: {}\n        terminationMessagePath: /dev/termination-log\n        terminationMessagePolicy: File\n      dnsPolicy: ClusterFirst\n      restartPolicy: Always\n      schedulerName: default-scheduler\n      securityContext: {}\n      terminationGracePeriodSeconds: 30\n",
       "dataRequest": "uid: 705ab4f5-6393-11e8-b7cc-42010a800002\nkind:\n  group: apps\n  version: v1\n  resource: deployments\nresource:\n  group: apps\n  version: v1\n  resource: deployments\nrequestKind:\n  group: apps\n  version: v1\n  resource: deployments\nrequestResource:\n  group: apps\n  version: v1\n  resource: deployments\nname: kubernetes-bootcamp\nnamespace: default\noperation: CREATE\nuserInfo:\n  username: node1\n  uid: 014fbff9a07c\n  groups:\n    - system:nodes\n  extra:\n    some-key:\n      - some-value1\n      - some-value2\n",
-      "dataAuthorizer": ""
+      "dataAuthorizer": "",
+      "category": "Request"
     },
     {
       "name": "Authorizer Accept",
@@ -30,7 +33,8 @@
       "dataOriginal": "",
       "dataUpdated": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  labels:\n    app: kubernetes-bootcamp\n  name: kubernetes-bootcamp\n  namespace: default\nspec:\n  progressDeadlineSeconds: 600\n  replicas: 1\n  revisionHistoryLimit: 10\n  selector:\n    matchLabels:\n      app: kubernetes-bootcamp\n  strategy:\n    rollingUpdate:\n      maxSurge: 25%\n      maxUnavailable: 25%\n    type: RollingUpdate\n  template:\n    metadata:\n      creationTimestamp: null\n      labels:\n        app: kubernetes-bootcamp\n    spec:\n      containers:\n      - image: gcr.io/google-samples/kubernetes-bootcamp:v1\n        imagePullPolicy: IfNotPresent\n        name: kubernetes-bootcamp\n        resources: {}\n        terminationMessagePath: /dev/termination-log\n        terminationMessagePolicy: File\n      dnsPolicy: ClusterFirst\n      restartPolicy: Always\n      schedulerName: default-scheduler\n      securityContext: {}\n      terminationGracePeriodSeconds: 30\n",
       "dataRequest": "uid: 705ab4f5-6393-11e8-b7cc-42010a800002\nkind:\n  group: apps\n  version: v1\n  resource: deployments\nresource:\n  group: apps\n  version: v1\n  resource: deployments\nrequestKind:\n  group: apps\n  version: v1\n  resource: deployments\nrequestResource:\n  group: apps\n  version: v1\n  resource: deployments\nname: kubernetes-bootcamp\nnamespace: default\noperation: CREATE\nuserInfo:\n  username: admin\n  uid: 014fbff9a07c\n  groups:\n    - system:authenticated\n    - my-admin-group\n  extra:\n    some-key:\n      - some-value1\n      - some-value2\n",
-      "dataAuthorizer": "paths:\ngroups:\nserviceAccounts:\n"
+      "dataAuthorizer": "paths:\ngroups:\nserviceAccounts:\n",
+      "category": "Authorizer"
     },
     {
       "name": "Authorizer Ignore breakglass",
@@ -38,7 +42,8 @@
       "dataOriginal": "",
       "dataUpdated": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  labels:\n    app: kubernetes-bootcamp\n  name: kubernetes-bootcamp\n  namespace: default\nspec:\n  progressDeadlineSeconds: 600\n  replicas: 1\n  revisionHistoryLimit: 10\n  selector:\n    matchLabels:\n      app: kubernetes-bootcamp\n  strategy:\n    rollingUpdate:\n      maxSurge: 25%\n      maxUnavailable: 25%\n    type: RollingUpdate\n  template:\n    metadata:\n      creationTimestamp: null\n      labels:\n        app: kubernetes-bootcamp\n    spec:\n      containers:\n      - image: gcr.io/google-samples/kubernetes-bootcamp:v1\n        imagePullPolicy: IfNotPresent\n        name: kubernetes-bootcamp\n        resources: {}\n        terminationMessagePath: /dev/termination-log\n        terminationMessagePolicy: File\n      dnsPolicy: ClusterFirst\n      restartPolicy: Always\n      schedulerName: default-scheduler\n      securityContext: {}\n      terminationGracePeriodSeconds: 30\n",
       "dataRequest": "uid: 705ab4f5-6393-11e8-b7cc-42010a800002\nkind:\n  group: apps\n  version: v1\n  resource: deployments\nresource:\n  group: apps\n  version: v1\n  resource: deployments\nrequestKind:\n  group: apps\n  version: v1\n  resource: deployments\nrequestResource:\n  group: apps\n  version: v1\n  resource: deployments\nname: kubernetes-bootcamp\nnamespace: default\noperation: CREATE\nuserInfo:\n  username: admin\n  uid: 014fbff9a07c\n  groups:\n    - system:authenticated\n    - my-admin-group\n  extra:\n    some-key:\n      - some-value1\n      - some-value2\n",
-      "dataAuthorizer": "paths:\ngroups:\n  admissionregistration.k8s.io:\n    resources:\n      validatingwebhookconfigurations:\n        checks:\n          \"\":\n            rbac.my-webhook.example.com:\n              breakglass:\n                decision: allow\nserviceAccounts:\n"
+      "dataAuthorizer": "paths:\ngroups:\n  admissionregistration.k8s.io:\n    resources:\n      validatingwebhookconfigurations:\n        checks:\n          \"\":\n            rbac.my-webhook.example.com:\n              breakglass:\n                decision: allow\nserviceAccounts:\n",
+      "category": "Authorizer"
     }
   ],
   "versions": {

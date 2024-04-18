@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="assets/css/modals.css" />
     <link rel="stylesheet" href="assets/css/tabs.css" />
     <link rel="stylesheet" href="assets/css/tooltips.css" />
-    <link rel="stylesheet" href="assets/css/accordions.css">
+    <link rel="stylesheet" href="assets/css/accordions.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -182,7 +182,7 @@
                 </div>
                 <div class="copy-click" id="cel-copy-click">Copied!</div>
               </div>
-              <div id="cel-input" class="editor__input"></div>
+              <div class="editor__input expr__input"></div>
             </div>
           </div>
           <div class="output-container">
@@ -222,7 +222,7 @@
                   </div>
                   <div class="copy-click" id="data-copy-click">Copied!</div>
                 </div>
-                <div id="data-input" class="editor__input"></div>
+                <div class="editor__input data__input"></div>
               </div>
             </div>
             <div class="editor editor--output">
@@ -313,6 +313,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
     <script src="dist/nice-select2.js"></script>
+    <script type="module" src="assets/js/StorageValues.js"></script>
     <script type="module" src="assets/js/services/modes.js"></script>
     <script type="module" src="assets/js/services/examples.js"></script>
     <script type="module" src="assets/js/utils/render-functions.js"></script>

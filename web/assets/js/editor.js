@@ -25,12 +25,14 @@ const EDITOR_DEFAULTS = {
   },
 };
 
+const DEFAULT_THEME = "ace/theme/clouds";
+
 class AceEditor {
-  constructor(id) {
+  constructor(id, mode) {
     this.editor = ace.edit(id);
-    this.editor.setTheme(EDITOR_DEFAULTS[id].theme);
+    this.editor.setTheme(DEFAULT_THEME);
     this.editor.setShowPrintMargin(false);
-    this.editor.getSession().setMode(EDITOR_DEFAULTS[id].mode);
+    this.editor.getSession().setMode(mode);
     this.editor.getSession().setUseWorker(false);
   }
 
@@ -40,10 +42,6 @@ class AceEditor {
 
   getValue() {
     return this.editor.getValue();
-  }
-
-  setExpressionSyntax(syntax) {
-    this.editor.getSession().setMode(`ace/mode/${syntax ?? "javascript"}`);
   }
 }
 

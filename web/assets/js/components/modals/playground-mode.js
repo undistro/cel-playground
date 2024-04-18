@@ -16,14 +16,13 @@
 
 import {
   renderExamplesInSelectInstance,
+  renderExpressionContent,
   renderTabs,
 } from "../../utils/render-functions.js";
-import { AceEditor } from "../../editor.js";
 import { ModesService } from "../../services/modes.js";
 import { ExampleService } from "../../services/examples.js";
-
-const celEditor = new AceEditor("cel-input");
-const dataEditor = new AceEditor("data-input");
+import { StorageValues } from "../../StorageValues.js";
+import { loadCurrentTheme } from "../../main.js";
 
 const playgroundModesModalEl = document.getElementById(
   "playground-modes__modal"
@@ -119,13 +118,9 @@ function handleModeClick(event, mode, element) {
     .querySelectorAll(".playground-modes__options--option")
     .forEach((option) => option.classList.remove("active"));
 
-  localStorage.removeItem("example-selected");
-
   element.classList.add("active");
   renderUIChangesByMode(mode);
   localStorage.setItem(localStorageModeKey, value);
-  celEditor.setValue("", -1);
-  dataEditor.setValue("", -1);
   setTimeout(() => modal.hide(), 1000);
 }
 
@@ -186,15 +181,26 @@ function createInputElement(mode) {
 function renderUIChangesByMode(mode) {
   const titleEl = document.querySelector(".title.expression__square");
   const toggleModeHolder = document.querySelector(".modes__container-holder");
-
   titleEl.innerHTML = mode.name;
   toggleModeHolder.innerHTML = mode.name;
 
   ExampleService.getExampleContentById(mode).then((examples) => {
-    renderExamplesInSelectInstance(examples, callbackFns);
-
-    function callbackFns(example) {
-      renderTabs(example);
-    }
+    renderExpressionContent(mode, examples);
+    renderTabs(mode, examples);
+    renderExamplesInSelectInstance(mode, examples, handleSaveValues);
+    loadCurrentTheme();
   });
+}
+
+export function handleSaveValues(mode, example) {
+  const storageValues = new StorageValues();
+
+  delete example.category;
+  delete example.name;
+
+  const valuesToSave = {
+    [mode.id]: mode.id,
+    ...example,
+  };
+  storageValues.setValues(valuesToSave);
 }

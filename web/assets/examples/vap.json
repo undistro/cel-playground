@@ -7,7 +7,8 @@
       "dataUpdated": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  labels:\n    app: kubernetes-bootcamp\n  name: kubernetes-bootcamp\n  namespace: default\nspec:\n  progressDeadlineSeconds: 600\n  replicas: 3\n  revisionHistoryLimit: 10\n  selector:\n    matchLabels:\n      app: kubernetes-bootcamp\n  strategy:\n    rollingUpdate:\n      maxSurge: 25%\n      maxUnavailable: 25%\n    type: RollingUpdate\n  template:\n    metadata:\n      creationTimestamp: null\n      labels:\n        app: kubernetes-bootcamp\n    spec:\n      containers:\n      - image: gcr.io/google-samples/kubernetes-bootcamp:v1\n        imagePullPolicy: IfNotPresent\n        name: kubernetes-bootcamp\n        resources: {}\n        terminationMessagePath: /dev/termination-log\n        terminationMessagePolicy: File\n      dnsPolicy: ClusterFirst\n      restartPolicy: Always\n      schedulerName: default-scheduler\n      securityContext: {}\n      terminationGracePeriodSeconds: 30\n",
       "dataNamespace": "",
       "dataRequest": "",
-      "dataAuthorizer": ""
+      "dataAuthorizer": "",
+      "category": "Validation"
     },
     {
       "name": "Variables in Validation",
@@ -16,7 +17,8 @@
       "dataUpdated": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  labels:\n    app: kubernetes-bootcamp\n    exempt: false\n  name: kubernetes-bootcamp\n  namespace: default\nspec:\n  progressDeadlineSeconds: 600\n  replicas: 3\n  revisionHistoryLimit: 10\n  selector:\n    matchLabels:\n      app: kubernetes-bootcamp\n  strategy:\n    rollingUpdate:\n      maxSurge: 25%\n      maxUnavailable: 25%\n    type: RollingUpdate\n  template:\n    metadata:\n      creationTimestamp: null\n      labels:\n        app: kubernetes-bootcamp\n    spec:\n      containers:\n      - image: prod.policy.example.com/google-samples/kubernetes-bootcamp:v1\n        imagePullPolicy: IfNotPresent\n        name: kubernetes-bootcamp\n        resources: {}\n        terminationMessagePath: /dev/termination-log\n        terminationMessagePolicy: File\n      dnsPolicy: ClusterFirst\n      restartPolicy: Always\n      schedulerName: default-scheduler\n      securityContext: {}\n      terminationGracePeriodSeconds: 30\n",
       "dataNamespace": "apiVersion: v1\nkind: Namespace\nmetadata:\n  creationTimestamp: \"2023-03-10T13:50:03Z\"\n  labels:\n    kubernetes.io/metadata.name: default\n    environment: prod\n  name: default\n  resourceVersion: \"5932\"\n  uid: 01d428dd-9515-4e9c-98a3-d8a278ee0125\nspec:\n  finalizers:\n  - kubernetes\nstatus:\n  phase: Active\n",
       "dataRequest": "",
-      "dataAuthorizer": ""
+      "dataAuthorizer": "",
+      "category": "Validation"
     },
     {
       "name": "Match Conditions",
@@ -25,7 +27,8 @@
       "dataUpdated": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  labels:\n    app: kubernetes-bootcamp\n    environment: prod\n    exempt: false\n  name: kubernetes-bootcamp\n  namespace: default\nspec:\n  progressDeadlineSeconds: 600\n  replicas: 3\n  revisionHistoryLimit: 10\n  selector:\n    matchLabels:\n      app: kubernetes-bootcamp\n  strategy:\n    rollingUpdate:\n      maxSurge: 25%\n      maxUnavailable: 25%\n    type: RollingUpdate\n  template:\n    metadata:\n      creationTimestamp: null\n      labels:\n        app: kubernetes-bootcamp\n    spec:\n      containers:\n      - image: prod.registry.io/google-samples/kubernetes-bootcamp:v1\n        imagePullPolicy: IfNotPresent\n        name: kubernetes-bootcamp\n        resources: {}\n        terminationMessagePath: /dev/termination-log\n        terminationMessagePolicy: File\n      dnsPolicy: ClusterFirst\n      restartPolicy: Always\n      schedulerName: default-scheduler\n      securityContext: {}\n      terminationGracePeriodSeconds: 30\n",
       "dataNamespace": "",
       "dataRequest": "uid: 705ab4f5-6393-11e8-b7cc-42010a800002\nkind:\n  group: apps\n  version: v1\n  resource: deployments\nresource:\n  group: apps\n  version: v1\n  resource: deployments\nrequestKind:\n  group: apps\n  version: v1\n  resource: deployments\nrequestResource:\n  group: apps\n  version: v1\n  resource: deployments\nname: kubernetes-bootcamp\nnamespace: default\noperation: CREATE\nuserInfo:\n  username: admin\n  uid: 014fbff9a07c\n  groups:\n    - system:authenticated\n    - my-admin-group\n  extra:\n    some-key:\n      - some-value1\n      - some-value2\n",
-      "dataAuthorizer": ""
+      "dataAuthorizer": "",
+      "category": "Conditions"
     },
     {
       "name": "Audit Annotations",
@@ -34,7 +37,8 @@
       "dataUpdated": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  labels:\n    app: kubernetes-bootcamp\n    environment: prod\n    exempt: false\n  name: kubernetes-bootcamp\n  namespace: default\nspec:\n  progressDeadlineSeconds: 600\n  replicas: 3\n  revisionHistoryLimit: 10\n  selector:\n    matchLabels:\n      app: kubernetes-bootcamp\n  strategy:\n    rollingUpdate:\n      maxSurge: 25%\n      maxUnavailable: 25%\n    type: RollingUpdate\n  template:\n    metadata:\n      creationTimestamp: null\n      labels:\n        app: kubernetes-bootcamp\n    spec:\n      containers:\n      - image: prod.registry.io/google-samples/kubernetes-bootcamp:v1\n        imagePullPolicy: IfNotPresent\n        name: kubernetes-bootcamp\n        resources: {}\n        terminationMessagePath: /dev/termination-log\n        terminationMessagePolicy: File\n      dnsPolicy: ClusterFirst\n      restartPolicy: Always\n      schedulerName: default-scheduler\n      securityContext: {}\n      terminationGracePeriodSeconds: 30\n",
       "dataNamespace": "",
       "dataRequest": "",
-      "dataAuthorizer": ""
+      "dataAuthorizer": "",
+      "category": "Audit"
     }
   ],
   "versions": {
