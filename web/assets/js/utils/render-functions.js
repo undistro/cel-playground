@@ -91,8 +91,7 @@ export function handleFillExpressionContent(mode, example) {
 }
 
 export function handleFillTabContent(mode, example) {
-  document.querySelectorAll(".editor__input.data__input")[0].style.display =
-    "block";
+  resetTabs();
   mode.tabs.forEach((tab) => {
     const containerId = tab.id;
     const inputEditor = new AceEditor(containerId, tab.mode);
@@ -158,6 +157,7 @@ export function renderTabs(mode, examples) {
   handleFillTabContent(mode, examples[0]);
 
   if (tabs.length <= 1) holderElement.style.visibility = "hidden";
+  else holderElement.style.visibility = "visible";
 
   function removeActiveClass(element) {
     element.classList.remove("active");
@@ -185,4 +185,20 @@ function getCurrentExample(mode, examples) {
   );
 
   return currentExample;
+}
+
+function resetTabs() {
+  document.querySelectorAll(".tabs-button").forEach((tabButton, i) => {
+    if (i === 0) {
+      tabButton.parentElement.setAttribute("style", `--current-tab: ${i}`);
+      tabButton.classList.add("active");
+    } else tabButton.classList.remove("active");
+  });
+
+  document
+    .querySelectorAll(".editor__input.data__input")
+    .forEach((editor, i) => {
+      if (i === 0) editor.style.display = "block";
+      else editor.style.display = "none";
+    });
 }
