@@ -70,7 +70,16 @@ export function renderExamplesInSelectInstance(mode, examples) {
     const example = examples.find(
       (example) => example.name === event.target.value
     );
-    if (event.target.value === "Blank") return;
+    if (event.target.value === "Blank") {
+      const currentMode = localStorage.getItem(localStorageModeKey) ?? "cel";
+      new AceEditor(currentMode).setValue("", -1);
+      document
+        .querySelectorAll(".editor__input.data__input")
+        .forEach((container) => {
+          const containerId = container.id;
+          new AceEditor(containerId).setValue("");
+        });
+    }
     if (!example) return;
 
     handleFillExpressionContent(mode, example);
