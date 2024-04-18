@@ -19,7 +19,7 @@ import { AceEditor } from "../editor.js";
 const examplesList = document.getElementById("examples");
 const selectInstance = NiceSelect.bind(examplesList);
 
-export function renderExamplesInSelectInstance(mode, examples, callbackFn) {
+export function renderExamplesInSelectInstance(mode, examples) {
   examplesList.innerHTML = `<option data-display="Examples" value="" disabled selected hidden>
       Examples
     </option>`;
@@ -64,8 +64,8 @@ export function renderExamplesInSelectInstance(mode, examples, callbackFn) {
   blankOption.innerText = "Blank";
   blankOption.value = "Blank";
   examplesList.appendChild(blankOption);
-
   selectInstance.update();
+
   examplesList.addEventListener("change", (event) => {
     const example = examples.find(
       (example) => example.name === event.target.value
@@ -75,7 +75,6 @@ export function renderExamplesInSelectInstance(mode, examples, callbackFn) {
 
     handleFillExpressionContent(mode, example);
     handleFillTabContent(mode, example);
-    callbackFn(mode, example);
     setCost("");
     output.value = "";
   });
@@ -92,9 +91,11 @@ export function handleFillExpressionContent(mode, example) {
 }
 
 export function handleFillTabContent(mode, example) {
+  document.querySelectorAll(".editor__input.data__input")[0].style.display =
+    "block";
   mode.tabs.forEach((tab) => {
     const containerId = tab.id;
-    const inputEditor = new AceEditor(containerId, mode.mode);
+    const inputEditor = new AceEditor(containerId, tab.mode);
     inputEditor.setValue(example[containerId], -1);
   });
 }
@@ -112,44 +113,51 @@ export function renderExpressionContent(mode, examples) {
 export function renderTabs(mode, examples) {
   const { tabs } = mode;
 
-  const dataInput = document.querySelector(".editor__input.data__input");
-
   const holderElement = document.getElementById("tab");
   holderElement.innerHTML = "";
-
   const divParent = document.createElement("div");
   divParent.className = "tabs";
   divParent.id = "tabs";
+
+  document.querySelectorAll(".editor__input.data__input")?.forEach((editor) => {
+    editor.remove();
+  });
 
   tabs.forEach((tab, idx) => {
     const currentExample = getCurrentExample(mode, examples);
 
     if (!currentExample) return;
 
-    dataInput.id = tab.id;
-    const inputEditor = new AceEditor(tab.id, mode.mode);
+    const containerId = tab.id;
+    const editorContainer = createEditorContainer(containerId);
+    const inputEditor = new AceEditor(containerId, tab.mode);
+    inputEditor.setValue(currentExample[containerId], -1);
+
     const tabButton = document.createElement("button");
     tabButton.innerHTML = tab.name;
     tabButton.className = "tabs-button";
-    tabButton.id = tab.id;
+
     tabButton.onclick = () => {
+      document
+        .querySelectorAll(".editor__input.data__input")
+        ?.forEach((editor) => {
+          editor.style.display = "none";
+        });
+      editorContainer.style.display = "block";
       const allButtons = divParent?.querySelectorAll(".tabs-button");
       allButtons.forEach(removeActiveClass);
       if (tabButton.classList.contains("active")) removeActiveClass(tabButton);
       else addActiveClass(tabButton);
       divParent.setAttribute("style", `--current-tab: ${idx}`);
-
-      inputEditor.setValue(currentExample[tab.id], -1);
     };
     if (idx === 0) addActiveClass(tabButton);
-
     divParent.appendChild(tabButton);
   });
 
   holderElement.appendChild(divParent);
-  // handleFillTabContent(mode, examples[0]);
+  handleFillTabContent(mode, examples[0]);
 
-  if (tabs.length <= 1) holderElement.innerHTML = "";
+  if (tabs.length <= 1) holderElement.style.visibility = "hidden";
 
   function removeActiveClass(element) {
     element.classList.remove("active");
@@ -158,6 +166,17 @@ export function renderTabs(mode, examples) {
   function addActiveClass(element) {
     element.classList.add("active");
   }
+}
+
+function createEditorContainer(containerId) {
+  const holderElement = document.getElementById("data-cont");
+
+  const parent = document.createElement("div");
+  parent.className = "editor__input data__input";
+  parent.id = containerId;
+  parent.style.display = "none";
+  holderElement.appendChild(parent);
+  return parent;
 }
 
 function getCurrentExample(mode, examples) {

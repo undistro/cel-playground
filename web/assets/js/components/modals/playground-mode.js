@@ -21,8 +21,6 @@ import {
 } from "../../utils/render-functions.js";
 import { ModesService } from "../../services/modes.js";
 import { ExampleService } from "../../services/examples.js";
-import { StorageValues } from "../../StorageValues.js";
-import { loadCurrentTheme } from "../../main.js";
 
 const playgroundModesModalEl = document.getElementById(
   "playground-modes__modal"
@@ -187,20 +185,6 @@ function renderUIChangesByMode(mode) {
   ExampleService.getExampleContentById(mode).then((examples) => {
     renderExpressionContent(mode, examples);
     renderTabs(mode, examples);
-    renderExamplesInSelectInstance(mode, examples, handleSaveValues);
-    loadCurrentTheme();
+    renderExamplesInSelectInstance(mode, examples);
   });
-}
-
-export function handleSaveValues(mode, example) {
-  const storageValues = new StorageValues();
-
-  delete example.category;
-  delete example.name;
-
-  const valuesToSave = {
-    [mode.id]: mode.id,
-    ...example,
-  };
-  storageValues.setValues(valuesToSave);
 }

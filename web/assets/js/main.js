@@ -15,7 +15,6 @@
  */
 
 import { setCost } from "./utils/render-functions.js";
-import { StorageValues } from "./StorageValues.js";
 import { AceEditor } from "./editor.js";
 
 // Add the following polyfill for Microsoft Edge 17/18 support:
@@ -32,8 +31,23 @@ if (!WebAssembly.instantiateStreaming) {
 const output = document.getElementById("output");
 
 function getRunValues() {
-  const storageValues = new StorageValues();
-  return storageValues.getValues();
+  const currentMode = localStorage.getItem(localStorageModeKey) ?? "cel";
+
+  const exprEditor = new AceEditor(currentMode);
+  let values = {
+    expression: exprEditor.getValue(),
+  };
+
+  document.querySelectorAll(".editor__input.data__input").forEach((editor) => {
+    const containerId = editor.id;
+    const dataEditor = new AceEditor(containerId);
+    values = {
+      ...values,
+      [containerId]: dataEditor.getValue(),
+    };
+  });
+
+  return values;
 }
 
 function run() {
@@ -41,6 +55,7 @@ function run() {
   const values = getRunValues();
   output.value = "Evaluating...";
   setCost("");
+  console.log({ values: getRunValues() });
   const result = eval(values);
 
   const { output: resultOutput, isError } = result;
