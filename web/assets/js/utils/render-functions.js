@@ -19,6 +19,8 @@ import { AceEditor } from "../editor.js";
 const examplesList = document.getElementById("examples");
 const selectInstance = NiceSelect.bind(examplesList);
 
+const dataEditorInputClassNames = ".editor__input.data__input";
+
 export function renderExamplesInSelectInstance(mode, examples) {
   examplesList.innerHTML = `<option data-display="Examples" value="" disabled selected hidden>
       Examples
@@ -36,24 +38,20 @@ export function renderExamplesInSelectInstance(mode, examples) {
     ([key, value]) => ({ label: key, value })
   );
 
-  examplesByCategory.forEach((example, i) => {
+  examplesByCategory.forEach((example) => {
     const optGroup = document.createElement("optgroup");
     optGroup.label = example.label;
 
     example.value.forEach((item) => {
-      const option = document.createElement("option");
       const itemName = item.name;
-
+      const option = document.createElement("option");
+      option.className = "examples__option";
       option.value = itemName;
       option.innerText = itemName;
       optGroup.appendChild(option);
     });
 
-    if (example.label === "default") {
-      if (!urlParams.has("content")) {
-      }
-      // setEditors(example.value[0].data, example.value[0].inputs[0].data);
-    } else if (example.label === "Blank") {
+    if (example.label === "Blank" || example.label === "default") {
       return;
     } else {
       examplesList.appendChild(optGroup);
@@ -74,7 +72,7 @@ export function renderExamplesInSelectInstance(mode, examples) {
       const currentMode = localStorage.getItem(localStorageModeKey) ?? "cel";
       new AceEditor(currentMode).setValue("", -1);
       document
-        .querySelectorAll(".editor__input.data__input")
+        .querySelectorAll(dataEditorInputClassNames)
         .forEach((container) => {
           const containerId = container.id;
           new AceEditor(containerId).setValue("");
@@ -127,7 +125,7 @@ export function renderTabs(mode, examples) {
   divParent.className = "tabs";
   divParent.id = "tabs";
 
-  document.querySelectorAll(".editor__input.data__input")?.forEach((editor) => {
+  document.querySelectorAll(dataEditorInputClassNames)?.forEach((editor) => {
     editor.remove();
   });
 
@@ -147,7 +145,7 @@ export function renderTabs(mode, examples) {
 
     tabButton.onclick = () => {
       document
-        .querySelectorAll(".editor__input.data__input")
+        .querySelectorAll(dataEditorInputClassNames)
         ?.forEach((editor) => {
           editor.style.display = "none";
         });
@@ -204,10 +202,8 @@ function resetTabs() {
     } else tabButton.classList.remove("active");
   });
 
-  document
-    .querySelectorAll(".editor__input.data__input")
-    .forEach((editor, i) => {
-      if (i === 0) editor.style.display = "block";
-      else editor.style.display = "none";
-    });
+  document.querySelectorAll(dataEditorInputClassNames).forEach((editor, i) => {
+    if (i === 0) editor.style.display = "block";
+    else editor.style.display = "none";
+  });
 }

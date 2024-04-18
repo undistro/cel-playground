@@ -21,6 +21,7 @@ import {
 } from "../../utils/render-functions.js";
 import { ModesService } from "../../services/modes.js";
 import { ExampleService } from "../../services/examples.js";
+import { applyThemeToEditors } from "../../theme.js";
 
 const playgroundModesModalEl = document.getElementById(
   "playground-modes__modal"
@@ -186,5 +187,6 @@ function renderUIChangesByMode(mode) {
     renderExpressionContent(mode, examples);
     renderTabs(mode, examples);
     renderExamplesInSelectInstance(mode, examples);
+    applyThemeToEditors();
   });
 }
