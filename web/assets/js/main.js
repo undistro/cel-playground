@@ -73,7 +73,10 @@ function run() {
 function share() {
   const values = getRunValues();
 
-  const str = JSON.stringify(values);
+  const str = JSON.stringify({
+    ...values,
+    mode: localStorage.getItem(localStorageModeKey) ?? "cel",
+  });
   var compressed_uint8array = pako.gzip(str);
   var b64encoded_string = btoa(
     String.fromCharCode.apply(null, compressed_uint8array)
@@ -104,8 +107,14 @@ if (urlParams.has("content")) {
       throw new Error("Invalid content parameter");
     }
     const obj = JSON.parse(decompressedData);
-    celEditor.setValue(obj.expression, -1);
-    dataEditor.setValue(obj.data, -1);
+    localStorage.setItem(localStorageModeKey, obj.mode);
+    new AceEditor(obj.mode).setValue(obj.expression, -1);
+    document
+      .querySelectorAll(".editor__input.data__input")
+      .forEach((editor) => {
+        const containerId = editor.id;
+        new AceEditor(containerId).setValue(obj[containerId], -1);
+      });
   } catch (error) {
     console.error(error);
   }
