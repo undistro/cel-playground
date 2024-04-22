@@ -2,72 +2,72 @@
   {
     "id": "cel",
     "name": "CEL Expression",
-    "mode": "ace/mode/javascript",
+    "mode": "javascript",
     "tabs": [
       {
         "id": "dataInput",
         "name": "Input",
-        "mode": "ace/mode/javascript"
+        "mode": "javascript"
       }
     ]
   },
   {
     "id": "vap",
     "name": "Validating Admission Policy",
-    "mode": "ace/mode/yaml",
+    "mode": "yaml",
     "tabs": [
       {
         "id": "dataOriginal",
         "name": "Original",
-        "mode": "ace/mode/yaml"
+        "mode": "yaml"
       },
       {
         "id": "dataUpdated",
         "name": "Updated",
-        "mode": "ace/mode/yaml"
+        "mode": "yaml"
       },
       {
         "id": "dataNamespace",
         "name": "Namespace",
-        "mode": "ace/mode/yaml"
+        "mode": "yaml"
       },
       {
         "id": "dataRequest",
         "name": "Request",
-        "mode": "ace/mode/yaml"
+        "mode": "yaml"
       },
       {
         "id": "dataAuthorizer",
         "name": "Authorizer",
-        "mode": "ace/mode/yaml"
+        "mode": "yaml"
       }
     ]
   },
   {
     "id": "webhooks",
     "name": "Web Hooks",
-    "mode": "ace/mode/yaml",
+    "mode": "yaml",
 
     "tabs": [
       {
         "id": "dataOriginal",
         "name": "Original",
-        "mode": "ace/mode/yaml"
+        "mode": "yaml"
       },
       {
         "id": "dataUpdated",
         "name": "Updated",
-        "mode": "ace/mode/yaml"
+        "mode": "yaml"
       },
       {
         "id": "dataRequest",
         "name": "Request",
-        "mode": "ace/mode/yaml"
+        "mode": "yaml"
       },
       {
         "id": "dataAuthorizer",
         "name": "Authorizer",
-        "mode": "ace/mode/yaml"
+        "mode": "yaml"
       }
     ]
   }

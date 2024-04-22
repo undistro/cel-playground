@@ -70,8 +70,8 @@ function run() {
   } else {
     const obj = JSON.parse(resultOutput);
 
-    const resultCost = obj?.cost
-    delete obj.cost
+    const resultCost = obj?.cost;
+    delete obj.cost;
 
     const objValues = Object.values(obj);
     const hasSomeChildrenArray = objValues.some((values) =>
@@ -125,14 +125,18 @@ if (urlParams.has("content")) {
     }
     const obj = JSON.parse(decompressedData);
     localStorage.setItem(localStorageModeKey, obj.mode);
-    new AceEditor(obj.mode).setValue(obj[obj.mode], -1);
+    const editorEl = document.getElementById(obj.mode);
 
-    document
-      .querySelectorAll(".editor__input.data__input")
-      .forEach((editor) => {
-        const containerId = editor.id;
-        new AceEditor(containerId).setValue(obj[containerId], -1);
-      });
+    if (editorEl) {
+      new AceEditor(obj.mode).setValue(obj[obj.mode], -1);
+
+      document
+        .querySelectorAll(".editor__input.data__input")
+        .forEach((editor) => {
+          const containerId = editor.id;
+          new AceEditor(containerId).setValue(obj[containerId], -1);
+        });
+    }
   } catch (error) {
     console.error(error);
   }

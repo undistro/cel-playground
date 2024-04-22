@@ -103,7 +103,7 @@ export function setCost(cost) {
 }
 
 export function handleFillExpressionContent(mode, example) {
-  const exprEditor = new AceEditor(mode.id, mode.mode);
+  const exprEditor = new AceEditor(mode.id);
   exprEditor.setValue(example[mode.id], -1);
   exprEditor.editor.setTheme();
   setEditorTheme(exprEditor);
@@ -113,7 +113,7 @@ export function handleFillTabContent(mode, example) {
   resetTabs();
   mode.tabs.forEach((tab) => {
     const containerId = tab.id;
-    const inputEditor = new AceEditor(containerId, tab.mode);
+    const inputEditor = new AceEditor(containerId);
     inputEditor.setValue(example[containerId], -1);
     setEditorTheme(inputEditor);
   });
@@ -124,7 +124,8 @@ export function renderExpressionContent(mode, examples) {
   exprInput.id = mode.id;
 
   const currentExample = getCurrentExample(mode, examples);
-  const exprEditor = new AceEditor(mode.id, mode.mode);
+  const exprEditor = new AceEditor(mode.id);
+  exprEditor.setSyntax(mode.mode);
   exprEditor.setValue(currentExample?.[mode.id] ?? mode[mode.id], -1);
 }
 
@@ -149,7 +150,8 @@ export function renderTabs(mode, examples) {
 
     const containerId = tab.id;
     const editorContainer = createEditorContainer(containerId);
-    const inputEditor = new AceEditor(containerId, tab.mode);
+    const inputEditor = new AceEditor(containerId);
+    inputEditor.setSyntax(tab.mode);
     inputEditor.setValue(currentExample[containerId], -1);
 
     const tabButton = document.createElement("button");
