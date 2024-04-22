@@ -98,6 +98,7 @@ type EvalResponse struct {
 	Validations              []*EvalResult   `json:"validations,omitempty"`
 	AuditAnnotations         []*EvalResult   `json:"auditAnnotations,omitempty"`
 	WebhookMatchConditions   [][]*EvalResult `json:"webhookMatchConditions,omitempty"`
+	Cost                     *uint64         `json:"cost, omitempty"`
 }
 
 func getResults(val *ref.Val) (any, *string) {
@@ -174,9 +175,43 @@ func generateEvalArrayResults(responses []evalResponses) [][]*EvalResult {
 	return evalsArray
 }
 
+func calculateLazyEvalCost(lazyEvals lazyEvalMap) uint64 {
+	var cost uint64
+	for _, lazyEval := range lazyEvals {
+		if lazyEval.val != nil {
+			cost += *lazyEval.val.details.ActualCost()
+		}
+	}
+	return cost
+}
+
+func calculateEvalResponsesCost(evals evalResponses) uint64 {
+	var cost uint64
+	for _, eval := range evals {
+		cost += *eval.details.ActualCost()
+	}
+	return cost
+}
+
+func calculateEvalResponsesArrayCost(evalsArray []evalResponses) uint64 {
+	var cost uint64
+	for _, evals := range evalsArray {
+		cost += calculateEvalResponsesCost(evals)
+	}
+	return cost
+}
+
 func generateEvalResponse(matchConditionsVariableNames []string, matchConditionsVariableLazyEvals lazyEvalMap, matchConditionsEvals evalResponses,
 	validationVariableNames []string, validationVariableLazyEvals lazyEvalMap, validationEvals evalResponses,
 	auditAnnotationEvals evalResponses, webhookMatchConditionsEvals []evalResponses) *EvalResponse {
+
+	cost := calculateLazyEvalCost(matchConditionsVariableLazyEvals)
+	cost += calculateEvalResponsesCost(matchConditionsEvals)
+	cost += calculateLazyEvalCost(validationVariableLazyEvals)
+	cost += calculateEvalResponsesCost(validationEvals)
+	cost += calculateEvalResponsesCost(auditAnnotationEvals)
+	cost += calculateEvalResponsesArrayCost(webhookMatchConditionsEvals)
+
 	return &EvalResponse{
 		MatchConditionsVariables: generateEvalVariables(matchConditionsVariableNames, matchConditionsVariableLazyEvals),
 		MatchConditions:          generateEvalResults(matchConditionsEvals),
@@ -184,5 +219,6 @@ func generateEvalResponse(matchConditionsVariableNames []string, matchConditions
 		Validations:              generateEvalResults(validationEvals),
 		AuditAnnotations:         generateEvalResults(auditAnnotationEvals),
 		WebhookMatchConditions:   generateEvalArrayResults(webhookMatchConditionsEvals),
+		Cost:                     &cost,
 	}
 }
