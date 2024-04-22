@@ -79,7 +79,7 @@
 
 .editor__output-result-accordion[data-open="true"]
   .result-accordion-expansible-content {
-  max-height: 250px;
+  max-height: 450px;
   visibility: visible;
 }
 

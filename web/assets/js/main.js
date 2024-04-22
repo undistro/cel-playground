@@ -16,7 +16,7 @@
 
 import { setCost } from "./utils/render-functions.js";
 import { AceEditor } from "./editor.js";
-import { renderAccordions } from "./components/accordions/result.js";
+import { handleRenderAccordions } from "./components/accordions/result.js";
 import { localStorageModeKey } from "./constants.js";
 import { setEditorTheme } from "./theme.js";
 import { getExprEditorValue, getInputEditorValue } from "./utils/editor.js";
@@ -56,7 +56,6 @@ function getRunValues() {
 }
 
 function run() {
-  const cost = document.getElementById("cost");
   const values = getRunValues();
   output.value = "Evaluating...";
   setCost("");
@@ -64,18 +63,23 @@ function run() {
   const mode = localStorage.getItem(localStorageModeKey) ?? "cel";
   const result = eval(mode, values);
 
-  console.log({ result: result });
-
   const { output: resultOutput, isError } = result;
   if (isError) {
     output.value = resultOutput;
     output.style.color = "red";
   } else {
     const obj = JSON.parse(resultOutput);
-    console.log(obj);
-    renderAccordions(obj);
-    output.value = JSON.stringify(obj, null, 2);
-    output.style.color = "white";
+    const objValues = Object.values(obj);
+    const hasSomeChildrenArray = objValues.some((values) =>
+      Array.isArray(values)
+    );
+    if (hasSomeChildrenArray) handleRenderAccordions(obj);
+    else {
+      output.value = obj.result;
+      output.style.color = "white";
+    }
+
+    setCost(obj?.cost);
   }
 }
 

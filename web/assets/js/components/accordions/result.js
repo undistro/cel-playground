@@ -15,49 +15,52 @@
  */
 
 const outputResultEl = document.getElementById("editor__output-result");
+const holderEl = document.querySelector(".editor__output-holder");
 
-function createAccordionItemsByResults(result) {
-  outputResultEl.style.display = "flex";
+function createAccordionItemsByResults(name, result, index) {
+  const listItem = document.createElement("li");
+  listItem.className = "editor__output-result-accordion";
+  listItem.setAttribute("data-open", "false");
+  listItem.onclick = (e) => {
+    const isAccordionOpen = listItem.getAttribute("data-open") === "true";
+    if (isAccordionOpen) listItem.setAttribute("data-open", "false");
+    else listItem.setAttribute("data-open", "true");
+  };
 
-  Object.keys(result).forEach((key, i) => {
-    const data = result[key];
-    data.forEach((item) => {
-      const listItem = document.createElement("li");
-      listItem.className = "editor__output-result-accordion";
-      listItem.setAttribute("data-open", "false");
-      listItem.onclick = (e) => {
-        const isAccordionOpen = listItem.getAttribute("data-open") === "true";
-        if (isAccordionOpen) listItem.setAttribute("data-open", "false");
-        else listItem.setAttribute("data-open", "true");
-      };
+  const accordionContent = document.createElement("div");
+  accordionContent.className = "result-accordion-content";
+  accordionContent.innerHTML = createLabel(result, name, index);
+  const costSpan = document.createElement("span");
+  costSpan.innerHTML = `Cost: ${result.cost}`;
+  accordionContent.appendChild(costSpan);
 
-      const accordionContent = document.createElement("div");
-      accordionContent.className = "result-accordion-content";
-      accordionContent.innerHTML = createErrorIcon(item, key, i);
-      const costSpan = document.createElement("span");
-      costSpan.innerHTML = `Cost: ${item.cost}`;
-      accordionContent.appendChild(costSpan);
+  const expansibleContent = document.createElement("div");
+  expansibleContent.className = "result-accordion-expansible-content";
+  expansibleContent.innerHTML = `<span>${getResultValue(result)}</span>`;
 
-      const expansibleContent = document.createElement("div");
-      expansibleContent.className = "result-accordion-expansible-content";
-      expansibleContent.innerHTML = `<span>${item.result}</span>`;
+  listItem.appendChild(accordionContent);
+  listItem.appendChild(expansibleContent);
 
-      listItem.appendChild(accordionContent);
-      listItem.appendChild(expansibleContent);
+  outputResultEl.appendChild(listItem);
+}
+function getResultValue(result) {
+  if ("value" in result) {
+    if (typeof result.value === "object")
+      return `<pre>${JSON.stringify(result.value, null, 2)}</pre>`;
+    return String(result.value);
+  }
 
-      outputResultEl.appendChild(listItem);
-    });
-  });
+  return result.result;
 }
 
-function createErrorIcon(item, key, i) {
+function createLabel(item, name, i) {
   return `<div
             style="display: flex; align-items: center; gap: 0.5rem; position:relative"
           >
             <i class="ph ph-caret-right ph-bold result-arrow"></i>
             <div class="tooltip__container">
                     ${
-                      item.isError
+                      item?.isError
                         ? `<i class="ph ph-x-circle ph-fill" style="color: #e01e5a; z-index:999999" id="tooltip__trigger"></i>`
                         : ""
                     }
@@ -68,15 +71,28 @@ function createErrorIcon(item, key, i) {
                     </div>
                   </div>
                         
-            <span>${key}[${i}]</span>
+            <span>${name}[${i}]</span>
           </div>`;
 }
 
-export function renderAccordions(result) {
-  outputResultEl.innerHTML = "";
-  createAccordionItemsByResults(result);
+function renderAccordions(key, values, index = 0) {
+  if (Array.isArray(values))
+    values.forEach((value, index) => renderAccordions(key, value, index));
+  else createAccordionItemsByResults(key, values, index);
 }
 
 export function hideAccordions() {
   outputResultEl.style.display = "none";
+}
+
+export function handleRenderAccordions(result) {
+  outputResultEl.innerHTML = "";
+  outputResultEl.style.display = "flex";
+  outputResultEl.scrollTo({ top: 0, behavior: "smooth" });
+  holderEl.style.overflowY = "auto";
+  holderEl.style.overflowX = "hidden";
+
+  Object.entries(result).forEach(([key, values]) => {
+    renderAccordions(key, values);
+  });
 }

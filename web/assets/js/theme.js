@@ -30,18 +30,11 @@ export function applyThemeToEditors() {
   const editorsInputEl = document.querySelectorAll(
     ".editor__input.data__input"
   );
-
-  if (theme === "dark") {
-    exprEditor.editor.setTheme("ace/theme/tomorrow_night");
-    editorsInputEl.forEach((editor) => {
-      new AceEditor(editor.id).editor.setTheme("ace/theme/tomorrow_night");
-    });
-  } else {
-    exprEditor.editor.setTheme("ace/theme/clouds");
-    editorsInputEl.forEach((editor) => {
-      new AceEditor(editor.id);
-    });
-  }
+  setEditorTheme(exprEditor);
+  editorsInputEl.forEach((editor) => {
+    const inputEditor = new AceEditor(editor.id);
+    setEditorTheme(inputEditor);
+  });
 }
 
 function toggleTheme(theme) {
