@@ -1,5 +1,13 @@
+import {
+  ACE_EDITOR,
+  localStorageModeKey,
+  localStorageThemeKey,
+} from "./constants.js";
 import { AceEditor } from "./editor.js";
+import { getCurrentTheme } from "./utils/localStorage.js";
 const toggleBtn = document.getElementsByClassName("toggle-theme")[0];
+
+const { theme: aceEditorTheme } = ACE_EDITOR;
 
 window.addEventListener("load", () => {
   let theme = localStorage.getItem(localStorageThemeKey);
@@ -56,4 +64,14 @@ function toggleTheme(theme) {
   }
   localStorage.setItem(localStorageThemeKey, theme);
   applyThemeToEditors();
+}
+
+function getEditorByTheme(currentTheme) {
+  return aceEditorTheme[currentTheme];
+}
+
+export function setEditorTheme({ editor }) {
+  const theme = getCurrentTheme();
+  const editorTheme = getEditorByTheme(theme);
+  editor.setTheme(editorTheme);
 }

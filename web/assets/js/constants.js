@@ -14,5 +14,11 @@
  * limitations under the License.
  */
 
-const localStorageModeKey = "mode";
-const localStorageThemeKey = "theme";
+export const localStorageModeKey = "mode";
+export const localStorageThemeKey = "theme";
+export const ACE_EDITOR = {
+  theme: {
+    dark: "ace/theme/tomorrow_night",
+    light: "ace/theme/clouds",
+  },
+};

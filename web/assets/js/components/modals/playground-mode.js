@@ -22,6 +22,7 @@ import {
 import { ModesService } from "../../services/modes.js";
 import { ExampleService } from "../../services/examples.js";
 import { applyThemeToEditors } from "../../theme.js";
+import { localStorageModeKey } from "../../constants.js";
 
 const playgroundModesModalEl = document.getElementById(
   "playground-modes__modal"

@@ -16,6 +16,9 @@
 
 import { setCost } from "./utils/render-functions.js";
 import { AceEditor } from "./editor.js";
+import { renderAccordions } from "./components/accordions/result.js";
+import { localStorageModeKey, localStorageThemeKey } from "./constants.js";
+import { setEditorTheme } from "./theme.js";
 
 // Add the following polyfill for Microsoft Edge 17/18 support:
 // <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
@@ -32,12 +35,8 @@ const output = document.getElementById("output");
 
 function getRunValues() {
   const currentMode = localStorage.getItem(localStorageModeKey) ?? "cel";
-  const currentTheme = localStorage.getItem(localStorageThemeKey) ?? "light";
-  const editorTheme =
-    currentTheme === "dark" ? "ace/theme/tomorrow_night" : "ace/theme/clouds";
-
   const exprEditor = new AceEditor(currentMode);
-  exprEditor.editor.setTheme(editorTheme);
+  setEditorTheme(exprEditor);
   let values = {
     [currentMode]: exprEditor.getValue(),
   };
@@ -45,7 +44,7 @@ function getRunValues() {
   document.querySelectorAll(".editor__input.data__input").forEach((editor) => {
     const containerId = editor.id;
     const dataEditor = new AceEditor(containerId);
-    dataEditor.editor.setTheme(editorTheme);
+    setEditorTheme(dataEditor);
     values = {
       ...values,
       [containerId]: dataEditor.getValue(),
@@ -60,7 +59,7 @@ function run() {
   const values = getRunValues();
   output.value = "Evaluating...";
   setCost("");
-  console.log({ values: getRunValues() });
+
   const mode = localStorage.getItem(localStorageModeKey) ?? "cel";
   const result = eval(mode, values);
 
@@ -72,7 +71,8 @@ function run() {
     output.style.color = "red";
   } else {
     const obj = JSON.parse(resultOutput);
-    output.value = JSON.stringify(obj, null, 2);
+    renderAccordions(obj);
+    // output.value = JSON.stringify(obj, null, 2);
     output.style.color = "white";
   }
 }

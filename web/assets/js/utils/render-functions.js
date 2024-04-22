@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+import { localStorageModeKey } from "../constants.js";
 import { AceEditor } from "../editor.js";
+import { setEditorTheme } from "../theme.js";
+import { getCurrentTheme } from "./localStorage.js";
 
 const examplesList = document.getElementById("examples");
 const selectInstance = NiceSelect.bind(examplesList);
@@ -95,6 +98,8 @@ export function setCost(cost) {
 export function handleFillExpressionContent(mode, example) {
   const exprEditor = new AceEditor(mode.id, mode.mode);
   exprEditor.setValue(example[mode.id], -1);
+  exprEditor.editor.setTheme();
+  setEditorTheme(exprEditor);
 }
 
 export function handleFillTabContent(mode, example) {
@@ -103,6 +108,7 @@ export function handleFillTabContent(mode, example) {
     const containerId = tab.id;
     const inputEditor = new AceEditor(containerId, tab.mode);
     inputEditor.setValue(example[containerId], -1);
+    setEditorTheme(inputEditor);
   });
 }
 
@@ -111,7 +117,6 @@ export function renderExpressionContent(mode, examples) {
   exprInput.id = mode.id;
 
   const currentExample = getCurrentExample(mode, examples);
-
   const exprEditor = new AceEditor(mode.id, mode.mode);
   exprEditor.setValue(currentExample?.[mode.id] ?? mode[mode.id], -1);
 }

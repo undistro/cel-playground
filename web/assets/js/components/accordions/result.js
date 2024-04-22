@@ -16,54 +16,63 @@
 
 const outputResultEl = document.getElementById("editor__output-result");
 
-function createAccordionItemsByResults(results, name) {
-  results.forEach((result, i) => {
-    const listItem = document.createElement("li");
-    listItem.className = "editor__output-result-accordion";
-    listItem.setAttribute("data-open", "false");
-    listItem.onclick = (e) => {
-      const isAccordionOpen = listItem.getAttribute("data-open") === "true";
-      if (isAccordionOpen) listItem.setAttribute("data-open", "false");
-      else listItem.setAttribute("data-open", "true");
-    };
+function createAccordionItemsByResults(result) {
+  outputResultEl.style.display = "flex";
 
-    const accordionContent = document.createElement("div");
-    accordionContent.className = "result-accordion-content";
-    accordionContent.innerHTML = `<div
-                                    style="display: flex; align-items: center; gap: 0.5rem; position:relative"
-                                  >
-                                    <i class="ph ph-caret-right ph-bold result-arrow"></i>
-                                    <div class="tooltip__container">
-                                            ${
-                                              result.isError
-                                                ? `<i class="ph ph-x-circle ph-fill" style="color: #e01e5a; z-index:999999" id="tooltip__trigger"></i>`
-                                                : ""
-                                            }
-                                            <div id="tooltip__content" class="tooltip" style="right:0; top:0">
-                                              <span class="tooltip__content--text">
-                                                Validation compilation failed.
-                                              </span>
-                                            </div>
-                                          </div>
-                                                
-                                    <span>${name}[${i}]</span>
-                                  </div>`;
-    const costSpan = document.createElement("span");
-    costSpan.innerHTML = `Cost: ${result.cost}`;
-    accordionContent.appendChild(costSpan);
+  Object.keys(result).forEach((key, i) => {
+    const data = result[key];
+    data.forEach((item) => {
+      const listItem = document.createElement("li");
+      listItem.className = "editor__output-result-accordion";
+      listItem.setAttribute("data-open", "false");
+      listItem.onclick = (e) => {
+        const isAccordionOpen = listItem.getAttribute("data-open") === "true";
+        if (isAccordionOpen) listItem.setAttribute("data-open", "false");
+        else listItem.setAttribute("data-open", "true");
+      };
 
-    const expansibleContent = document.createElement("div");
-    expansibleContent.className = "result-accordion-expansible-content";
-    expansibleContent.innerHTML = `<span>${result.result}</span>`;
+      const accordionContent = document.createElement("div");
+      accordionContent.className = "result-accordion-content";
+      accordionContent.innerHTML = createErrorIcon(item, key, i);
+      const costSpan = document.createElement("span");
+      costSpan.innerHTML = `Cost: ${item.cost}`;
+      accordionContent.appendChild(costSpan);
 
-    listItem.appendChild(accordionContent);
-    listItem.appendChild(expansibleContent);
+      const expansibleContent = document.createElement("div");
+      expansibleContent.className = "result-accordion-expansible-content";
+      expansibleContent.innerHTML = `<span>${item.result}</span>`;
 
-    outputResultEl.appendChild(listItem);
+      listItem.appendChild(accordionContent);
+      listItem.appendChild(expansibleContent);
+
+      outputResultEl.appendChild(listItem);
+    });
   });
 }
 
-export function renderResultAccordions(results, name) {
-  outputResultEl.style.display = "flex";
-  createAccordionItemsByResults(results, name);
+function createErrorIcon(item, key, i) {
+  return `<div
+            style="display: flex; align-items: center; gap: 0.5rem; position:relative"
+          >
+            <i class="ph ph-caret-right ph-bold result-arrow"></i>
+            <div class="tooltip__container">
+                    ${
+                      item.isError
+                        ? `<i class="ph ph-x-circle ph-fill" style="color: #e01e5a; z-index:999999" id="tooltip__trigger"></i>`
+                        : ""
+                    }
+                    <div id="tooltip__content" class="tooltip" style="right:0; top:0">
+                      <span class="tooltip__content--text">
+                        Validation compilation failed.
+                      </span>
+                    </div>
+                  </div>
+                        
+            <span>${key}[${i}]</span>
+          </div>`;
+}
+
+export function renderAccordions(result) {
+  outputResultEl.innerHTML = "";
+  createAccordionItemsByResults(result);
 }
