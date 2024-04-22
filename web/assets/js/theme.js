@@ -20,10 +20,10 @@ toggleBtn.addEventListener("click", function () {
   let currTheme = localStorage.getItem(localStorageThemeKey);
   if (currTheme === "dark") toggleTheme("light");
   else toggleTheme("dark");
+  applyThemeToEditors();
 });
 
 export function applyThemeToEditors() {
-  const theme = localStorage.getItem(localStorageThemeKey);
   const exprEditor = new AceEditor(
     localStorage.getItem(localStorageModeKey) ?? "cel"
   );
@@ -56,7 +56,7 @@ function toggleTheme(theme) {
     copyIcon[1].src = "./assets/img/copy.svg";
   }
   localStorage.setItem(localStorageThemeKey, theme);
-  applyThemeToEditors();
+  // applyThemeToEditors();
 }
 
 function getEditorByTheme(currentTheme) {
