@@ -2,20 +2,20 @@ import { AceEditor } from "./editor.js";
 const toggleBtn = document.getElementsByClassName("toggle-theme")[0];
 
 window.addEventListener("load", () => {
-  let theme = localStorage.getItem("theme");
+  let theme = localStorage.getItem(localStorageThemeKey);
   if (theme === "dark") {
     toggleTheme("dark");
   }
 });
 
 toggleBtn.addEventListener("click", function () {
-  let currTheme = localStorage.getItem("theme");
+  let currTheme = localStorage.getItem(localStorageThemeKey);
   if (currTheme === "dark") toggleTheme("light");
   else toggleTheme("dark");
 });
 
 export function applyThemeToEditors() {
-  const theme = localStorage.getItem("theme");
+  const theme = localStorage.getItem(localStorageThemeKey);
   const exprEditor = new AceEditor(
     localStorage.getItem(localStorageModeKey) ?? "cel"
   );
@@ -54,6 +54,6 @@ function toggleTheme(theme) {
     copyIcon[0].src = "./assets/img/copy.svg";
     copyIcon[1].src = "./assets/img/copy.svg";
   }
-  localStorage.setItem("theme", theme);
+  localStorage.setItem(localStorageThemeKey, theme);
   applyThemeToEditors();
 }

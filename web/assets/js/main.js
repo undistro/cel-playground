@@ -32,8 +32,12 @@ const output = document.getElementById("output");
 
 function getRunValues() {
   const currentMode = localStorage.getItem(localStorageModeKey) ?? "cel";
+  const currentTheme = localStorage.getItem(localStorageThemeKey) ?? "light";
+  const editorTheme =
+    currentTheme === "dark" ? "ace/theme/tomorrow_night" : "ace/theme/clouds";
 
   const exprEditor = new AceEditor(currentMode);
+  exprEditor.editor.setTheme(editorTheme);
   let values = {
     [currentMode]: exprEditor.getValue(),
   };
@@ -41,6 +45,7 @@ function getRunValues() {
   document.querySelectorAll(".editor__input.data__input").forEach((editor) => {
     const containerId = editor.id;
     const dataEditor = new AceEditor(containerId);
+    dataEditor.editor.setTheme(editorTheme);
     values = {
       ...values,
       [containerId]: dataEditor.getValue(),
@@ -56,7 +61,7 @@ function run() {
   output.value = "Evaluating...";
   setCost("");
   console.log({ values: getRunValues() });
-  const mode = localStorage.getItem(localStorageModeKey) ?? "cel"
+  const mode = localStorage.getItem(localStorageModeKey) ?? "cel";
   const result = eval(mode, values);
 
   console.log({ result: result });

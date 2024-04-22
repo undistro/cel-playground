@@ -15,3 +15,4 @@
  */
 
 const localStorageModeKey = "mode";
+const localStorageThemeKey = "theme";
