@@ -68,6 +68,7 @@ func TestValidationEval(t *testing.T) {
 		updated: "updated1.yaml",
 		expected: k8s.EvalResponse{
 			Validations: []*k8s.EvalResult{{Message: "All production deployments should be HA with at least three replicas", Result: false, Cost: uint64ptr(4)}},
+			Cost:        uint64ptr(4),
 		},
 	}, {
 		name:    "test an expression which should succeed",
@@ -76,6 +77,7 @@ func TestValidationEval(t *testing.T) {
 		updated: "updated2.yaml",
 		expected: k8s.EvalResponse{
 			Validations: []*k8s.EvalResult{{Result: true, Cost: uint64ptr(4)}},
+			Cost:        uint64ptr(4),
 		},
 	}, {
 		name:    "test an expression with variables, expression should fail with no audit annotation",
@@ -89,6 +91,7 @@ func TestValidationEval(t *testing.T) {
 				Cost:  uint64ptr(6),
 			}},
 			Validations: []*k8s.EvalResult{{Result: false, Cost: uint64ptr(2)}},
+			Cost:        uint64ptr(8),
 		},
 	}, {
 		name:    "test an expression with variables, expression should succeed with audit annotation",
@@ -110,6 +113,7 @@ func TestValidationEval(t *testing.T) {
 				Message: "Label for foo is set to bar",
 				Cost:    uint64ptr(2),
 			}},
+			Cost: uint64ptr(15),
 		},
 	}, {
 		name:    "test an expression with variables evaluating to a map, expression should succeed",
@@ -126,6 +130,7 @@ func TestValidationEval(t *testing.T) {
 				Cost: uint64ptr(5),
 			}},
 			Validations: []*k8s.EvalResult{{Result: true, Cost: uint64ptr(2)}},
+			Cost:        uint64ptr(7),
 		},
 	}, {
 		name:    "test an expression with variables evaluating to query parameters in a URL, expression should succeed",
@@ -141,6 +146,7 @@ func TestValidationEval(t *testing.T) {
 				Cost: uint64ptr(14),
 			}},
 			Validations: []*k8s.EvalResult{{Result: true, Cost: uint64ptr(2)}},
+			Cost:        uint64ptr(16),
 		},
 	}, {
 		name:    "test valid matchConditions, should see validations and auditAnnotations",
@@ -164,6 +170,7 @@ func TestValidationEval(t *testing.T) {
 				Message: "Name is kubernetes-bootcamp, namespace is default",
 				Cost:    uint64ptr(9),
 			}},
+			Cost: uint64ptr(24),
 		},
 	}, {
 		name:    "test invalid matchConditions, should not see validations and auditAnnotations",
@@ -186,6 +193,7 @@ func TestValidationEval(t *testing.T) {
 				Result: false,
 				Cost:   uint64ptr(5),
 			}},
+			Cost: uint64ptr(11),
 		},
 	}, {
 		name:      "test an expression using namespace attributes",
@@ -233,6 +241,7 @@ func TestValidationEval(t *testing.T) {
 				Result: true,
 				Cost:   uint64ptr(11),
 			}},
+			Cost: uint64ptr(50),
 		},
 	}, {
 		name:    "test an expression using request attributes",
@@ -242,6 +251,7 @@ func TestValidationEval(t *testing.T) {
 		request: "request1 request.yaml",
 		expected: k8s.EvalResponse{
 			Validations: []*k8s.EvalResult{{Result: true, Cost: uint64ptr(12)}},
+			Cost:        uint64ptr(12),
 		},
 	}, {
 		name:       "test an expression using allowed authorizer checks",
@@ -269,6 +279,7 @@ func TestValidationEval(t *testing.T) {
 				Message: "Deployment is allowed in namespace default",
 				Cost:    uint64ptr(4),
 			}},
+			Cost: uint64ptr(23),
 		},
 	}, {
 		name:       "test an expression using disallowed authorizer checks",
@@ -291,6 +302,7 @@ func TestValidationEval(t *testing.T) {
 				Result: false,
 				Cost:   uint64ptr(10),
 			}},
+			Cost: uint64ptr(19),
 		},
 	}}
 	for _, tt := range tests {

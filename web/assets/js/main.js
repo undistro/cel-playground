@@ -69,6 +69,10 @@ function run() {
     output.style.color = "red";
   } else {
     const obj = JSON.parse(resultOutput);
+
+    const resultCost = obj?.cost
+    delete obj.cost
+
     const objValues = Object.values(obj);
     const hasSomeChildrenArray = objValues.some((values) =>
       Array.isArray(values)
@@ -79,7 +83,7 @@ function run() {
       output.style.color = "white";
     }
 
-    setCost(obj?.cost);
+    setCost(resultCost);
   }
 }
 
