@@ -581,6 +581,10 @@ footer .langdef {
   transition: none;
 }
 
+.nice-select.right.open {
+  border: 1px solid rgba(132, 71, 209, 1);
+}
+
 .nice-select .optgroup {
   padding-left: 1rem;
 }
