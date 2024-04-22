@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
+import { hideAccordions } from "../components/accordions/result.js";
 import { localStorageModeKey } from "../constants.js";
 import { AceEditor } from "../editor.js";
 import { setEditorTheme } from "../theme.js";
-import { getCurrentTheme } from "./localStorage.js";
 
 const examplesList = document.getElementById("examples");
 const selectInstance = NiceSelect.bind(examplesList);
@@ -73,13 +73,19 @@ export function renderExamplesInSelectInstance(mode, examples) {
     );
     if (event.target.value === "Blank") {
       const currentMode = localStorage.getItem(localStorageModeKey) ?? "cel";
-      new AceEditor(currentMode).setValue("", -1);
+      const exprEditor = new AceEditor(currentMode);
+      exprEditor.setValue("", -1);
+      setEditorTheme(exprEditor);
       document
         .querySelectorAll(dataEditorInputClassNames)
         .forEach((container) => {
           const containerId = container.id;
-          new AceEditor(containerId).setValue("");
+          const inputEditor = new AceEditor(containerId);
+          inputEditor.setValue("");
+          setEditorTheme(inputEditor);
         });
+      hideAccordions();
+      output.value = "";
     }
     if (!example) return;
 
@@ -87,6 +93,7 @@ export function renderExamplesInSelectInstance(mode, examples) {
     handleFillTabContent(mode, example);
     setCost("");
     output.value = "";
+    hideAccordions();
   });
 }
 
@@ -129,6 +136,7 @@ export function renderTabs(mode, examples) {
   const divParent = document.createElement("div");
   divParent.className = "tabs";
   divParent.id = "tabs";
+  divParent.setAttribute("data-tab-active", 0);
 
   document.querySelectorAll(dataEditorInputClassNames)?.forEach((editor) => {
     editor.remove();
@@ -160,6 +168,7 @@ export function renderTabs(mode, examples) {
       if (tabButton.classList.contains("active")) removeActiveClass(tabButton);
       else addActiveClass(tabButton);
       divParent.setAttribute("style", `--current-tab: ${idx}`);
+      divParent.setAttribute("data-tab-active", idx);
     };
     if (idx === 0) addActiveClass(tabButton);
     divParent.appendChild(tabButton);

@@ -17,8 +17,9 @@
 import { setCost } from "./utils/render-functions.js";
 import { AceEditor } from "./editor.js";
 import { renderAccordions } from "./components/accordions/result.js";
-import { localStorageModeKey, localStorageThemeKey } from "./constants.js";
+import { localStorageModeKey } from "./constants.js";
 import { setEditorTheme } from "./theme.js";
+import { getExprEditorValue, getInputEditorValue } from "./utils/editor.js";
 
 // Add the following polyfill for Microsoft Edge 17/18 support:
 // <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
@@ -71,8 +72,9 @@ function run() {
     output.style.color = "red";
   } else {
     const obj = JSON.parse(resultOutput);
+    console.log(obj);
     renderAccordions(obj);
-    // output.value = JSON.stringify(obj, null, 2);
+    output.value = JSON.stringify(obj, null, 2);
     output.style.color = "white";
   }
 }
@@ -141,8 +143,8 @@ celInput.addEventListener("mouseleave", () => {
 });
 
 celCopyIcon.addEventListener("click", () => {
-  let value = celEditor.editor.getValue();
-  navigator.clipboard.writeText(value).catch(console.error);
+  const exprEditorValue = getExprEditorValue();
+  navigator.clipboard.writeText(exprEditorValue).catch(console.error);
   celCopyHover.style.display = "none";
   celCopyClick.style.display = "flex";
   setTimeout(() => {
@@ -172,8 +174,8 @@ dataInput.addEventListener("mouseleave", () => {
 });
 
 dataCopyIcon.addEventListener("click", () => {
-  let value = dataEditor.editor.getValue();
-  navigator.clipboard.writeText(value);
+  const dataInputValue = getInputEditorValue();
+  navigator.clipboard.writeText(dataInputValue);
   dataCopyHover.style.display = "none";
   dataCopyClick.style.display = "flex";
   setTimeout(() => {

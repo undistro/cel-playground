@@ -23,6 +23,7 @@ import { ModesService } from "../../services/modes.js";
 import { ExampleService } from "../../services/examples.js";
 import { applyThemeToEditors } from "../../theme.js";
 import { localStorageModeKey } from "../../constants.js";
+import { hideAccordions } from "../accordions/result.js";
 
 const playgroundModesModalEl = document.getElementById(
   "playground-modes__modal"
@@ -121,6 +122,8 @@ function handleModeClick(event, mode, element) {
   element.classList.add("active");
   renderUIChangesByMode(mode);
   localStorage.setItem(localStorageModeKey, value);
+  hideAccordions();
+  output.value = "";
   setTimeout(() => modal.hide(), 1000);
 }
 

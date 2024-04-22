@@ -76,3 +76,7 @@ export function renderAccordions(result) {
   outputResultEl.innerHTML = "";
   createAccordionItemsByResults(result);
 }
+
+export function hideAccordions() {
+  outputResultEl.style.display = "none";
+}
