@@ -15,7 +15,6 @@
 package k8s_test
 
 import (
-	"embed"
 	"encoding/json"
 	"reflect"
 	"testing"
@@ -23,29 +22,26 @@ import (
 	"github.com/undistro/cel-playground/k8s"
 )
 
-//go:embed testdata
-var testdata embed.FS
-
-func testfile(name string) string {
-	return "testdata/" + name
+func vapTestfile(file string) string {
+	return testfile("vap/" + file)
 }
 
-func readTestData(policy, original, updated, namespace, request, authorizer string) (policyData, originalData, updatedData, namespaceData, requestData, authorizerData []byte, err error) {
-	policyData, err = testdata.ReadFile(testfile(policy))
+func readValidationTestData(policy, original, updated, namespace, request, authorizer string) (policyData, originalData, updatedData, namespaceData, requestData, authorizerData []byte, err error) {
+	policyData, err = testdata.ReadFile(vapTestfile(policy))
 	if err == nil && original != "" {
-		originalData, err = testdata.ReadFile(testfile(original))
+		originalData, err = testdata.ReadFile(vapTestfile(original))
 	}
 	if err == nil && updated != "" {
-		updatedData, err = testdata.ReadFile(testfile(updated))
+		updatedData, err = testdata.ReadFile(vapTestfile(updated))
 	}
 	if err == nil && namespace != "" {
-		namespaceData, err = testdata.ReadFile(testfile(namespace))
+		namespaceData, err = testdata.ReadFile(vapTestfile(namespace))
 	}
 	if err == nil && request != "" {
-		requestData, err = testdata.ReadFile(testfile(request))
+		requestData, err = testdata.ReadFile(vapTestfile(request))
 	}
 	if err == nil && authorizer != "" {
-		authorizerData, err = testdata.ReadFile(testfile(authorizer))
+		authorizerData, err = testdata.ReadFile(vapTestfile(authorizer))
 	}
 	return
 }
@@ -307,7 +303,7 @@ func TestValidationEval(t *testing.T) {
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			policy, orig, updated, namespace, request, authorizer, err := readTestData(tt.policy, tt.orig, tt.updated, tt.namespace, tt.request, tt.authorizer)
+			policy, orig, updated, namespace, request, authorizer, err := readValidationTestData(tt.policy, tt.orig, tt.updated, tt.namespace, tt.request, tt.authorizer)
 			var results string
 			if err == nil {
 				results, err = k8s.EvalValidatingAdmissionPolicy(policy, orig, updated, namespace, request, authorizer)
@@ -333,12 +329,4 @@ func TestValidationEval(t *testing.T) {
 			}
 		})
 	}
-}
-
-func uint64ptr(val uint64) *uint64 {
-	return &val
-}
-
-func strptr(str string) *string {
-	return &str
 }

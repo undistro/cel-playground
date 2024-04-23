@@ -1,0 +1,23 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+webhooks:
+  - name: rbac.my-webhook.example.com
+    matchPolicy: Equivalent
+    rules:
+      - operations: ['CREATE','UPDATE']
+        apiGroups: ['apps']
+        apiVersions: ['*']
+        resources: ['*']
+    failurePolicy: 'Fail' # Fail-closed (the default)
+    sideEffects: None
+    clientConfig:
+      service:
+        namespace: my-namespace
+        name: my-webhook
+      caBundle: 'PGNhYnVuZGxlPgo='
+    # You can have up to 64 matchConditions per webhook
+    matchConditions:
+      - name: 'breakglass'
+        # Skip requests made by users authorized to 'breakglass' on this webhook.
+        # The 'breakglass' API verb does not need to exist outside this check.
+        expression: '!authorizer.group("admissionregistration.k8s.io").resource("validatingwebhookconfigurations").name("rbac.my-webhook.example.com").check("breakglass").allowed()'

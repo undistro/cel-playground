@@ -188,7 +188,9 @@ func calculateLazyEvalCost(lazyEvals lazyEvalMap) uint64 {
 func calculateEvalResponsesCost(evals evalResponses) uint64 {
 	var cost uint64
 	for _, eval := range evals {
-		cost += *eval.details.ActualCost()
+		if eval.details != nil {
+			cost += *eval.details.ActualCost()
+		}
 	}
 	return cost
 }
