@@ -259,7 +259,6 @@ a {
 /* Containers */
 .editor-container {
   display: flex;
-  flex-direction: row;
   /* 3 * 24px = 72px for padding, 72px for navbar, 32px for footer */
   height: calc(100vh - (3 * 24px) - 72px - 32px);
   gap: 24px;

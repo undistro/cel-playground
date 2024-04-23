@@ -20,12 +20,15 @@
   --tab-button-width: 150px;
 
   display: flex;
+  width: 100%;
+  flex: 1;
   align-items: center;
 }
 
 .tabs::after {
   content: "";
-  width: var(--tab-button-width);
+  max-width: var(--tab-button-width);
+  width: 100%;
   height: 2px;
 
   background-color: var(--purple);
@@ -75,17 +78,6 @@
 .dark .tabs button.active {
   color: var(--purple-dark);
 }
-
-/* .tabs button.active::after {
-  content: "";
-  width: 150px;
-  height: 2px;
-
-  background-color: var(--purple);
-
-  position: absolute;
-  bottom: 0;
-} */
 
 .dark .tabs button.active::after {
   background-color: var(--purple-dark);
