@@ -64,25 +64,21 @@ function run() {
   const result = eval(mode, values);
 
   const { output: resultOutput, isError } = result;
+
   if (isError) {
     output.value = resultOutput;
     output.style.color = "red";
   } else {
     const obj = JSON.parse(resultOutput);
-
     const resultCost = obj?.cost;
     delete obj.cost;
 
-    const objValues = Object.values(obj);
-    const hasSomeChildrenArray = objValues.some((values) =>
-      Array.isArray(values)
-    );
-    if (hasSomeChildrenArray) handleRenderAccordions(obj);
-    else {
-      output.value = obj.result;
+    if ("result" in obj) {
+      output.value = JSON.stringify(obj.result);
       output.style.color = "white";
+    } else {
+      handleRenderAccordions(obj);
     }
-
     setCost(resultCost);
   }
 }
