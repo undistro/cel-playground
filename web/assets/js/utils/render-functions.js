@@ -18,6 +18,7 @@ import { hideAccordions } from "../components/accordions/result.js";
 import { localStorageModeKey } from "../constants.js";
 import { AceEditor } from "../editor.js";
 import { setEditorTheme } from "../theme.js";
+import { getCurrentMode } from "./localStorage.js";
 
 const examplesList = document.getElementById("examples");
 const selectInstance = NiceSelect.bind(examplesList);
@@ -72,7 +73,7 @@ export function renderExamplesInSelectInstance(mode, examples) {
       (example) => example.name === event.target.value
     );
     if (event.target.value === "Blank") {
-      const currentMode = localStorage.getItem(localStorageModeKey) ?? "cel";
+      const currentMode = getCurrentMode();
       const exprEditor = new AceEditor(currentMode);
       exprEditor.setValue("", -1);
       setEditorTheme(exprEditor);
@@ -86,11 +87,12 @@ export function renderExamplesInSelectInstance(mode, examples) {
         });
       hideAccordions();
       output.value = "";
+    } else {
+      if (!example) return;
+      handleFillExpressionContent(mode, example);
+      handleFillTabContent(mode, example);
     }
-    if (!example) return;
 
-    handleFillExpressionContent(mode, example);
-    handleFillTabContent(mode, example);
     setCost("");
     output.value = "";
     hideAccordions();
