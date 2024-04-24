@@ -33,13 +33,6 @@
   border-left: 10px solid var(--purple);
 }
 
-.tabs {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  align-items: center;
-}
-
 .tabs::after {
   content: "";
   width: var(--tab-button-width);
@@ -51,6 +44,14 @@
   bottom: 0;
   transform: translateX(calc(var(--current-tab) * var(--tab-button-width)));
   transition: transform 300ms;
+}
+
+.tabs__wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  align-items: center;
+  position: relative;
 }
 
 .tabs button {
@@ -75,6 +76,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.tabs .tooltip__content {
+  top: 40px;
+  left: calc(var(--tab-button-width) * var(--hovered-tab));
 }
 
 .dark .tabs button {

@@ -17,13 +17,46 @@
 const tooltipContainers = document.querySelectorAll(".tooltip__container");
 
 tooltipContainers.forEach((container) => {
-  const tooltipTrigger = container.querySelector("#tooltip__trigger");
-  const tooltipContent = container.querySelector("#tooltip__content");
-  tooltipTrigger?.addEventListener("mouseover", () => {
+  const tooltipTrigger = container.querySelector(".tooltip__trigger");
+  const tooltipContent = container.querySelector(".tooltip__content");
+  tooltipTrigger.addEventListener("mouseover", () => {
     tooltipContent.style.display = "initial";
   });
 
-  tooltipTrigger?.addEventListener("mouseleave", () => {
+  tooltipTrigger.addEventListener("mouseleave", () => {
     tooltipContent.style.display = "none";
   });
 });
+
+export function createTooltip({
+  triggerElement,
+  contentText,
+  onMouseOver,
+  onMouseLeave,
+}) {
+  const container = document.createElement("div");
+  container.className = "tooltip__container";
+  triggerElement.classList.add("tooltip__trigger");
+
+  const divContent = document.createElement("div");
+  divContent.className = "tooltip tooltip__content";
+
+  const spanContent = document.createElement("span");
+  spanContent.className = "tooltip__content--text";
+  spanContent.innerHTML = contentText;
+  divContent.appendChild(spanContent);
+
+  container.appendChild(triggerElement);
+  container.appendChild(divContent);
+
+  triggerElement.onmouseover = () => {
+    onMouseOver();
+    divContent.style.display = "initial";
+  };
+  triggerElement.onmouseleave = () => {
+    onMouseLeave();
+    divContent.style.display = "none";
+  };
+
+  return container;
+}

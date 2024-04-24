@@ -15,6 +15,7 @@
  */
 
 import { hideAccordions } from "../components/accordions/result.js";
+import { createTooltip } from "../components/tooltips/index.js";
 import { localStorageModeKey } from "../constants.js";
 import { AceEditor } from "../editor.js";
 import { setEditorTheme } from "../theme.js";
@@ -133,14 +134,16 @@ export function renderExpressionContent(mode, examples) {
 
 export function renderTabs(mode, examples) {
   const { tabs } = mode;
-
   const holderElement = document.getElementById("tab");
   holderElement.innerHTML = "";
+
   const divParent = document.createElement("div");
   divParent.className = "tabs";
   divParent.id = "tabs";
   divParent.setAttribute("data-tab-active", 0);
   divParent.setAttribute("data-tab-length", tabs.length);
+  const divWrapper = document.createElement("div");
+  divWrapper.className = "tabs__wrapper";
 
   document.querySelectorAll(dataEditorInputClassNames)?.forEach((editor) => {
     editor.remove();
@@ -160,7 +163,35 @@ export function renderTabs(mode, examples) {
     const tabButton = document.createElement("button");
     tabButton.innerHTML = `<span>${tab.name}</span>`;
     tabButton.className = "tabs-button";
-    tabButton.title = tab.name;
+    const tabButtonWithTooltip = createTooltip({
+      contentText: tab.name,
+      triggerElement: tabButton,
+      onMouseOver() {
+        const divParentStyles = divParent
+          .getAttribute("style")
+          ?.split(";")
+          .filter((style) => !style.includes("--hovered-tab"))
+          .filter(Boolean)
+          .join(";")
+          .trim();
+
+        divParent.setAttribute(
+          "style",
+          `--hovered-tab: ${idx}; ${divParentStyles ?? ""}`
+        );
+      },
+      onMouseLeave() {
+        const divParentStyles = divParent
+          .getAttribute("style")
+          ?.split(";")
+          .filter((style) => !style.includes("--hovered-tab"))
+          .filter(Boolean)
+          .join(";")
+          .trim();
+
+        divParent.setAttribute("style", `${divParentStyles ?? ""}`);
+      },
+    });
 
     tabButton.onclick = () => {
       document
@@ -173,13 +204,26 @@ export function renderTabs(mode, examples) {
       allButtons.forEach(removeActiveClass);
       if (tabButton.classList.contains("active")) removeActiveClass(tabButton);
       else addActiveClass(tabButton);
-      divParent.setAttribute("style", `--current-tab: ${idx}`);
+
+      const divParentStyles = divParent
+        .getAttribute("style")
+        ?.split(";")
+        .filter((style) => !style.includes("--current-tab"))
+        .filter(Boolean)
+        .join(";")
+        .trim();
+
+      divParent.setAttribute(
+        "style",
+        `--current-tab: ${idx}; ${divParentStyles ?? ""}`
+      );
       divParent.setAttribute("data-tab-active", idx);
     };
-    if (idx === 0) addActiveClass(tabButton);
-    divParent.appendChild(tabButton);
-  });
 
+    if (idx === 0) addActiveClass(tabButton);
+    divWrapper.appendChild(tabButtonWithTooltip);
+  });
+  divParent.appendChild(divWrapper);
   holderElement.appendChild(divParent);
   handleFillTabContent(mode, examples[0]);
 
