@@ -18,6 +18,7 @@ import {
   renderExamplesInSelectInstance,
   renderExpressionContent,
   renderTabs,
+  setCost,
 } from "../../utils/render-functions.js";
 import { ModesService } from "../../services/modes.js";
 import { ExampleService } from "../../services/examples.js";
@@ -183,12 +184,18 @@ function createInputElement(mode) {
 
 function renderUIChangesByMode(mode) {
   const titleEl = document.querySelector(".title.expression__square");
+  const inputTitleEl = document.querySelector(".title.input__square");
   const toggleModeHolder = document.querySelector(".modes__container-holder");
+  const costText = document.querySelector(".cost__text");
+
   titleEl.innerHTML = mode.name;
   toggleModeHolder.innerHTML = mode.name;
+  inputTitleEl.innerHTML = mode.tabs.length > 1 ? "Inputs: " : "Input";
+  costText.innerHTML = mode.tabs.length > 1 ? "Total cost: " : "Cost: ";
 
   ExampleService.getExampleContentById(mode).then((examples) => {
     renderExpressionContent(mode, examples);
+    setCost("");
     renderTabs(mode, examples);
     renderExamplesInSelectInstance(mode, examples);
     applyThemeToEditors();
