@@ -160,6 +160,7 @@ export function renderTabs(mode, examples) {
     const tabButton = document.createElement("button");
     tabButton.innerHTML = `<span>${tab.name}</span>`;
     tabButton.className = "tabs-button";
+    tabButton.title = tab.name;
 
     tabButton.onclick = () => {
       document
