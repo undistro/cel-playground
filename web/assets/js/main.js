@@ -16,7 +16,10 @@
 
 import { setCost } from "./utils/render-functions.js";
 import { AceEditor } from "./editor.js";
-import { handleRenderAccordions } from "./components/accordions/result.js";
+import {
+  handleRenderAccordions,
+  hideAccordions,
+} from "./components/accordions/result.js";
 import { localStorageModeKey } from "./constants.js";
 import { setEditorTheme } from "./theme.js";
 import { getExprEditorValue, getInputEditorValue } from "./utils/editor.js";
@@ -68,6 +71,7 @@ function run() {
   if (isError) {
     output.value = resultOutput;
     output.style.color = "red";
+    hideAccordions();
   } else {
     const obj = JSON.parse(resultOutput);
     const resultCost = obj?.cost;
