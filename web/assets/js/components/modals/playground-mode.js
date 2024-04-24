@@ -125,7 +125,7 @@ function handleModeClick(event, mode, element) {
   localStorage.setItem(localStorageModeKey, value);
   hideAccordions();
   output.value = "";
-  setTimeout(() => modal.hide(), 1000);
+  setTimeout(() => modal.hide(), 350);
 }
 
 function renderModeOptions() {
