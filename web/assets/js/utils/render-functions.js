@@ -140,6 +140,7 @@ export function renderTabs(mode, examples) {
   divParent.className = "tabs";
   divParent.id = "tabs";
   divParent.setAttribute("data-tab-active", 0);
+  divParent.setAttribute("data-tab-length", tabs.length);
 
   document.querySelectorAll(dataEditorInputClassNames)?.forEach((editor) => {
     editor.remove();
@@ -157,7 +158,7 @@ export function renderTabs(mode, examples) {
     inputEditor.setValue(currentExample[containerId], -1);
 
     const tabButton = document.createElement("button");
-    tabButton.innerHTML = tab.name;
+    tabButton.innerHTML = `<span>${tab.name}</span>`;
     tabButton.className = "tabs-button";
 
     tabButton.onclick = () => {

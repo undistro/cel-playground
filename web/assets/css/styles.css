@@ -258,7 +258,8 @@ a {
 
 /* Containers */
 .editor-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, calc(50% - 12px));
   /* 3 * 24px = 72px for padding, 72px for navbar, 32px for footer */
   height: calc(100vh - (3 * 24px) - 72px - 32px);
   gap: 24px;
@@ -296,6 +297,11 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.editor__header.editor__tab {
+  display: grid;
+  grid-template-columns: 80% 20%;
 }
 
 .dark .editor__header {
@@ -386,6 +392,8 @@ a {
   font-size: 14px;
   line-height: 24px;
   height: 32px;
+  width: max-content;
+  justify-self: flex-end;
 }
 
 .dark .button {

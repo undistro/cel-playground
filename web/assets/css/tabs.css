@@ -14,21 +14,35 @@
  * limitations under the License.
  */
 
-.tabs {
+#tab {
   --purple: #8447d1;
   --purple-dark: #ab75f0;
-  --tab-button-width: 150px;
+  --tab-button-width: 110px;
 
   display: flex;
+  align-items: center;
+}
+
+.tab__arrow::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+
+  border-left: 10px solid var(--purple);
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
   width: 100%;
-  flex: 1;
   align-items: center;
 }
 
 .tabs::after {
   content: "";
-  max-width: var(--tab-button-width);
-  width: 100%;
+  width: var(--tab-button-width);
   height: 2px;
 
   background-color: var(--purple);
@@ -42,7 +56,8 @@
 .tabs button {
   background-color: transparent;
   border: none;
-  width: var(--tab-button-width);
+  min-width: var(--tab-button-width);
+  position: relative;
 
   display: flex;
   flex-direction: column;
@@ -54,6 +69,12 @@
   font-size: 0.875rem;
   color: #8b8692;
   cursor: pointer;
+}
+
+.tabs button > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dark .tabs button {
@@ -81,4 +102,42 @@
 
 .dark .tabs button.active::after {
   background-color: var(--purple-dark);
+}
+
+@media (max-width: 1650px) {
+  #tab {
+    --tab-button-width: 90px;
+  }
+
+  .tabs button {
+    width: var(--tab-button-width);
+  }
+
+  .tabs button > span {
+    width: 70px;
+  }
+
+  .tabs::after {
+    width: var(--tab-button-width);
+    transform: translateX(calc(var(--current-tab) * var(--tab-button-width)));
+  }
+}
+
+@media (max-width: 1366px) {
+  #tab {
+    --tab-button-width: 70px;
+  }
+
+  .tabs button {
+    width: var(--tab-button-width);
+  }
+
+  .tabs button > span {
+    width: 50px;
+  }
+
+  .tabs::after {
+    width: var(--tab-button-width);
+    transform: translateX(calc(var(--current-tab) * var(--tab-button-width)));
+  }
 }
