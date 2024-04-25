@@ -178,7 +178,7 @@ func generateEvalArrayResults(responses []evalResponses) [][]*EvalResult {
 func calculateLazyEvalCost(lazyEvals lazyEvalMap) uint64 {
 	var cost uint64
 	for _, lazyEval := range lazyEvals {
-		if lazyEval.val != nil {
+		if lazyEval.val != nil && lazyEval.val.details != nil {
 			cost += *lazyEval.val.details.ActualCost()
 		}
 	}
