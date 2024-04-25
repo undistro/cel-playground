@@ -63,27 +63,33 @@ function run() {
   output.value = "Evaluating...";
   setCost("");
 
-  const mode = localStorage.getItem(localStorageModeKey) ?? "cel";
-  const result = eval(mode, values);
+  try {
+    const mode = localStorage.getItem(localStorageModeKey) ?? "cel";
+    const result = eval(mode, values);
 
-  const { output: resultOutput, isError } = result;
+    const { output: resultOutput, isError } = result;
 
-  if (isError) {
-    output.value = resultOutput;
-    output.style.color = "red";
-    hideAccordions();
-  } else {
-    const obj = JSON.parse(resultOutput);
-    const resultCost = obj?.cost;
-    delete obj.cost;
-
-    if ("result" in obj) {
-      output.value = JSON.stringify(obj.result);
-      output.style.color = "white";
+    if (isError) {
+      output.value = resultOutput;
+      output.style.color = "red";
+      hideAccordions();
     } else {
-      handleRenderAccordions(obj);
+      const obj = JSON.parse(resultOutput);
+      const resultCost = obj?.cost;
+      delete obj.cost;
+
+      if ("result" in obj) {
+        output.value = JSON.stringify(obj.result);
+        output.style.color = "white";
+      } else {
+        handleRenderAccordions(obj);
+      }
+      setCost(resultCost);
     }
-    setCost(resultCost);
+  } catch (error) {
+    output.value = "";
+    setCost("");
+    console.log(error);
   }
 }
 
