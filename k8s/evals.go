@@ -99,9 +99,9 @@ type lazyEvalMap map[string]*lazyVariableEval
 
 type EvalVariable struct {
 	Name    string  `json:"name"`
-	Value   any     `json:"value"`
+	Value   any     `json:"value,omitempty"`
 	Cost    *uint64 `json:"cost,omitempty"`
-	IsError bool    `json:"isError"`
+	IsError bool    `json:"isError,omitempty"`
 	Error   *string `json:"error,omitempty"`
 }
 
@@ -110,7 +110,7 @@ type EvalResult struct {
 	Result  any     `json:"result,omitempty"`
 	Cost    *uint64 `json:"cost,omitempty"`
 	Error   *string `json:"error,omitempty"`
-	IsError bool    `json:"isError"`
+	IsError bool    `json:"isError,omitempty"`
 	Message any     `json:"message,omitempty"`
 }
 
