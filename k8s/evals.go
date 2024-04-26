@@ -15,6 +15,7 @@
 package k8s
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/google/cel-go/cel"
@@ -23,6 +24,32 @@ import (
 	"github.com/google/cel-go/interpreter"
 	"google.golang.org/protobuf/types/known/structpb"
 )
+
+type evalResponseError struct {
+	error
+	cause error
+}
+
+func newEvalResponseErr(operation, expression string, err error) *evalResponse {
+	switch celErr := err.(type) {
+	case *types.Err:
+		underlying := celErr.Unwrap()
+		switch evalErr := underlying.(type) {
+		case *evalResponseError:
+			return &evalResponse{
+				val: types.WrapErr(&evalResponseError{fmt.Errorf("unexpected error %s expression '%s', caused by nested exception: '%s'", operation, expression, evalErr.cause), evalErr.cause}),
+			}
+		default:
+			return &evalResponse{
+				val: types.WrapErr(&evalResponseError{fmt.Errorf("unexpected error %s expression %s: %s", operation, expression, underlying), underlying}),
+			}
+		}
+	default:
+		return &evalResponse{
+			val: types.WrapErr(&evalResponseError{fmt.Errorf("unexpected error %s expression %s: %s", operation, expression, err), err}),
+		}
+	}
+}
 
 type evalResponse struct {
 	name       string
@@ -33,12 +60,6 @@ type evalResponse struct {
 }
 
 type evalResponses []*evalResponse
-
-func newEvalResponseErr(operation, expression string, err error) *evalResponse {
-	return &evalResponse{
-		val: types.NewErr("Unexpected error %s expression %s: %v", operation, expression, err),
-	}
-}
 
 func newEvalResponse(name string, exprEval ref.Val, details *cel.EvalDetails, message string, messageVal ref.Val) *evalResponse {
 	return &evalResponse{

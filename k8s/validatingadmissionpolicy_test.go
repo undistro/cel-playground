@@ -300,6 +300,30 @@ func TestValidationEval(t *testing.T) {
 			}},
 			Cost: uint64ptr(19),
 		},
+	}, {
+		name:    "test a broken expression within variables, expression should fail with no audit annotation",
+		policy:  "broken1 policy.yaml",
+		orig:    "",
+		updated: "broken1 updated.yaml",
+		expected: k8s.EvalResponse{
+			ValidationVariables: []*k8s.EvalVariable{{
+				Name:  "foo",
+				Value: "default",
+				Cost:  uint64ptr(6),
+			}, {
+				Name:  "containers",
+				Error: strptr("unexpected error evaluating expression containers: no such key: spc"),
+			}},
+			Validations: []*k8s.EvalResult{{
+				Error: strptr("unexpected error evaluating expression 'variables.foo == 'default' && variables.containers.all(c, c.image.startsWith(\"test\"))', caused by nested exception: 'no such key: spc'"),
+			}},
+			AuditAnnotations: []*k8s.EvalResult{{
+				Name:    strptr("foo-label"),
+				Message: "Label for foo is set to default",
+				Cost:    uint64ptr(2),
+			}},
+			Cost: uint64ptr(8),
+		},
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
