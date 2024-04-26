@@ -1,0 +1,23 @@
+apiVersion: admissionregistration.k8s.io/v1alpha1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: "test-variable-access"
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+    - apiGroups:   ["apps"]
+      apiVersions: ["v1"]
+      operations:  ["CREATE", "UPDATE"]
+      resources:   ["deployments"]
+  variables:
+    - name: foo
+      expression: "'foo' in object.spec.template.metadata.labels ? object.spec.template.metadata.labels['foo'] : 'default'"
+    - name: containers
+      # deliberately misspelling 'spec' as 'spc'
+      expression: "object.spec.template.spc.containers"
+  validations:
+    - expression: variables.foo == 'default' && variables.containers.all(c, c.image.startsWith("test"))
+  auditAnnotations:
+    - key: "foo-label"
+      valueExpression: "'Label for foo is set to ' + variables.foo"

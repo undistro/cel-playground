@@ -15,6 +15,7 @@
 package k8s
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/google/cel-go/cel"
@@ -23,6 +24,32 @@ import (
 	"github.com/google/cel-go/interpreter"
 	"google.golang.org/protobuf/types/known/structpb"
 )
+
+type evalResponseError struct {
+	error
+	cause error
+}
+
+func newEvalResponseErr(operation, expression string, err error) *evalResponse {
+	switch celErr := err.(type) {
+	case *types.Err:
+		underlying := celErr.Unwrap()
+		switch evalErr := underlying.(type) {
+		case *evalResponseError:
+			return &evalResponse{
+				val: types.WrapErr(&evalResponseError{fmt.Errorf("unexpected error %s expression '%s', caused by nested exception: '%s'", operation, expression, evalErr.cause), evalErr.cause}),
+			}
+		default:
+			return &evalResponse{
+				val: types.WrapErr(&evalResponseError{fmt.Errorf("unexpected error %s expression %s: %s", operation, expression, underlying), underlying}),
+			}
+		}
+	default:
+		return &evalResponse{
+			val: types.WrapErr(&evalResponseError{fmt.Errorf("unexpected error %s expression %s: %s", operation, expression, err), err}),
+		}
+	}
+}
 
 type evalResponse struct {
 	name       string
@@ -33,12 +60,6 @@ type evalResponse struct {
 }
 
 type evalResponses []*evalResponse
-
-func newEvalResponseErr(operation, expression string, err error) *evalResponse {
-	return &evalResponse{
-		val: types.NewErr("Unexpected error %s expression %s: %v", operation, expression, err),
-	}
-}
 
 func newEvalResponse(name string, exprEval ref.Val, details *cel.EvalDetails, message string, messageVal ref.Val) *evalResponse {
 	return &evalResponse{
@@ -77,10 +98,11 @@ func (lve *lazyVariableEval) evalExpression(env *cel.Env, activation interpreter
 type lazyEvalMap map[string]*lazyVariableEval
 
 type EvalVariable struct {
-	Name  string  `json:"name"`
-	Value any     `json:"value"`
-	Cost  *uint64 `json:"cost,omitempty"`
-	Error *string `json:"error,omitempty"`
+	Name    string  `json:"name"`
+	Value   any     `json:"value"`
+	Cost    *uint64 `json:"cost,omitempty"`
+	IsError bool    `json:"isError"`
+	Error   *string `json:"error,omitempty"`
 }
 
 type EvalResult struct {
@@ -88,6 +110,7 @@ type EvalResult struct {
 	Result  any     `json:"result,omitempty"`
 	Cost    *uint64 `json:"cost,omitempty"`
 	Error   *string `json:"error,omitempty"`
+	IsError bool    `json:"isError"`
 	Message any     `json:"message,omitempty"`
 }
 
@@ -131,10 +154,11 @@ func generateEvalVariables(names []string, lazyEvals lazyEvalMap) []*EvalVariabl
 		if varLazyEval, ok := lazyEvals[name]; ok && varLazyEval.val != nil {
 			value, err := getResults(&varLazyEval.val.val)
 			variables = append(variables, &EvalVariable{
-				Name:  varLazyEval.name,
-				Value: value,
-				Cost:  getCost(varLazyEval.val.details),
-				Error: err,
+				Name:    varLazyEval.name,
+				Value:   value,
+				Cost:    getCost(varLazyEval.val.details),
+				Error:   err,
+				IsError: err != nil,
 			})
 		}
 	}
@@ -160,6 +184,7 @@ func generateEvalResults(responses evalResponses) []*EvalResult {
 			Result:  value,
 			Cost:    getCost(eval.details),
 			Error:   err,
+			IsError: err != nil,
 			Message: message,
 		})
 	}
