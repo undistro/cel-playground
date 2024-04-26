@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { createTooltip } from "../tooltips/index.js";
+
 const outputResultEl = document.getElementById("editor__output-result");
 const holderEl = document.querySelector(".editor__output-holder");
 
@@ -29,9 +31,9 @@ function createAccordionItemsByResults(name, result, index) {
 
   const accordionContent = document.createElement("div");
   accordionContent.className = "result-accordion-content";
-  accordionContent.innerHTML = createLabel(result, name, index);
+  accordionContent.appendChild(createLabel(result, name, index));
   const costSpan = document.createElement("span");
-  costSpan.innerHTML = `Cost: ${result.cost}`;
+  costSpan.innerHTML = `Cost: ${result?.cost ?? "-"}`;
   accordionContent.appendChild(costSpan);
 
   const expansibleContent = document.createElement("div");
@@ -44,7 +46,9 @@ function createAccordionItemsByResults(name, result, index) {
   outputResultEl.appendChild(listItem);
 }
 function getResultValue(result) {
-  if ("value" in result) {
+  if (result.isError) {
+    return `<span style="color:#e01e5a">${result.error}</span>`;
+  } else if ("value" in result) {
     if (typeof result.value === "object")
       return `<pre>${JSON.stringify(result.value, null, 2)}</pre>`;
     return String(result.value);
@@ -54,25 +58,58 @@ function getResultValue(result) {
 }
 
 function createLabel(item, name, i) {
-  return `<div
-            style="display: flex; align-items: center; gap: 0.5rem; position:relative"
-          >
-            <i class="ph ph-caret-right ph-bold result-arrow"></i>
-            <div class="tooltip__container">
-                    ${
-                      item?.isError
-                        ? `<i class="ph ph-x-circle ph-fill" style="color: #e01e5a; z-index:999999" id="tooltip__trigger"></i>`
-                        : ""
-                    }
-                    <div id="tooltip__content" class="tooltip" style="right:0; top:0">
-                      <span class="tooltip__content--text">
-                        Validation compilation failed.
-                      </span>
-                    </div>
-                  </div>
-                        
-            <span>${name}[${i}]</span>
-          </div>`;
+  const parentContainer = document.createElement("div");
+  parentContainer.style =
+    "display: flex; align-items: center; gap: 0.5rem; position:relative";
+
+  const arrowIcon = document.createElement("i");
+  arrowIcon.className = "ph ph-caret-right ph-bold result-arrow";
+
+  const span = document.createElement("span");
+  span.innerHTML = `${name}[${i}]`;
+
+  parentContainer.appendChild(arrowIcon);
+
+  if (item?.isError) {
+    const errorIcon = document.createElement("i");
+    errorIcon.className = "ph ph-x-circle ph-fill";
+    errorIcon.style =
+      "color: #e01e5a; z-index:999999; display:flex;align-items:center;justify-content: center;";
+
+    const errorIconWithTooltip = createTooltip({
+      contentText: "Validation compilation failed.",
+      triggerElement: errorIcon,
+      position: {
+        left: 50,
+        top: -10,
+      },
+    });
+    parentContainer.appendChild(errorIconWithTooltip);
+  }
+
+  parentContainer.appendChild(span);
+
+  return parentContainer;
+
+  // return `<div
+  //           style="display: flex; align-items: center; gap: 0.5rem; position:relative"
+  //         >
+  //           <i class="ph ph-caret-right ph-bold result-arrow"></i>
+  //           <div class="tooltip__container">
+  //                   ${
+  //                     item?.isError
+  //                       ? `<i class="ph ph-x-circle ph-fill" style="color: #e01e5a; z-index:999999" id="tooltip__trigger"></i>`
+  //                       : ""
+  //                   }
+  //                   <div id="tooltip__content" class="tooltip" style="right:0; top:0">
+  //                     <span class="tooltip__content--text">
+  //                       Validation compilation failed.
+  //                     </span>
+  //                   </div>
+  //           </div>
+
+  //           <span>${name}[${i}]</span>
+  //         </div>`;
 }
 
 function renderAccordions(key, values, index = 0) {

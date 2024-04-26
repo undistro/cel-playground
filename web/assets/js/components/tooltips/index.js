@@ -31,6 +31,7 @@ tooltipContainers.forEach((container) => {
 export function createTooltip({
   triggerElement,
   contentText,
+  position = {},
   onMouseOver,
   onMouseLeave,
 }) {
@@ -41,6 +42,13 @@ export function createTooltip({
   const divContent = document.createElement("div");
   divContent.className = "tooltip tooltip__content";
 
+  if (!!position) {
+    const positionKeys = Object.keys(position);
+    positionKeys.forEach((key) => {
+      divContent.style[key] = `${position[key]}px`;
+    });
+  }
+
   const spanContent = document.createElement("span");
   spanContent.className = "tooltip__content--text";
   spanContent.innerHTML = contentText;
@@ -50,11 +58,11 @@ export function createTooltip({
   container.appendChild(divContent);
 
   triggerElement.onmouseover = () => {
-    onMouseOver();
+    onMouseOver?.();
     divContent.style.display = "initial";
   };
   triggerElement.onmouseleave = () => {
-    onMouseLeave();
+    onMouseLeave?.();
     divContent.style.display = "none";
   };
 
