@@ -16,7 +16,6 @@
 
 import { hideAccordions } from "../components/accordions/result.js";
 import { createTooltip } from "../components/tooltips/index.js";
-import { localStorageModeKey } from "../constants.js";
 import { AceEditor } from "../editor.js";
 import { setEditorTheme } from "../theme.js";
 import { getCurrentMode } from "./localStorage.js";
@@ -259,11 +258,10 @@ function getCurrentExample(mode, examples) {
 }
 
 function resetTabs() {
+  document.getElementById("tabs").setAttribute("style", "--current-tab: 0");
   document.querySelectorAll(".tabs-button").forEach((tabButton, i) => {
-    if (i === 0) {
-      tabButton.parentElement.setAttribute("style", `--current-tab: ${i}`);
-      tabButton.classList.add("active");
-    } else tabButton.classList.remove("active");
+    if (i === 0) tabButton.classList.add("active");
+    else tabButton.classList.remove("active");
   });
 
   document.querySelectorAll(dataEditorInputClassNames).forEach((editor, i) => {
