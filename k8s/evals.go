@@ -98,10 +98,11 @@ func (lve *lazyVariableEval) evalExpression(env *cel.Env, activation interpreter
 type lazyEvalMap map[string]*lazyVariableEval
 
 type EvalVariable struct {
-	Name  string  `json:"name"`
-	Value any     `json:"value"`
-	Cost  *uint64 `json:"cost,omitempty"`
-	Error *string `json:"error,omitempty"`
+	Name    string  `json:"name"`
+	Value   any     `json:"value"`
+	Cost    *uint64 `json:"cost,omitempty"`
+	IsError bool    `json:"isError"`
+	Error   *string `json:"error,omitempty"`
 }
 
 type EvalResult struct {
@@ -109,6 +110,7 @@ type EvalResult struct {
 	Result  any     `json:"result,omitempty"`
 	Cost    *uint64 `json:"cost,omitempty"`
 	Error   *string `json:"error,omitempty"`
+	IsError bool    `json:"isError"`
 	Message any     `json:"message,omitempty"`
 }
 
@@ -152,10 +154,11 @@ func generateEvalVariables(names []string, lazyEvals lazyEvalMap) []*EvalVariabl
 		if varLazyEval, ok := lazyEvals[name]; ok && varLazyEval.val != nil {
 			value, err := getResults(&varLazyEval.val.val)
 			variables = append(variables, &EvalVariable{
-				Name:  varLazyEval.name,
-				Value: value,
-				Cost:  getCost(varLazyEval.val.details),
-				Error: err,
+				Name:    varLazyEval.name,
+				Value:   value,
+				Cost:    getCost(varLazyEval.val.details),
+				Error:   err,
+				IsError: err != nil,
 			})
 		}
 	}
@@ -181,6 +184,7 @@ func generateEvalResults(responses evalResponses) []*EvalResult {
 			Result:  value,
 			Cost:    getCost(eval.details),
 			Error:   err,
+			IsError: err != nil,
 			Message: message,
 		})
 	}
