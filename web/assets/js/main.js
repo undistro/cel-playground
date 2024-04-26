@@ -66,9 +66,7 @@ function run() {
   try {
     const mode = localStorage.getItem(localStorageModeKey) ?? "cel";
     const result = eval(mode, values);
-
     const { output: resultOutput, isError } = result;
-
     if (isError) {
       output.value = resultOutput;
       output.style.color = "red";
