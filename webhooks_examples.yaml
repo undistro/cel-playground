@@ -39,9 +39,9 @@ examples:
             - name: 'exclude-kubelet-requests'
               expression: '!("system:nodes" in request.userInfo.groups)' # Match requests made by non-node users.
 
-    dataOriginal: |
+    dataOldObject: |
 
-    dataUpdated: |
+    dataObject: |
       apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -142,9 +142,9 @@ examples:
             - name: 'exclude-kubelet-requests'
               expression: '!("system:nodes" in request.userInfo.groups)' # Match requests made by non-node users.
 
-    dataOriginal: |
+    dataOldObject: |
 
-    dataUpdated: |
+    dataObject: |
       apiVersion: coordination.k8s.io/v1
       kind: Lease
       metadata:
@@ -219,9 +219,9 @@ examples:
             - name: 'exclude-kubelet-requests'
               expression: '!("system:nodes" in request.userInfo.groups)' # Match requests made by non-node users.
 
-    dataOriginal: |
+    dataOldObject: |
 
-    dataUpdated: |
+    dataObject: |
       apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -321,9 +321,9 @@ examples:
               # The 'breakglass' API verb does not need to exist outside this check.
               expression: '!authorizer.group("admissionregistration.k8s.io").resource("validatingwebhookconfigurations").name("rbac.my-webhook.example.com").check("breakglass").allowed()'
 
-    dataOriginal: |
+    dataOldObject: |
 
-    dataUpdated: |
+    dataObject: |
       apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -427,9 +427,9 @@ examples:
               # The 'breakglass' API verb does not need to exist outside this check.
               expression: '!authorizer.group("admissionregistration.k8s.io").resource("validatingwebhookconfigurations").name("rbac.my-webhook.example.com").check("breakglass").allowed()'
 
-    dataOriginal: |
+    dataOldObject: |
 
-    dataUpdated: |
+    dataObject: |
       apiVersion: apps/v1
       kind: Deployment
       metadata:

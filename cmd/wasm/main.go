@@ -45,8 +45,8 @@ var modeExecFns = map[string]execFunction{
 	"vap": func(mode string, argMap js.Value) (string, error) {
 		return k8s.EvalValidatingAdmissionPolicy(
 			getArg(argMap, "vap"),
-			getArg(argMap, "dataOriginal"),
-			getArg(argMap, "dataUpdated"),
+			getArg(argMap, "dataOldObject"),
+			getArg(argMap, "dataObject"),
 			getArg(argMap, "dataNamespace"),
 			getArg(argMap, "dataRequest"),
 			getArg(argMap, "dataAuthorizer"),
@@ -55,8 +55,8 @@ var modeExecFns = map[string]execFunction{
 	"webhooks": func(mode string, argMap js.Value) (string, error) {
 		return k8s.EvalWebhook(
 			getArg(argMap, "webhooks"),
-			getArg(argMap, "dataOriginal"),
-			getArg(argMap, "dataUpdated"),
+			getArg(argMap, "dataOldObject"),
+			getArg(argMap, "dataObject"),
 			getArg(argMap, "dataRequest"),
 			getArg(argMap, "dataAuthorizer"),
 		)
