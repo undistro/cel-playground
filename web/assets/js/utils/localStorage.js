@@ -21,5 +21,5 @@ export function getCurrentTheme() {
 }
 
 export function getCurrentMode() {
-  return localStorage.getItem(localStorageModeKey) ?? "cel";
+  return localStorage.getItem(localStorageModeKey) ?? "cel-input";
 }

@@ -5,6 +5,7 @@ import {
   getInputEditorValue,
   getRunValues,
 } from "./utils/editor.js";
+import { getCurrentMode } from "./utils/localStorage.js";
 
 const shareButton = document.getElementById("share");
 shareButton.addEventListener("click", share);
@@ -14,7 +15,7 @@ function share() {
 
   const str = JSON.stringify({
     ...values,
-    mode: localStorage.getItem(localStorageModeKey) ?? "cel",
+    mode: getCurrentMode(),
   });
   var compressed_uint8array = pako.gzip(str);
   var b64encoded_string = btoa(
@@ -29,40 +30,42 @@ function share() {
   document.querySelector(".share-url__input").value = url.toString();
 }
 
-var urlParams = new URLSearchParams(window.location.search);
-if (urlParams.has("content")) {
-  const content = urlParams.get("content");
-  try {
-    const decodedUint8Array = new Uint8Array(
-      atob(content)
-        .split("")
-        .map(function (char) {
-          return char.charCodeAt(0);
-        })
-    );
+window.onload = () => {
+  var urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has("content")) {
+    const content = urlParams.get("content");
+    try {
+      const decodedUint8Array = new Uint8Array(
+        atob(content)
+          .split("")
+          .map(function (char) {
+            return char.charCodeAt(0);
+          })
+      );
 
-    const decompressedData = pako.ungzip(decodedUint8Array, { to: "string" });
-    if (!decompressedData) {
-      throw new Error("Invalid content parameter");
+      const decompressedData = pako.ungzip(decodedUint8Array, { to: "string" });
+      if (!decompressedData) {
+        throw new Error("Invalid content parameter");
+      }
+      const obj = JSON.parse(decompressedData);
+      localStorage.setItem(localStorageModeKey, obj.mode);
+      const editorEl = document.getElementById(obj.mode);
+
+      if (editorEl) {
+        new AceEditor(obj.mode).setValue(obj[obj.mode], -1);
+
+        document
+          .querySelectorAll(".editor__input.data__input")
+          ?.forEach((editor) => {
+            const containerId = editor.id;
+            // new AceEditor(containerId).setValue(obj[containerId], -1);
+          });
+      }
+    } catch (error) {
+      console.error(error);
     }
-    const obj = JSON.parse(decompressedData);
-    localStorage.setItem(localStorageModeKey, obj.mode);
-    const editorEl = document.getElementById(obj.mode);
-
-    if (editorEl) {
-      new AceEditor(obj.mode).setValue(obj[obj.mode], -1);
-
-      document
-        .querySelectorAll(".editor__input.data__input")
-        .forEach((editor) => {
-          const containerId = editor.id;
-          new AceEditor(containerId).setValue(obj[containerId], -1);
-        });
-    }
-  } catch (error) {
-    console.error(error);
   }
-}
+};
 
 let celCopyIcon = document.getElementById("cel-copy-icon");
 let celCopyHover = document.getElementById("cel-copy-hover");

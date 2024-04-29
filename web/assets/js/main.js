@@ -19,8 +19,8 @@ import {
   handleRenderAccordions,
   hideAccordions,
 } from "./components/accordions/result.js";
-import { localStorageModeKey } from "./constants.js";
 import { getRunValues } from "./utils/editor.js";
+import { getCurrentMode } from "./utils/localStorage.js";
 
 // Add the following polyfill for Microsoft Edge 17/18 support:
 // <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
@@ -41,7 +41,7 @@ function run() {
   setCost("");
 
   try {
-    const mode = localStorage.getItem(localStorageModeKey) ?? "cel";
+    const mode = getCurrentMode();
     const result = eval(mode, values);
     const { output: resultOutput, isError } = result;
     if (isError) {
@@ -102,11 +102,15 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-fetch("../assets/examples/cel.json")
-  .then((response) => response.json())
-  .then(({ versions }) => {
-    document.getElementById("version").innerText = versions["cel-go"];
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+function getVersion() {
+  fetch("../assets/examples/cel-input.json")
+    .then((response) => response.json())
+    .then(({ versions }) => {
+      document.getElementById("version").innerText = versions["cel-go"];
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+}
+
+getVersion();

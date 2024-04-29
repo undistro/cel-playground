@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { localStorageModeKey } from "../constants.js";
 import { AceEditor } from "../editor.js";
 import { setEditorTheme } from "../theme.js";
 import { getCurrentMode } from "./localStorage.js";
@@ -39,7 +38,7 @@ export function getInputEditorValue() {
 }
 
 export function getRunValues() {
-  const currentMode = localStorage.getItem(localStorageModeKey) ?? "cel";
+  const currentMode = getCurrentMode();
   const exprEditor = new AceEditor(currentMode);
   setEditorTheme(exprEditor);
   let values = {

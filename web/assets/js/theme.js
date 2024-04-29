@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-import {
-  ACE_EDITOR,
-  localStorageModeKey,
-  localStorageThemeKey,
-} from "./constants.js";
+import { ACE_EDITOR, localStorageThemeKey } from "./constants.js";
 import { AceEditor } from "./editor.js";
-import { getCurrentTheme } from "./utils/localStorage.js";
+import { getCurrentMode, getCurrentTheme } from "./utils/localStorage.js";
 const toggleBtn = document.getElementsByClassName("toggle-theme")[0];
 
 const { theme: aceEditorTheme } = ACE_EDITOR;
@@ -40,9 +36,7 @@ toggleBtn.addEventListener("click", function () {
 });
 
 export function applyThemeToEditors() {
-  const exprEditor = new AceEditor(
-    localStorage.getItem(localStorageModeKey) ?? "cel"
-  );
+  const exprEditor = new AceEditor(getCurrentMode());
   const editorsInputEl = document.querySelectorAll(
     ".editor__input.data__input"
   );

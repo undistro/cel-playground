@@ -143,7 +143,7 @@ function renderModeOptions() {
 
         if (!modeSaved && i === 0) {
           divOption.classList.add("active");
-          renderUIChangesByMode(modes.find((mode) => mode.id === "cel"));
+          renderUIChangesByMode(modes.find((mode) => mode.id === "cel-input"));
         }
         if (modeSaved === mode.id) {
           divOption.classList.add("active");
