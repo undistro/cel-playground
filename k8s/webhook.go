@@ -23,20 +23,20 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func EvalWebhook(webhookInput, origValueInput, updatedValueInput, requestInput, authorizerInput []byte) (string, error) {
+func EvalWebhook(webhookInput, oldObjectInput, objectValueInput, requestInput, authorizerInput []byte) (string, error) {
 	celInfo, err := extractCelInformation(webhookInput)
 	if err != nil {
 		return "", err
 	}
 
-	var origValue map[string]any
-	if err := yaml.Unmarshal(origValueInput, &origValue); err != nil {
-		return "", fmt.Errorf("failed to decode input for the old resource value: %w", err)
+	var oldObjectValue map[string]any
+	if err := yaml.Unmarshal(oldObjectInput, &oldObjectValue); err != nil {
+		return "", fmt.Errorf("failed to decode input for the old object resource value: %w", err)
 	}
 
-	var updatedValue map[string]any
-	if err := yaml.Unmarshal(updatedValueInput, &updatedValue); err != nil {
-		return "", fmt.Errorf("failed to decode input for the new resource value: %w", err)
+	var objectValue map[string]any
+	if err := yaml.Unmarshal(objectValueInput, &objectValue); err != nil {
+		return "", fmt.Errorf("failed to decode input for the object resource value: %w", err)
 	}
 
 	request, err := deserializeRequest(requestInput)
@@ -58,14 +58,14 @@ func EvalWebhook(webhookInput, origValueInput, updatedValueInput, requestInput, 
 	matchConditionsCelVars := []cel.EnvOption{}
 	matchConditionsInputData := map[string]any{}
 
-	if updatedValue != nil {
-		cleanMetaData(updatedValue)
-		matchConditionsCelVars = updateVars("object", matchConditionsCelVars, matchConditionsInputData, updatedValue)
+	if objectValue != nil {
+		cleanMetaData(objectValue)
+		matchConditionsCelVars = updateVars("object", matchConditionsCelVars, matchConditionsInputData, objectValue)
 	}
 
-	if origValue != nil {
-		cleanMetaData(origValue)
-		matchConditionsCelVars = updateVars("oldObject", matchConditionsCelVars, matchConditionsInputData, origValue)
+	if oldObjectValue != nil {
+		cleanMetaData(oldObjectValue)
+		matchConditionsCelVars = updateVars("oldObject", matchConditionsCelVars, matchConditionsInputData, oldObjectValue)
 	}
 
 	if request != nil {

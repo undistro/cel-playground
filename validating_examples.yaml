@@ -31,9 +31,9 @@ examples:
           - expression: "object.spec.replicas >= 3"
             message: "All production deployments should be HA with at least three replicas"
 
-    dataOriginal: |
+    dataOldObject: |
 
-    dataUpdated: |
+    dataObject: |
       apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -107,9 +107,9 @@ examples:
         - expression: "variables.exempt || variables.containersToCheck.all(c, c.image.startsWith(variables.environment + '.'))"
           messageExpression: "'only ' + variables.environment + ' images are allowed in namespace ' + namespaceObject.metadata.name"
 
-    dataOriginal: |
+    dataOldObject: |
 
-    dataUpdated: |
+    dataObject: |
       apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -194,9 +194,9 @@ examples:
         validations:
           - expression: "!object.metadata.name.contains('demo') || object.metadata.namespace == 'demo'"
 
-    dataOriginal: |
+    dataOldObject: |
 
-    dataUpdated: |
+    dataObject: |
       apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -296,9 +296,9 @@ examples:
           - key: "high-replica-count"
             valueExpression: "'Deployment spec.replicas set to ' + string(object.spec.replicas)"
 
-    dataOriginal: |
+    dataOldObject: |
 
-    dataUpdated: |
+    dataObject: |
       apiVersion: apps/v1
       kind: Deployment
       metadata:

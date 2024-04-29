@@ -17,13 +17,13 @@
     "mode": "yaml",
     "tabs": [
       {
-        "id": "dataOriginal",
-        "name": "Original",
+        "id": "dataOldObject",
+        "name": "Old Object",
         "mode": "yaml"
       },
       {
-        "id": "dataUpdated",
-        "name": "Updated",
+        "id": "dataObject",
+        "name": "Object",
         "mode": "yaml"
       },
       {
@@ -50,13 +50,13 @@
 
     "tabs": [
       {
-        "id": "dataOriginal",
-        "name": "Original",
+        "id": "dataOldObject",
+        "name": "Old Object",
         "mode": "yaml"
       },
       {
-        "id": "dataUpdated",
-        "name": "Updated",
+        "id": "dataObject",
+        "name": "Object",
         "mode": "yaml"
       },
       {

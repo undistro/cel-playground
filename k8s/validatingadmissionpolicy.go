@@ -82,19 +82,19 @@ var stringType = reflect.TypeOf("")
 //     non-intersecting keys are appended, retaining their partial order.
 //
 // TODO: Support parameters
-func EvalValidatingAdmissionPolicy(policyInput, origValueInput, updatedValueInput, namespaceInput, requestInput, authorizerInput []byte) (string, error) {
+func EvalValidatingAdmissionPolicy(policyInput, oldObjectInput, objectValueInput, namespaceInput, requestInput, authorizerInput []byte) (string, error) {
 	celInfo, err := extractCelInformation(policyInput)
 	if err != nil {
 		return "", err
 	}
 
-	var origValue map[string]any
-	if err := yaml.Unmarshal(origValueInput, &origValue); err != nil {
+	var oldObjectValue map[string]any
+	if err := yaml.Unmarshal(oldObjectInput, &oldObjectValue); err != nil {
 		return "", fmt.Errorf("failed to decode input for the old resource value: %w", err)
 	}
 
-	var updatedValue map[string]any
-	if err := yaml.Unmarshal(updatedValueInput, &updatedValue); err != nil {
+	var objectValue map[string]any
+	if err := yaml.Unmarshal(objectValueInput, &objectValue); err != nil {
 		return "", fmt.Errorf("failed to decode input for the new resource value: %w", err)
 	}
 
@@ -124,16 +124,16 @@ func EvalValidatingAdmissionPolicy(policyInput, origValueInput, updatedValueInpu
 	matchConditionsCelVars := []cel.EnvOption{}
 	matchConditionsInputData := map[string]any{}
 
-	if updatedValue != nil {
-		cleanMetaData(updatedValue)
-		validationCelVars = updateVars("object", validationCelVars, validationInputData, updatedValue)
-		matchConditionsCelVars = updateVars("object", matchConditionsCelVars, matchConditionsInputData, updatedValue)
+	if objectValue != nil {
+		cleanMetaData(objectValue)
+		validationCelVars = updateVars("object", validationCelVars, validationInputData, objectValue)
+		matchConditionsCelVars = updateVars("object", matchConditionsCelVars, matchConditionsInputData, objectValue)
 	}
 
-	if origValue != nil {
-		cleanMetaData(origValue)
-		validationCelVars = updateVars("oldObject", validationCelVars, validationInputData, origValue)
-		matchConditionsCelVars = updateVars("oldObject", matchConditionsCelVars, matchConditionsInputData, origValue)
+	if oldObjectValue != nil {
+		cleanMetaData(oldObjectValue)
+		validationCelVars = updateVars("oldObject", validationCelVars, validationInputData, oldObjectValue)
+		matchConditionsCelVars = updateVars("oldObject", matchConditionsCelVars, matchConditionsInputData, oldObjectValue)
 	}
 
 	if request != nil {
