@@ -66,7 +66,7 @@ function createLabel(item, name, i) {
   arrowIcon.className = "ph ph-caret-right ph-bold result-arrow";
 
   const span = document.createElement("span");
-  span.innerHTML = `${item?.name ? item.name : `${name}[${i}]`}`;
+  span.innerHTML = `${item?.name ? `variables.${item.name}` : `${name}[${i}]`}`;
 
   parentContainer.appendChild(arrowIcon);
 
