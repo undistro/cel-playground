@@ -138,6 +138,7 @@ function renderModeOptions() {
 
   ModesService.getModes()
     .then(async (modes) => {
+      let index = 0;
       for (const mode of modes) {
         const divOption = createParentElement(mode);
         const label = createLabelElement(mode);
@@ -159,7 +160,7 @@ function renderModeOptions() {
             await renderUIChangesByMode(mode);
             renderSharedContent(mode, obj);
           }
-        } else if (!modeId && i === 0) {
+        } else if (!modeId && index === 0) {
           divOption.classList.add("active");
           await renderUIChangesByMode(modes.find((mode) => mode.id === "cel"));
         } else if (modeId === mode.id) {
@@ -170,6 +171,7 @@ function renderModeOptions() {
         divOption.appendChild(label);
         divOption.appendChild(input);
         el.appendChild(divOption);
+        index++;
       }
     })
     .catch((err) => console.log(err));
