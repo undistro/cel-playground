@@ -66,7 +66,7 @@ function createLabel(item, name, i) {
   arrowIcon.className = "ph ph-caret-right ph-bold result-arrow";
 
   const span = document.createElement("span");
-  span.innerHTML = `${item?.name ? `variables.${item.name}` : `${name}[${i}]`}`;
+  span.innerHTML = `${item.name ? `${name}.${item.name}` : `${name}[${i}]`}`;
 
   parentContainer.appendChild(arrowIcon);
 
@@ -108,6 +108,8 @@ export function handleRenderAccordions(result) {
   outputResultEl.scrollTo({ top: 0, behavior: "smooth" });
   holderEl.style.overflowY = "auto";
   holderEl.style.overflowX = "hidden";
+
+  console.log({ result });
 
   Object.entries(result).forEach(([key, values]) => {
     renderAccordions(key, values);
