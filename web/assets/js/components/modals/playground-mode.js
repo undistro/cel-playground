@@ -27,6 +27,7 @@ import { localStorageModeKey } from "../../constants.js";
 import { hideAccordions } from "../accordions/result.js";
 import { renderSharedContent } from "../../share.js";
 import { getCurrentMode } from "../../utils/localStorage.js";
+import { getDecompressedContent } from "../../utils/compress.js";
 
 const playgroundModesModalEl = document.getElementById(
   "playground-modes__modal"
@@ -115,7 +116,7 @@ modal.trap = function (e) {
 renderModeOptions();
 modal.init();
 
-function handleModeClick(event, mode, element) {
+async function handleModeClick(event, mode, element) {
   const { value } = event.target;
 
   document
@@ -123,7 +124,7 @@ function handleModeClick(event, mode, element) {
     .forEach((option) => option.classList.remove("active"));
 
   element.classList.add("active");
-  renderUIChangesByMode(mode);
+  await renderUIChangesByMode(mode);
   localStorage.setItem(localStorageModeKey, JSON.stringify(mode));
   hideAccordions();
   output.value = "";
@@ -133,10 +134,11 @@ function handleModeClick(event, mode, element) {
 
 function renderModeOptions() {
   const el = document.querySelector(".playground-modes__options");
+  const urlParams = new URLSearchParams(window.location.search);
 
   ModesService.getModes()
-    .then((modes) => {
-      modes.forEach((mode, i) => {
+    .then(async (modes) => {
+      for (const mode of modes) {
         const divOption = createParentElement(mode);
         const label = createLabelElement(mode);
         const input = createInputElement(mode);
@@ -144,19 +146,31 @@ function renderModeOptions() {
 
         const { id: modeId } = getCurrentMode();
 
-        if (!modeId && i === 0) {
+        if (urlParams.has("content")) {
+          const obj = getDecompressedContent(urlParams.get("content"));
+
+          if (("data" in obj || "expression" in obj) && mode.id === "cel") {
+            divOption.classList.add("active");
+            await renderUIChangesByMode(mode);
+            renderSharedContent(mode, obj, true);
+            applyThemeToEditors(mode);
+          } else if (mode.id === obj.mode) {
+            divOption.classList.add("active");
+            await renderUIChangesByMode(mode);
+            renderSharedContent(mode, obj);
+          }
+        } else if (!modeId && i === 0) {
           divOption.classList.add("active");
-          renderUIChangesByMode(modes.find((mode) => mode.id === "cel"));
-        }
-        if (modeId === mode.id) {
+          await renderUIChangesByMode(modes.find((mode) => mode.id === "cel"));
+        } else if (modeId === mode.id) {
           divOption.classList.add("active");
-          renderUIChangesByMode(mode);
+          await renderUIChangesByMode(mode);
         }
 
         divOption.appendChild(label);
         divOption.appendChild(input);
         el.appendChild(divOption);
-      });
+      }
     })
     .catch((err) => console.log(err));
 }
@@ -202,7 +216,7 @@ export async function renderUIChangesByMode(mode) {
     setCost("");
     renderTabs(mode, examples);
     renderExamplesInSelectInstance(mode, examples);
-    applyThemeToEditors();
+    applyThemeToEditors(mode);
   } catch (error) {
     console.log(error);
   }

@@ -1,7 +1,5 @@
-import { renderUIChangesByMode } from "./components/modals/playground-mode.js";
 import { localStorageModeKey } from "./constants.js";
 import { AceEditor } from "./editor.js";
-import { ModesService } from "./services/modes.js";
 import {
   getExprEditorValue,
   getInputEditorValue,
@@ -34,57 +32,29 @@ function share() {
   document.querySelector(".share-url__input").value = url.toString();
 }
 
-export const renderSharedContent = async () => {
-  var urlParams = new URLSearchParams(window.location.search);
-
-  if (urlParams.has("content")) {
-    const content = urlParams.get("content");
-
-    try {
-      const decodedUint8Array = new Uint8Array(
-        atob(content)
-          .split("")
-          .map(function (char) {
-            return char.charCodeAt(0);
-          })
-      );
-
-      const decompressedData = pako.ungzip(decodedUint8Array, { to: "string" });
-      if (!decompressedData) {
-        throw new Error("Invalid content parameter");
-      }
-      const obj = JSON.parse(decompressedData);
-
-      try {
-        const modes = await ModesService.getModes();
-
-        if ("data" in obj && "expression" in obj) {
-          const modeShared = modes.find((mode) => mode.id === "cel");
-          await renderUIChangesByMode(modeShared);
-          new AceEditor("cel").setValue(obj.expression, -1);
-          new AceEditor("dataInput").setValue(obj.data, -1);
-          return;
-        }
-
-        const modeShared = modes.find((mode) => mode.id === obj.mode);
-        await renderUIChangesByMode(modeShared);
-
-        new AceEditor(obj.mode).setValue(obj[obj.mode], -1);
-        document
-          .querySelectorAll(".editor__input.data__input")
-          ?.forEach((editor) => {
-            console.log({ editor });
-            const containerId = editor.id;
-            new AceEditor(containerId).setValue(obj[containerId], -1);
-          });
-      } catch (error) {}
-    } catch (error) {
-      console.error(error);
+export const renderSharedContent = (
+  mode,
+  object,
+  legacyObjectShared = false
+) => {
+  localStorage.setItem(localStorageModeKey, JSON.stringify(mode));
+  try {
+    if (legacyObjectShared) {
+      new AceEditor("cel").setValue(object.expression, -1);
+      new AceEditor("dataInput").setValue(object.data, -1);
+    } else {
+      new AceEditor(object.mode).setValue(object[object.mode], -1);
+      document
+        .querySelectorAll(".editor__input.data__input")
+        ?.forEach((editor) => {
+          const containerId = editor.id;
+          new AceEditor(containerId).setValue(object[containerId], -1);
+        });
     }
+  } catch (error) {
+    console.error(error);
   }
 };
-
-window.onload = renderSharedContent;
 
 let celCopyIcon = document.getElementById("cel-copy-icon");
 let celCopyHover = document.getElementById("cel-copy-hover");

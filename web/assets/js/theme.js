@@ -35,13 +35,14 @@ toggleBtn.addEventListener("click", function () {
   applyThemeToEditors();
 });
 
-export function applyThemeToEditors() {
+export function applyThemeToEditors(modeParam) {
   const { id: modeId } = getCurrentMode();
-  const exprEditor = new AceEditor(modeId);
+  const exprEditor = new AceEditor(modeParam?.id ?? modeId);
+  setEditorTheme(exprEditor);
+
   const editorsInputEl = document.querySelectorAll(
     ".editor__input.data__input"
   );
-  setEditorTheme(exprEditor);
   editorsInputEl.forEach((editor) => {
     const inputEditor = new AceEditor(editor.id);
     setEditorTheme(inputEditor);
