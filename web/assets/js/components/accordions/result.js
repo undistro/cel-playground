@@ -66,7 +66,7 @@ function createLabel(item, name, i) {
   arrowIcon.className = "ph ph-caret-right ph-bold result-arrow";
 
   const span = document.createElement("span");
-  span.innerHTML = `${name}[${i}]`;
+  span.innerHTML = `${item?.name ? item.name : `${name}[${i}]`}`;
 
   parentContainer.appendChild(arrowIcon);
 
@@ -90,26 +90,6 @@ function createLabel(item, name, i) {
   parentContainer.appendChild(span);
 
   return parentContainer;
-
-  // return `<div
-  //           style="display: flex; align-items: center; gap: 0.5rem; position:relative"
-  //         >
-  //           <i class="ph ph-caret-right ph-bold result-arrow"></i>
-  //           <div class="tooltip__container">
-  //                   ${
-  //                     item?.isError
-  //                       ? `<i class="ph ph-x-circle ph-fill" style="color: #e01e5a; z-index:999999" id="tooltip__trigger"></i>`
-  //                       : ""
-  //                   }
-  //                   <div id="tooltip__content" class="tooltip" style="right:0; top:0">
-  //                     <span class="tooltip__content--text">
-  //                       Validation compilation failed.
-  //                     </span>
-  //                   </div>
-  //           </div>
-
-  //           <span>${name}[${i}]</span>
-  //         </div>`;
 }
 
 function renderAccordions(key, values, index = 0) {

@@ -72,6 +72,7 @@
 .editor__output-result-accordion .result-accordion-expansible-content {
   transition: max-height 400ms, visibility 50ms;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .editor__output-result-accordion[data-open="false"]
