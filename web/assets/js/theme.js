@@ -36,7 +36,8 @@ toggleBtn.addEventListener("click", function () {
 });
 
 export function applyThemeToEditors() {
-  const exprEditor = new AceEditor(getCurrentMode());
+  const { id: modeId } = getCurrentMode();
+  const exprEditor = new AceEditor(modeId);
   const editorsInputEl = document.querySelectorAll(
     ".editor__input.data__input"
   );

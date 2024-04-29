@@ -1,11 +1,11 @@
 [
   {
-    "id": "cel-input",
+    "id": "cel",
     "name": "CEL Expression",
     "mode": "javascript",
     "tabs": [
       {
-        "id": "data-input",
+        "id": "dataInput",
         "name": "Input",
         "mode": "javascript"
       }

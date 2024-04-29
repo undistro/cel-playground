@@ -25,6 +25,8 @@ import { ExampleService } from "../../services/examples.js";
 import { applyThemeToEditors } from "../../theme.js";
 import { localStorageModeKey } from "../../constants.js";
 import { hideAccordions } from "../accordions/result.js";
+import { renderSharedContent } from "../../share.js";
+import { getCurrentMode } from "../../utils/localStorage.js";
 
 const playgroundModesModalEl = document.getElementById(
   "playground-modes__modal"
@@ -122,9 +124,10 @@ function handleModeClick(event, mode, element) {
 
   element.classList.add("active");
   renderUIChangesByMode(mode);
-  localStorage.setItem(localStorageModeKey, value);
+  localStorage.setItem(localStorageModeKey, JSON.stringify(mode));
   hideAccordions();
   output.value = "";
+  deleteContentUrlParam();
   setTimeout(() => modal.hide(), 350);
 }
 
@@ -139,13 +142,13 @@ function renderModeOptions() {
         const input = createInputElement(mode);
         input.onclick = (e) => handleModeClick(e, mode, divOption);
 
-        const modeSaved = localStorage.getItem(localStorageModeKey);
+        const { id: modeId } = getCurrentMode();
 
-        if (!modeSaved && i === 0) {
+        if (!modeId && i === 0) {
           divOption.classList.add("active");
-          renderUIChangesByMode(modes.find((mode) => mode.id === "cel-input"));
+          renderUIChangesByMode(modes.find((mode) => mode.id === "cel"));
         }
-        if (modeSaved === mode.id) {
+        if (modeId === mode.id) {
           divOption.classList.add("active");
           renderUIChangesByMode(mode);
         }
@@ -182,7 +185,7 @@ function createInputElement(mode) {
   return input;
 }
 
-function renderUIChangesByMode(mode) {
+export async function renderUIChangesByMode(mode) {
   const titleEl = document.querySelector(".title.expression__square");
   const inputTitleEl = document.querySelector(".title.input__square");
   const toggleModeHolder = document.querySelector(".modes__container-holder");
@@ -193,11 +196,18 @@ function renderUIChangesByMode(mode) {
   inputTitleEl.innerHTML = mode.tabs.length > 1 ? "Inputs: " : "Input";
   costText.innerHTML = mode.tabs.length > 1 ? "Total cost: " : "Cost: ";
 
-  ExampleService.getExampleContentById(mode).then((examples) => {
+  try {
+    const examples = await ExampleService.getExampleContentById(mode.id);
     renderExpressionContent(mode, examples);
     setCost("");
     renderTabs(mode, examples);
     renderExamplesInSelectInstance(mode, examples);
     applyThemeToEditors();
-  });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function deleteContentUrlParam() {
+  window.history.pushState({}, document.title, window.location.pathname);
 }

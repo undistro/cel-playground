@@ -1,5 +1,7 @@
+import { renderUIChangesByMode } from "./components/modals/playground-mode.js";
 import { localStorageModeKey } from "./constants.js";
 import { AceEditor } from "./editor.js";
+import { ModesService } from "./services/modes.js";
 import {
   getExprEditorValue,
   getInputEditorValue,
@@ -13,9 +15,11 @@ shareButton.addEventListener("click", share);
 function share() {
   const values = getRunValues();
 
+  const { id: modeId } = getCurrentMode();
+
   const str = JSON.stringify({
     ...values,
-    mode: getCurrentMode(),
+    mode: modeId,
   });
   var compressed_uint8array = pako.gzip(str);
   var b64encoded_string = btoa(
@@ -30,10 +34,12 @@ function share() {
   document.querySelector(".share-url__input").value = url.toString();
 }
 
-window.onload = () => {
+export const renderSharedContent = async () => {
   var urlParams = new URLSearchParams(window.location.search);
+
   if (urlParams.has("content")) {
     const content = urlParams.get("content");
+
     try {
       const decodedUint8Array = new Uint8Array(
         atob(content)
@@ -48,24 +54,37 @@ window.onload = () => {
         throw new Error("Invalid content parameter");
       }
       const obj = JSON.parse(decompressedData);
-      localStorage.setItem(localStorageModeKey, obj.mode);
-      const editorEl = document.getElementById(obj.mode);
 
-      if (editorEl) {
+      try {
+        const modes = await ModesService.getModes();
+
+        if ("data" in obj && "expression" in obj) {
+          const modeShared = modes.find((mode) => mode.id === "cel");
+          await renderUIChangesByMode(modeShared);
+          new AceEditor("cel").setValue(obj.expression, -1);
+          new AceEditor("dataInput").setValue(obj.data, -1);
+          return;
+        }
+
+        const modeShared = modes.find((mode) => mode.id === obj.mode);
+        await renderUIChangesByMode(modeShared);
+
         new AceEditor(obj.mode).setValue(obj[obj.mode], -1);
-
         document
           .querySelectorAll(".editor__input.data__input")
           ?.forEach((editor) => {
+            console.log({ editor });
             const containerId = editor.id;
-            // new AceEditor(containerId).setValue(obj[containerId], -1);
+            new AceEditor(containerId).setValue(obj[containerId], -1);
           });
-      }
+      } catch (error) {}
     } catch (error) {
       console.error(error);
     }
   }
 };
+
+window.onload = renderSharedContent;
 
 let celCopyIcon = document.getElementById("cel-copy-icon");
 let celCopyHover = document.getElementById("cel-copy-hover");

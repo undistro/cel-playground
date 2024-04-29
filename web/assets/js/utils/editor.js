@@ -19,7 +19,8 @@ import { setEditorTheme } from "../theme.js";
 import { getCurrentMode } from "./localStorage.js";
 
 export function getExprEditorValue() {
-  const exprEditor = new AceEditor(getCurrentMode());
+  const { id: modeId } = getCurrentMode();
+  const exprEditor = new AceEditor(modeId);
   const exprEditorValue = exprEditor.getValue();
   setEditorTheme(exprEditor);
   return exprEditorValue;
@@ -38,11 +39,11 @@ export function getInputEditorValue() {
 }
 
 export function getRunValues() {
-  const currentMode = getCurrentMode();
-  const exprEditor = new AceEditor(currentMode);
+  const { id: modeId } = getCurrentMode();
+  const exprEditor = new AceEditor(modeId);
   setEditorTheme(exprEditor);
   let values = {
-    [currentMode]: exprEditor.getValue(),
+    [modeId]: exprEditor.getValue(),
   };
 
   document.querySelectorAll(".editor__input.data__input").forEach((editor) => {

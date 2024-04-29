@@ -41,8 +41,8 @@ function run() {
   setCost("");
 
   try {
-    const mode = getCurrentMode();
-    const result = eval(mode, values);
+    const { id: modeId } = getCurrentMode();
+    const result = eval(modeId, values);
     const { output: resultOutput, isError } = result;
     if (isError) {
       output.value = resultOutput;
@@ -103,7 +103,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 function getVersion() {
-  fetch("../assets/examples/cel-input.json")
+  fetch("../assets/examples/cel.json")
     .then((response) => response.json())
     .then(({ versions }) => {
       document.getElementById("version").innerText = versions["cel-go"];
