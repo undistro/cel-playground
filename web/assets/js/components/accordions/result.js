@@ -109,8 +109,6 @@ export function handleRenderAccordions(result) {
   holderEl.style.overflowY = "auto";
   holderEl.style.overflowX = "hidden";
 
-  console.log({ result });
-
   Object.entries(result).forEach(([key, values]) => {
     renderAccordions(key, values);
   });
