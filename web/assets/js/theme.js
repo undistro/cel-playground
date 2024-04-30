@@ -36,7 +36,7 @@ toggleBtn.addEventListener("click", function () {
 });
 
 export function applyThemeToEditors(modeParam) {
-  const { id: modeId } = getCurrentMode();
+  const modeId = getCurrentMode();
   const exprEditor = new AceEditor(modeParam?.id ?? modeId);
   setEditorTheme(exprEditor);
 

@@ -73,7 +73,7 @@ export function renderExamplesInSelectInstance(mode, examples) {
       (example) => example.name === event.target.value
     );
     if (event.target.value === "Blank") {
-      const { id: modeId } = getCurrentMode();
+      const modeId = getCurrentMode();
       const exprEditor = new AceEditor(modeId);
       exprEditor.setValue("", -1);
       setEditorTheme(exprEditor);

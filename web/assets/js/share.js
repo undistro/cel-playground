@@ -13,7 +13,7 @@ shareButton.addEventListener("click", share);
 function share() {
   const values = getRunValues();
 
-  const { id: modeId } = getCurrentMode();
+  const modeId = getCurrentMode();
 
   const str = JSON.stringify({
     ...values,
@@ -37,7 +37,7 @@ export const renderSharedContent = (
   object,
   legacyObjectShared = false
 ) => {
-  localStorage.setItem(localStorageModeKey, JSON.stringify(mode));
+  localStorage.setItem(localStorageModeKey, mode.id);
   try {
     if (legacyObjectShared) {
       new AceEditor("cel").setValue(object.expression, -1);

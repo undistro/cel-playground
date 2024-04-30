@@ -125,7 +125,7 @@ async function handleModeClick(event, mode, element) {
 
   element.classList.add("active");
   await renderUIChangesByMode(mode);
-  localStorage.setItem(localStorageModeKey, JSON.stringify(mode));
+  localStorage.setItem(localStorageModeKey, value);
   hideAccordions();
   output.value = "";
   deleteContentUrlParam();
@@ -145,7 +145,7 @@ function renderModeOptions() {
         const input = createInputElement(mode);
         input.onclick = (e) => handleModeClick(e, mode, divOption);
 
-        const { id: modeId } = getCurrentMode();
+        const modeId = getCurrentMode();
 
         if (urlParams.has("content")) {
           const obj = getDecompressedContent(urlParams.get("content"));

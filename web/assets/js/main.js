@@ -41,7 +41,7 @@ function run() {
   setCost("");
 
   try {
-    const { id: modeId } = getCurrentMode();
+    const modeId = getCurrentMode();
     const result = eval(modeId, values);
     const { output: resultOutput, isError } = result;
     if (isError) {

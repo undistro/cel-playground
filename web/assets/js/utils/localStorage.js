@@ -21,5 +21,5 @@ export function getCurrentTheme() {
 }
 
 export function getCurrentMode() {
-  return JSON.parse(localStorage.getItem(localStorageModeKey) ?? "{}");
+  return localStorage.getItem(localStorageModeKey) ?? "cel";
 }
