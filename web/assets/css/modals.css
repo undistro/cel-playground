@@ -80,6 +80,7 @@
   font-size: 20px;
   color: rgba(150, 150, 150, 1);
   cursor: pointer;
+  line-height: 0;
 }
 
 .modal-content .playground-modes__container {
