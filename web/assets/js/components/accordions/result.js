@@ -100,12 +100,14 @@ function renderAccordions(key, values, index = 0) {
 
 export function hideAccordions() {
   outputResultEl.style.display = "none";
+  holderEl.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 export function handleRenderAccordions(result) {
   outputResultEl.innerHTML = "";
   outputResultEl.style.display = "flex";
-  outputResultEl.scrollTo({ top: 0, behavior: "smooth" });
+
+  holderEl.scrollTo({ top: 0, behavior: "smooth" });
   holderEl.style.overflowY = "auto";
   holderEl.style.overflowX = "hidden";
 
