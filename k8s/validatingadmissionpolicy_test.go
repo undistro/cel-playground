@@ -311,11 +311,13 @@ func TestValidationEval(t *testing.T) {
 				Value: "default",
 				Cost:  uint64ptr(6),
 			}, {
-				Name:  "containers",
-				Error: strptr("unexpected error evaluating expression containers: no such key: spc"),
+				Name:    "containers",
+				IsError: true,
+				Error:   strptr("unexpected error evaluating expression containers: no such key: spc"),
 			}},
 			Validations: []*k8s.EvalResult{{
-				Error: strptr("unexpected error evaluating expression 'variables.foo == 'default' && variables.containers.all(c, c.image.startsWith(\"test\"))', caused by nested exception: 'no such key: spc'"),
+				IsError: true,
+				Error:   strptr("unexpected error evaluating expression 'variables.foo == 'default' && variables.containers.all(c, c.image.startsWith(\"test\"))', caused by nested exception: 'no such key: spc'"),
 			}},
 			AuditAnnotations: []*k8s.EvalResult{{
 				Name:    strptr("foo-label"),
