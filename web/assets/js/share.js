@@ -1,11 +1,12 @@
 import { localStorageModeKey } from "./constants.js";
 import { AceEditor } from "./editor.js";
+import { setEditorTheme } from "./theme.js";
 import {
   getExprEditorValue,
   getInputEditorValue,
   getRunValues,
 } from "./utils/editor.js";
-import { getCurrentMode } from "./utils/localStorage.js";
+import { getCurrentMode, getCurrentTheme } from "./utils/localStorage.js";
 
 const shareButton = document.getElementById("share");
 shareButton.addEventListener("click", share);
@@ -38,17 +39,27 @@ export const renderSharedContent = (
   legacyObjectShared = false
 ) => {
   localStorage.setItem(localStorageModeKey, mode.id);
+
   try {
     if (legacyObjectShared) {
-      new AceEditor("cel").setValue(object.expression, -1);
-      new AceEditor("dataInput").setValue(object.data, -1);
+      const celEditor = new AceEditor("cel");
+      celEditor.setValue(object.expression, -1);
+      setEditorTheme(celEditor);
+
+      const inputEditor = new AceEditor("dataInput");
+      inputEditor.setValue(object.data, -1);
+      setEditorTheme(inputEditor);
     } else {
-      new AceEditor(object.mode).setValue(object[object.mode], -1);
+      const exprEditor = new AceEditor(object.mode);
+      exprEditor.setValue(object[object.mode], -1);
+      setEditorTheme(exprEditor);
       document
         .querySelectorAll(".editor__input.data__input")
         ?.forEach((editor) => {
           const containerId = editor.id;
-          new AceEditor(containerId).setValue(object[containerId], -1);
+          const inputEditor = new AceEditor(containerId);
+          inputEditor.setValue(object[containerId], -1);
+          setEditorTheme(inputEditor);
         });
     }
   } catch (error) {
