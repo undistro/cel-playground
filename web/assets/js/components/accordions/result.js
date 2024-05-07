@@ -48,6 +48,8 @@ function createAccordionItemsByResults(name, result, index) {
 function getResultValue(result) {
   if (result.isError) {
     return `<span style="color:#e01e5a">${result.error}</span>`;
+  } else if ("message" in result) {
+    return String(result.message);
   } else if ("value" in result) {
     if (typeof result.value === "object")
       return `<pre>${JSON.stringify(result.value, null, 2)}</pre>`;
