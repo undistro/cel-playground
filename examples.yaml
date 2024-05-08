@@ -27,7 +27,7 @@ examples:
           || (account.overdraftProtection
           && account.overdraftLimit >= transaction.withdrawal  - account.balance)
 
-    data: |
+    dataInput: |
       # Here is the input data in YAML or JSON format.
 
       account:
@@ -46,7 +46,7 @@ examples:
           container.image.startsWith(registry)
         )
       )
-    data: |
+    dataInput: |
       params:
         allowedRegistries: 
           - myregistry.com
@@ -83,7 +83,7 @@ examples:
           port.hostPort == 0
         )
       )
-    data: |
+    dataInput: |
       object:
         apiVersion: apps/v1
         kind: Deployment
@@ -129,7 +129,7 @@ examples:
           !has(container.securityContext) || !has(container.securityContext.runAsNonRoot) || container.securityContext.runAsNonRoot != false
         )
       )
-    data: |
+    dataInput: |
       object:
         apiVersion: apps/v1
         kind: Deployment
@@ -175,7 +175,7 @@ examples:
         !has(container.securityContext.capabilities.add) ||
         container.securityContext.capabilities.add.all(cap, cap in params.allowedCapabilities)
       )
-    data: |
+    dataInput: |
       params:
         allowedCapabilities: [NET_BIND_SERVICE]
       object:
@@ -214,7 +214,7 @@ examples:
         // the regex above is suggested by semver.org: https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
         // allowing the "v" prefix
       )
-    data: |
+    dataInput: |
       object:
         apiVersion: v1
         kind: Pod
@@ -244,7 +244,7 @@ examples:
       && url(object.href).getPort() == '80'
       && url(object.href).getEscapedPath() == '/path'
       && url(object.href).getQuery().size() == 1
-    data: |
+    dataInput: |
       {
         "object": {
           "href": "https://user:pass@example.com:80/path?query=val#fragment"
@@ -266,7 +266,7 @@ examples:
         .filter(c, c.startsWith('group'))
             .all(c, jwt.extra_claims[c]
                 .all(g, g.endsWith('@acme.co')))
-    data: |
+    dataInput: |
       jwt: {
         "iss": "auth.acme.com:12350",
         "sub": "serviceAccount:delegate@acme.co",
@@ -286,7 +286,7 @@ examples:
 
   - name: "Optional"
     cel: 'object.?foo.orValue("fallback")'
-    data: "object: {}"
+    dataInput: "object: {}"
     category: "General"
 
   - name: "Duration and timestamp"
@@ -294,7 +294,7 @@ examples:
       // Validate that 'expired' date is after a 'created' date plus a 'ttl' duration
       has(object.expired) && 
       timestamp(object.created) + duration(object.ttl) < timestamp(object.expired)
-    data: |
+    dataInput: |
       object:
         created: "2023-06-14T02:00:14+00:00"
         ttl: "5m"
@@ -310,7 +310,7 @@ examples:
         .add(quantity("700M"))
         .sub(1) // test without this subtraction
         .isLessThan(quantity(object.limit))
-    data: |
+    dataInput: |
       object:
         memory: 1.3G
         limit: 2G
@@ -334,7 +334,7 @@ examples:
       //         expression: "response.code >= 400 || xds.cluster_name == 'BlackHoleCluster' ||  xds.cluster_name == 'PassthroughCluster' "
       
       response.code >= 400 || (xds.cluster_name == 'BlackHoleCluster' || xds.cluster_name == 'PassthroughCluster')
-    data: |
+    dataInput: |
       # The following configuration is true access logs only when the response code is greater or equal to 400
       # or the request went to the BlackHoleCluster or the PassthroughCluster
       request:
@@ -404,7 +404,7 @@ examples:
       //           value: "request.host"               # <--- CEL
       
       has(request.host) ? request.host : "unknown"
-    data: |
+    dataInput: |
       request:
         duration: "4.144461ms"
         headers:
@@ -474,5 +474,5 @@ examples:
 
   - name: "Blank"
     cel: ""
-    data: ""
+    dataInput: ""
     category: "Blank"

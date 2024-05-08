@@ -25,12 +25,15 @@ const EDITOR_DEFAULTS = {
   },
 };
 
+const DEFAULT_THEME = "ace/theme/clouds";
+const FALLBACK_MODE = "ace/mode/javascript";
+
 class AceEditor {
   constructor(id) {
     this.editor = ace.edit(id);
-    this.editor.setTheme(EDITOR_DEFAULTS[id].theme);
+    this.editor.setTheme(DEFAULT_THEME);
     this.editor.setShowPrintMargin(false);
-    this.editor.getSession().setMode(EDITOR_DEFAULTS[id].mode);
+    // this.editor.getSession().setMode(mode ?? FALLBACK_MODE);
     this.editor.getSession().setUseWorker(false);
   }
 
@@ -40,6 +43,11 @@ class AceEditor {
 
   getValue() {
     return this.editor.getValue();
+  }
+
+  setSyntax(syntax) {
+    const mode = `ace/mode/${syntax}`;
+    this.editor.getSession().setMode(mode);
   }
 }
 

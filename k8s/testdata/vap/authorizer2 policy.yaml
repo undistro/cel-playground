@@ -1,0 +1,22 @@
+apiVersion: admissionregistration.k8s.io/v1alpha1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: "demo-policy.example.com"
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+      - apiGroups:   ["*"]
+        apiVersions: ["*"]
+        operations:  ["CREATE", "UPDATE"]
+        resources:   ["*"]
+  variables:
+  - name: environment
+    expression: "'environment' in namespaceObject.metadata.labels ? namespaceObject.metadata.labels['environment'] : 'prod'"
+  - name: isProd
+    expression: "variables.environment == 'prod'"
+  validations:
+    -  expression: 'variables.isProd && authorizer.group("apps").resource("deployments").namespace(object.metadata.namespace).check("admin").allowed()'
+  auditAnnotations:
+    - key: "test-annotation"
+      valueExpression: "'Deployment is allowed in namespace ' + object.metadata.namespace"

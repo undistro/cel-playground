@@ -1,0 +1,11 @@
+paths:
+groups:
+  apps:
+    resources:
+      deployments:
+        checks:
+          default:
+            "":
+              admin:
+                decision: allow
+serviceAccounts:

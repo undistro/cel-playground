@@ -1,0 +1,149 @@
+/**
+ * Copyright 2024 Undistro Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#tab {
+  --purple: #8447d1;
+  --purple-dark: #ab75f0;
+  --tab-button-width: 110px;
+
+  display: flex;
+  align-items: center;
+}
+
+.tab__arrow::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+
+  border-left: 10px solid var(--purple);
+}
+
+.tabs::after {
+  content: "";
+  width: var(--tab-button-width);
+  height: 2px;
+
+  background-color: var(--purple);
+
+  position: absolute;
+  bottom: 0;
+  transform: translateX(calc(var(--current-tab) * var(--tab-button-width)));
+  transition: transform 300ms;
+}
+
+.tabs__wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  align-items: center;
+  position: relative;
+}
+
+.tabs button {
+  background-color: transparent;
+  border: none;
+  min-width: var(--tab-button-width);
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #8b8692;
+  cursor: pointer;
+}
+
+.tabs button > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tabs .tooltip__content {
+  top: 40px;
+  left: calc(var(--tab-button-width) * var(--hovered-tab));
+}
+
+.dark .tabs button {
+  color: white;
+}
+
+.tabs button:not(.active):hover {
+  background-color: rgba(132, 71, 209, 0.08);
+  color: var(--purple);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.dark .tabs button:not(.active):hover {
+  color: var(--purple-dark);
+}
+
+.tabs button.active {
+  color: var(--purple);
+}
+
+.dark .tabs button.active {
+  color: var(--purple-dark);
+}
+
+.dark .tabs button.active::after {
+  background-color: var(--purple-dark);
+}
+
+@media (max-width: 1650px) {
+  #tab {
+    --tab-button-width: 90px;
+  }
+
+  .tabs button {
+    width: var(--tab-button-width);
+  }
+
+  .tabs button > span {
+    width: 70px;
+  }
+
+  .tabs::after {
+    width: var(--tab-button-width);
+    transform: translateX(calc(var(--current-tab) * var(--tab-button-width)));
+  }
+}
+
+@media (max-width: 1366px) {
+  #tab {
+    --tab-button-width: 70px;
+  }
+
+  .tabs button {
+    width: var(--tab-button-width);
+  }
+
+  .tabs button > span {
+    width: 50px;
+  }
+
+  .tabs::after {
+    width: var(--tab-button-width);
+    transform: translateX(calc(var(--current-tab) * var(--tab-button-width)));
+  }
+}

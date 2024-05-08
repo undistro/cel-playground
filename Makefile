@@ -31,19 +31,23 @@ serve: ## Serve static files.
 	#go run cmd/server/main.go --dir web/
 
 .PHONY: update-data
-update-data: ## Update the web/assets/data.json file.
-	yq -ojson '.' examples.yaml > web/assets/data.json
-	yq -ojson -i '.versions.cel-go = "$(CEL_GO_VERSION)"' web/assets/data.json
+update-data: ## Update the example files
+	yq -ojson '.' examples.yaml > web/assets/examples/cel.json
+	yq -ojson -i '.versions.cel-go = "$(CEL_GO_VERSION)"' web/assets/examples/cel.json
+	yq -ojson '.' validating_examples.yaml > web/assets/examples/vap.json
+	yq -ojson -i '.versions.cel-go = "$(CEL_GO_VERSION)"' web/assets/examples/vap.json
+	yq -ojson '.' webhooks_examples.yaml > web/assets/examples/webhooks.json
+	yq -ojson -i '.versions.cel-go = "$(CEL_GO_VERSION)"' web/assets/examples/webhooks.json
 
 .PHONY: addlicense
 addlicense: ## Add copyright license headers in source code files.
 	@test -s $(LOCALBIN)/addlicense || GOBIN=$(LOCALBIN) go install github.com/google/addlicense@latest
-	$(LOCALBIN)/addlicense -c "Undistro Authors" -l "apache" -ignore ".github/**" -ignore ".idea/**" -ignore "web/dist/**" .
+	$(LOCALBIN)/addlicense -c "Undistro Authors" -l "apache" -ignore ".github/**" -ignore ".idea/**" -ignore "web/dist/**" -ignore "k8s/testdata/**" .
 
 .PHONY: checklicense
 checklicense: ## Check copyright license headers in source code files.
 	@test -s $(LOCALBIN)/addlicense || GOBIN=$(LOCALBIN) go install github.com/google/addlicense@latest
-	$(LOCALBIN)/addlicense -c "Undistro Authors" -l "apache" -ignore ".github/**" -ignore ".idea/**" -ignore "web/dist/**" -check .
+	$(LOCALBIN)/addlicense -c "Undistro Authors" -l "apache" -ignore ".github/**" -ignore ".idea/**" -ignore "web/dist/**" -ignore "k8s/testdata/**" -check .
 
 ##@ Build
 

@@ -1,0 +1,517 @@
+# Copyright 2023 Undistro Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+examples:
+  - name: "Request Accept"
+    webhooks: |
+      apiVersion: admissionregistration.k8s.io/v1
+      kind: ValidatingWebhookConfiguration
+      webhooks:
+        - name: my-webhook.example.com
+          matchPolicy: Equivalent
+          rules:
+            - operations: ['CREATE','UPDATE']
+              apiGroups: ['*']
+              apiVersions: ['*']
+              resources: ['*']
+          failurePolicy: 'Ignore' # Fail-open (optional)
+          sideEffects: None
+          clientConfig:
+            service:
+              namespace: my-namespace
+              name: my-webhook
+            caBundle: 'PGNhYnVuZGxlPgo='
+          # You can have up to 64 matchConditions per webhook
+          matchConditions:
+            - name: 'exclude-leases' # Each match condition must have a unique name
+              expression: '!(request.resource.group == "coordination.k8s.io" && request.resource.resource == "leases")' # Match non-lease resources.
+            - name: 'exclude-kubelet-requests'
+              expression: '!("system:nodes" in request.userInfo.groups)' # Match requests made by non-node users.
+
+    dataOldObject: |
+
+    dataObject: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        labels:
+          app: kubernetes-bootcamp
+        name: kubernetes-bootcamp
+        namespace: default
+      spec:
+        progressDeadlineSeconds: 600
+        replicas: 1
+        revisionHistoryLimit: 10
+        selector:
+          matchLabels:
+            app: kubernetes-bootcamp
+        strategy:
+          rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+          type: RollingUpdate
+        template:
+          metadata:
+            creationTimestamp: null
+            labels:
+              app: kubernetes-bootcamp
+          spec:
+            containers:
+            - image: gcr.io/google-samples/kubernetes-bootcamp:v1
+              imagePullPolicy: IfNotPresent
+              name: kubernetes-bootcamp
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+
+    dataRequest: |
+      uid: 705ab4f5-6393-11e8-b7cc-42010a800002
+      kind:
+        group: apps
+        version: v1
+        resource: deployments
+      resource:
+        group: apps
+        version: v1
+        resource: deployments
+      requestKind:
+        group: apps
+        version: v1
+        resource: deployments
+      requestResource:
+        group: apps
+        version: v1
+        resource: deployments
+      name: kubernetes-bootcamp
+      namespace: default
+      operation: CREATE
+      userInfo:
+        username: admin
+        uid: 014fbff9a07c
+        groups:
+          - system:authenticated
+          - my-admin-group
+        extra:
+          some-key:
+            - some-value1
+            - some-value2
+
+    dataAuthorizer: |
+
+    category: "Request"
+
+  - name: "Request Ignore Leases"
+    webhooks: |
+      apiVersion: admissionregistration.k8s.io/v1
+      kind: ValidatingWebhookConfiguration
+      webhooks:
+        - name: my-webhook.example.com
+          matchPolicy: Equivalent
+          rules:
+            - operations: ['CREATE','UPDATE']
+              apiGroups: ['*']
+              apiVersions: ['*']
+              resources: ['*']
+          failurePolicy: 'Ignore' # Fail-open (optional)
+          sideEffects: None
+          clientConfig:
+            service:
+              namespace: my-namespace
+              name: my-webhook
+            caBundle: 'PGNhYnVuZGxlPgo='
+          # You can have up to 64 matchConditions per webhook
+          matchConditions:
+            - name: 'exclude-leases' # Each match condition must have a unique name
+              expression: '!(request.resource.group == "coordination.k8s.io" && request.resource.resource == "leases")' # Match non-lease resources.
+            - name: 'exclude-kubelet-requests'
+              expression: '!("system:nodes" in request.userInfo.groups)' # Match requests made by non-node users.
+
+    dataOldObject: |
+
+    dataObject: |
+      apiVersion: coordination.k8s.io/v1
+      kind: Lease
+      metadata:
+        name: ingress-nginx-leader
+        namespace: ingress-nginx
+      spec:
+        acquireTime: "2023-11-24T16:51:02.229818Z"
+        holderIdentity: ingress-nginx-controller-6597456577-s5h9w
+        leaseDurationSeconds: 30
+        leaseTransitions: 7
+        renewTime: "2024-04-09T21:59:30.694589Z"
+
+    dataRequest: |
+      uid: 705ab4f5-6393-11e8-b7cc-42010a800002
+      kind:
+        group: coordination.k8s.io
+        version: v1
+        resource: leases
+      resource:
+        group: coordination.k8s.io
+        version: v1
+        resource: leases
+      requestKind:
+        group: coordination.k8s.io
+        version: v1
+        resource: leases
+      requestResource:
+        group: coordination.k8s.io
+        version: v1
+        resource: leases
+      name: ingress-nginx-leader
+      namespace: ingress-nginx
+      operation: CREATE
+      userInfo:
+        username: admin
+        uid: 014fbff9a07c
+        groups:
+          - system:authenticated
+          - my-admin-group
+        extra:
+          some-key:
+            - some-value1
+            - some-value2
+
+    dataAuthorizer: |
+
+    category: "Request"
+
+  - name: "Request Ignore Kubelet"
+    webhooks: |
+      apiVersion: admissionregistration.k8s.io/v1
+      kind: ValidatingWebhookConfiguration
+      webhooks:
+        - name: my-webhook.example.com
+          matchPolicy: Equivalent
+          rules:
+            - operations: ['CREATE','UPDATE']
+              apiGroups: ['*']
+              apiVersions: ['*']
+              resources: ['*']
+          failurePolicy: 'Ignore' # Fail-open (optional)
+          sideEffects: None
+          clientConfig:
+            service:
+              namespace: my-namespace
+              name: my-webhook
+            caBundle: 'PGNhYnVuZGxlPgo='
+          # You can have up to 64 matchConditions per webhook
+          matchConditions:
+            - name: 'exclude-leases' # Each match condition must have a unique name
+              expression: '!(request.resource.group == "coordination.k8s.io" && request.resource.resource == "leases")' # Match non-lease resources.
+            - name: 'exclude-kubelet-requests'
+              expression: '!("system:nodes" in request.userInfo.groups)' # Match requests made by non-node users.
+
+    dataOldObject: |
+
+    dataObject: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        labels:
+          app: kubernetes-bootcamp
+        name: kubernetes-bootcamp
+        namespace: default
+      spec:
+        progressDeadlineSeconds: 600
+        replicas: 1
+        revisionHistoryLimit: 10
+        selector:
+          matchLabels:
+            app: kubernetes-bootcamp
+        strategy:
+          rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+          type: RollingUpdate
+        template:
+          metadata:
+            creationTimestamp: null
+            labels:
+              app: kubernetes-bootcamp
+          spec:
+            containers:
+            - image: gcr.io/google-samples/kubernetes-bootcamp:v1
+              imagePullPolicy: IfNotPresent
+              name: kubernetes-bootcamp
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+
+    dataRequest: |
+      uid: 705ab4f5-6393-11e8-b7cc-42010a800002
+      kind:
+        group: apps
+        version: v1
+        resource: deployments
+      resource:
+        group: apps
+        version: v1
+        resource: deployments
+      requestKind:
+        group: apps
+        version: v1
+        resource: deployments
+      requestResource:
+        group: apps
+        version: v1
+        resource: deployments
+      name: kubernetes-bootcamp
+      namespace: default
+      operation: CREATE
+      userInfo:
+        username: node1
+        uid: 014fbff9a07c
+        groups:
+          - system:nodes
+        extra:
+          some-key:
+            - some-value1
+            - some-value2
+
+    dataAuthorizer: |
+
+    category: "Request"
+
+  - name: "Authorizer Accept"
+    webhooks: |
+      apiVersion: admissionregistration.k8s.io/v1
+      kind: ValidatingWebhookConfiguration
+      webhooks:
+        - name: rbac.my-webhook.example.com
+          matchPolicy: Equivalent
+          rules:
+            - operations: ['CREATE','UPDATE']
+              apiGroups: ['apps']
+              apiVersions: ['*']
+              resources: ['*']
+          failurePolicy: 'Fail' # Fail-closed (the default)
+          sideEffects: None
+          clientConfig:
+            service:
+              namespace: my-namespace
+              name: my-webhook
+            caBundle: 'PGNhYnVuZGxlPgo='
+          # You can have up to 64 matchConditions per webhook
+          matchConditions:
+            - name: 'breakglass'
+              # Skip requests made by users authorized to 'breakglass' on this webhook.
+              # The 'breakglass' API verb does not need to exist outside this check.
+              expression: '!authorizer.group("admissionregistration.k8s.io").resource("validatingwebhookconfigurations").name("rbac.my-webhook.example.com").check("breakglass").allowed()'
+
+    dataOldObject: |
+
+    dataObject: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        labels:
+          app: kubernetes-bootcamp
+        name: kubernetes-bootcamp
+        namespace: default
+      spec:
+        progressDeadlineSeconds: 600
+        replicas: 1
+        revisionHistoryLimit: 10
+        selector:
+          matchLabels:
+            app: kubernetes-bootcamp
+        strategy:
+          rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+          type: RollingUpdate
+        template:
+          metadata:
+            creationTimestamp: null
+            labels:
+              app: kubernetes-bootcamp
+          spec:
+            containers:
+            - image: gcr.io/google-samples/kubernetes-bootcamp:v1
+              imagePullPolicy: IfNotPresent
+              name: kubernetes-bootcamp
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+
+    dataRequest: |
+      uid: 705ab4f5-6393-11e8-b7cc-42010a800002
+      kind:
+        group: apps
+        version: v1
+        resource: deployments
+      resource:
+        group: apps
+        version: v1
+        resource: deployments
+      requestKind:
+        group: apps
+        version: v1
+        resource: deployments
+      requestResource:
+        group: apps
+        version: v1
+        resource: deployments
+      name: kubernetes-bootcamp
+      namespace: default
+      operation: CREATE
+      userInfo:
+        username: admin
+        uid: 014fbff9a07c
+        groups:
+          - system:authenticated
+          - my-admin-group
+        extra:
+          some-key:
+            - some-value1
+            - some-value2
+
+    dataAuthorizer: |
+      paths:
+      groups:
+      serviceAccounts:
+
+    category: "Authorizer"
+
+  - name: "Authorizer Ignore breakglass"
+    webhooks: |
+      apiVersion: admissionregistration.k8s.io/v1
+      kind: ValidatingWebhookConfiguration
+      webhooks:
+        - name: rbac.my-webhook.example.com
+          matchPolicy: Equivalent
+          rules:
+            - operations: ['CREATE','UPDATE']
+              apiGroups: ['apps']
+              apiVersions: ['*']
+              resources: ['*']
+          failurePolicy: 'Fail' # Fail-closed (the default)
+          sideEffects: None
+          clientConfig:
+            service:
+              namespace: my-namespace
+              name: my-webhook
+            caBundle: 'PGNhYnVuZGxlPgo='
+          # You can have up to 64 matchConditions per webhook
+          matchConditions:
+            - name: 'breakglass'
+              # Skip requests made by users authorized to 'breakglass' on this webhook.
+              # The 'breakglass' API verb does not need to exist outside this check.
+              expression: '!authorizer.group("admissionregistration.k8s.io").resource("validatingwebhookconfigurations").name("rbac.my-webhook.example.com").check("breakglass").allowed()'
+
+    dataOldObject: |
+
+    dataObject: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        labels:
+          app: kubernetes-bootcamp
+        name: kubernetes-bootcamp
+        namespace: default
+      spec:
+        progressDeadlineSeconds: 600
+        replicas: 1
+        revisionHistoryLimit: 10
+        selector:
+          matchLabels:
+            app: kubernetes-bootcamp
+        strategy:
+          rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+          type: RollingUpdate
+        template:
+          metadata:
+            creationTimestamp: null
+            labels:
+              app: kubernetes-bootcamp
+          spec:
+            containers:
+            - image: gcr.io/google-samples/kubernetes-bootcamp:v1
+              imagePullPolicy: IfNotPresent
+              name: kubernetes-bootcamp
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+
+    dataRequest: |
+      uid: 705ab4f5-6393-11e8-b7cc-42010a800002
+      kind:
+        group: apps
+        version: v1
+        resource: deployments
+      resource:
+        group: apps
+        version: v1
+        resource: deployments
+      requestKind:
+        group: apps
+        version: v1
+        resource: deployments
+      requestResource:
+        group: apps
+        version: v1
+        resource: deployments
+      name: kubernetes-bootcamp
+      namespace: default
+      operation: CREATE
+      userInfo:
+        username: admin
+        uid: 014fbff9a07c
+        groups:
+          - system:authenticated
+          - my-admin-group
+        extra:
+          some-key:
+            - some-value1
+            - some-value2
+
+    dataAuthorizer: |
+      paths:
+      groups:
+        admissionregistration.k8s.io:
+          resources:
+            validatingwebhookconfigurations:
+              checks:
+                "":
+                  rbac.my-webhook.example.com:
+                    breakglass:
+                      decision: allow
+      serviceAccounts:
+
+    category: "Authorizer"
+

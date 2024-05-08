@@ -1,0 +1,51 @@
+/**
+ * Copyright 2024 Undistro Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.tooltip-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  right: 50px;
+  top: 38px;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 8px;
+  z-index: 20;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.12);
+  width: max-content;
+}
+
+.tooltip .tooltip__content--text {
+  color: #000000;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tooltip__container .icon {
+  font-size: 24px;
+  line-height: 0;
+  color: #8c97a6;
+
+  display: flex;
+  justify-content: center;
+}

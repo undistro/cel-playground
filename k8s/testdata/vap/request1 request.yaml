@@ -1,0 +1,37 @@
+kind:
+  group: "test.example.com"
+  version: "v1"
+  kind: "testkind"
+resource: 
+  group: "test.example.com"
+  version: "v1"
+  resource: "testkinds"
+subResource: ""
+requestKind:
+  group: "test.example.com"
+  version: "v1beta1"
+  kind: "testkind"
+requestResource: 
+  group: "test.example.com"
+  version: "v1beta1"
+  resource: "testkinds"
+requestSubResource: ""
+name: "testResource"
+namespace: "testNamespace"
+operation: "CREATE"
+userInfo:
+  username: "testuser"
+  uid: "123456789"
+  groups:
+  - "testgroup1"
+  - "testgroup2"
+  - "testgroup3"
+  extra:
+    extra1:
+    - "extra1 val1"
+    - "extra1 val2"
+    - "extra1 val3"
+    extra2:
+    - "extra2 val1"
+    - "extra2 val2"
+    - "extra2 val3"

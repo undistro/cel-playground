@@ -1,0 +1,12 @@
+paths:
+groups:
+  admissionregistration.k8s.io:
+    resources:
+      validatingwebhookconfigurations:
+        checks:
+          "":
+            rbac.my-webhook.example.com:
+              breakglass:
+                decision: allow
+serviceAccounts:
+

@@ -1,5 +1,5 @@
 /**
- * Copyright 2023 Undistro Authors
+ * Copyright 2024 Undistro Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-const costTooltipElement = document.getElementById("cost-tooltip");
-const costInfoElement = document.getElementById("cost-info");
-
-function openCostInfoTooltip() {
-  costTooltipElement.style.display = "initial";
-}
-
-costInfoElement.addEventListener("mouseover", openCostInfoTooltip);
-
-costInfoElement.addEventListener("mouseleave", () => {
-  costTooltipElement.style.display = "none";
-});
+export const localStorageModeKey = "mode";
+export const localStorageThemeKey = "theme";
+export const ACE_EDITOR = {
+  theme: {
+    dark: "ace/theme/tomorrow_night",
+    light: "ace/theme/clouds",
+  },
+};

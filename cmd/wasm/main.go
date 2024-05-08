@@ -21,31 +21,73 @@ import (
 	"fmt"
 	"syscall/js"
 
-	"gopkg.in/yaml.v3"
-
 	"github.com/undistro/cel-playground/eval"
+	"github.com/undistro/cel-playground/k8s"
 )
 
+type execFunction func(mode string, argMap js.Value) (string, error)
+
+func getArg(value js.Value, name string) []byte {
+	arg := value.Get(name)
+	if arg.Type() == js.TypeString {
+		return []byte(arg.String())
+	}
+	return []byte{}
+}
+
+var modeExecFns = map[string]execFunction{
+	"cel": func(mode string, argMap js.Value) (string, error) {
+		return eval.CelEval(
+			getArg(argMap, "cel"),
+			getArg(argMap, "dataInput"),
+		)
+	},
+	"vap": func(mode string, argMap js.Value) (string, error) {
+		return k8s.EvalValidatingAdmissionPolicy(
+			getArg(argMap, "vap"),
+			getArg(argMap, "dataOldObject"),
+			getArg(argMap, "dataObject"),
+			getArg(argMap, "dataNamespace"),
+			getArg(argMap, "dataRequest"),
+			getArg(argMap, "dataAuthorizer"),
+		)
+	},
+	"webhooks": func(mode string, argMap js.Value) (string, error) {
+		return k8s.EvalWebhook(
+			getArg(argMap, "webhooks"),
+			getArg(argMap, "dataOldObject"),
+			getArg(argMap, "dataObject"),
+			getArg(argMap, "dataRequest"),
+			getArg(argMap, "dataAuthorizer"),
+		)
+	},
+}
+
 func main() {
-	evalFunc := js.FuncOf(evalWrapper)
-	js.Global().Set("eval", evalFunc)
-	defer evalFunc.Release()
+	defer addFunction("eval", dynamicEvalWrapper).Release()
 	<-make(chan bool)
 }
 
-// evalWrapper wraps the eval function with `syscall/js` parameters
-func evalWrapper(_ js.Value, args []js.Value) any {
+func addFunction(name string, fn func(js.Value, []js.Value) any) js.Func {
+	function := js.FuncOf(fn)
+	js.Global().Set(name, function)
+	return function
+}
+
+func dynamicEvalWrapper(_ js.Value, args []js.Value) any {
 	if len(args) < 2 {
 		return response("", errors.New("invalid arguments"))
 	}
-	exp := args[0].String()
-	is := args[1].String()
-
-	var input map[string]any
-	if err := yaml.Unmarshal([]byte(is), &input); err != nil {
-		return response("", fmt.Errorf("failed to decode input: %w", err))
+	if args[0].Type() != js.TypeString || args[1].Type() != js.TypeObject {
+		return response("", errors.New("invalid argument types, expecting string and object"))
 	}
-	output, err := eval.Eval(exp, input)
+	mode := args[0].String()
+	fn, ok := modeExecFns[mode]
+	if !ok {
+		return response("", fmt.Errorf("unknown mode %s", mode))
+	}
+
+	output, err := fn(mode, args[1])
 	if err != nil {
 		return response("", err)
 	}

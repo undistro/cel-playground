@@ -1,0 +1,30 @@
+uid: 705ab4f5-6393-11e8-b7cc-42010a800002
+kind:
+  group: apps
+  version: v1
+  resource: deployments
+resource:
+  group: apps
+  version: v1
+  resource: deployments
+requestKind:
+  group: apps
+  version: v1
+  resource: deployments
+requestResource:
+  group: apps
+  version: v1
+  resource: deployments
+name: kubernetes-bootcamp
+namespace: default
+operation: CREATE
+userInfo:
+  username: admin
+  uid: 014fbff9a07c
+  groups:
+    - system:authenticated
+    - my-admin-group
+  extra:
+    some-key:
+      - some-value1
+      - some-value2
