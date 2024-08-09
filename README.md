@@ -1,6 +1,7 @@
 # CEL Playground
 ![GitHub](https://img.shields.io/github/license/undistro/cel-playground)
 [![Go Report Card](https://goreportcard.com/badge/github.com/undistro/cel-playground)](https://goreportcard.com/report/github.com/undistro/cel-playground)
+[![slack](https://img.shields.io/badge/Slack-Join-4a154b?logo=slack)](https://join.slack.com/t/undistrocommunity/shared_invite/zt-21slyrao4-dTW_XtOB90QVj05txOX6rA)
 
 CEL Playground is an interactive WebAssembly (Wasm) powered environment to explore and experiment with the [Common Expression Language (CEL)](https://github.com/google/cel-spec).
 It provides a simple and user-friendly interface to write and quickly evaluate CEL expressions.
@@ -28,11 +29,16 @@ Serve the static files:
 make serve
 ```
 
-## Contributing
+## Community
 
-We appreciate your contribution.
-Please refer to our [contributing guideline](https://github.com/undistro/cel-playground/blob/main/CONTRIBUTING.md) for further information.
-This project adheres to the Contributor Covenant [code of conduct](https://github.com/undistro/cel-playground/blob/main/CODE_OF_CONDUCT.md).
+To engage with our community, you can use the following resources:
+- Give us a [star :star:](https://github.com/undistro/cel-playground/stargazers) - If you want us to continue developing and improving CEL Playground
+- [Contributing to CEL Playground](https://github.com/undistro/cel-playground/blob/main/CONTRIBUTING.md) - Start here if you're interested in contributing to the project
+- [Code of Conduct](https://github.com/undistro/cel-playground/blob/main/CODE_OF_CONDUCT.md) - Learn about the guidelines that govern our community interactions
+- [Slack Channel](https://join.slack.com/t/undistrocommunity/shared_invite/zt-21slyrao4-dTW_XtOB90QVj05txOX6rA) - Join us on Slack to get support or discuss the project
+- [Community Sessions](https://tinyurl.com/undistro-community-calendar) - Join our monthly community meetings and bi-weekly office hours
+- [Roadmap](https://github.com/undistro/cel-playground/blob/main/roadmap.md) - Discover what's next for the project
+- [Adopters](https://github.com/undistro/cel-playground/blob/main/ADOPTERS.md) - Is your company using CEL Playground? Let us know, and we'll feature you here!
 
 ## License
 
