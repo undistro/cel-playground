@@ -10,7 +10,6 @@ Implement support for defining custom validation expressions for Kubernetes Cust
 
 Owners: 
 
-- Link to design proposal
 - [Link to issue](https://github.com/undistro/cel-playground/issues/41)
 
 ### Support for WebHook Match Conditions Expressions
@@ -19,7 +18,6 @@ Enable users to define webhook match conditions expressions for validating and m
 
 Owners: 
 
-- Link to design proposal
 - [Link to issue](https://github.com/undistro/cel-playground/issues/41)
 
 ### Support for Validating Admission Policy
@@ -28,7 +26,6 @@ Owners:
 
 Owners: 
 
-- Link to design proposal
 - [Link to issue](https://github.com/undistro/cel-playground/issues/41)
   
 ### Support for Authentication Configuration Claim Mappings
@@ -37,7 +34,6 @@ Add support for configuring authentication claim mappings in the Kubernetes API 
 
 Owners: 
 
-- Link to design proposal
 - [Link to issue](https://github.com/undistro/cel-playground/issues/41)
 
 ### Support for Authorization Configuration
@@ -46,7 +42,6 @@ Implement authorization configuration options to define access control policies 
 
 Owners: 
 
-- Link to design proposal
 - [Link to issue](https://github.com/undistro/cel-playground/issues/41)
 
 
