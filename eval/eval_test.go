@@ -270,17 +270,17 @@ func TestValidation(t *testing.T) {
 		{
 			name:    "Homogeneous Aggregate Validation test 1",
 			exp:     `name in ['hello', 0]`,
-			wantErr: true,
+			wantErr: false,
 		},
 		{
 			name:    "Homogeneous Aggregate Validation test 2",
 			exp:     `{'hello':'world', 1:'!'}`,
-			wantErr: true,
+			wantErr: false,
 		},
 		{
 			name:    "Homogeneous Aggregate Validation test 3",
 			exp:     `name in {'hello':'world', 'goodbye':true}`,
-			wantErr: true,
+			wantErr: false,
 		},
 		{
 			name: "Homogeneous Aggregate Validation test 4",

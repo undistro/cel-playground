@@ -36,7 +36,6 @@ type EvalResponse struct {
 
 var celEnvOptions = []cel.EnvOption{
 	// 1.0 (1.23)
-	cel.HomogeneousAggregateLiterals(),
 	cel.EagerlyValidateDeclarations(true),
 	cel.DefaultUTCTimeZone(true),
 	k8s.URLs(),
@@ -56,7 +55,6 @@ var celEnvOptions = []cel.EnvOption{
 		cel.ValidateDurationLiterals(),
 		cel.ValidateTimestampLiterals(),
 		cel.ValidateRegexLiterals(),
-		cel.ValidateHomogeneousAggregateLiterals(),
 	),
 
 	// Strings (from 1.29 onwards)
