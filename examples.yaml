@@ -43,7 +43,7 @@ examples:
       object.spec.template.spec.containers.all(container,
         params.allowedRegistries.exists(registry,
           ((registry in ['docker.io', 'docker.io/library']) && !container.image.contains('/')) ||
-          container.image.startsWith(registry)
+          container.image.startsWith(registry + '/')
         )
       )
     dataInput: |

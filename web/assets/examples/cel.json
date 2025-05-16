@@ -8,7 +8,7 @@
     },
     {
       "name": "Check image registry",
-      "cel": "object.spec.template.spec.containers.all(container,\n  params.allowedRegistries.exists(registry,\n    ((registry in ['docker.io', 'docker.io/library']) && !container.image.contains('/')) ||\n    container.image.startsWith(registry)\n  )\n)\n",
+      "cel": "object.spec.template.spec.containers.all(container,\n  params.allowedRegistries.exists(registry,\n    ((registry in ['docker.io', 'docker.io/library']) && !container.image.contains('/')) ||\n    container.image.startsWith(registry + '/')\n  )\n)\n",
       "dataInput": "params:\n  allowedRegistries: \n    - myregistry.com\n    - docker.io # use 'docker.io' for Docker Hub\nobject:\n  apiVersion: apps/v1\n  kind: Deployment\n  metadata:\n    name: nginx\n  spec:\n    template:\n      metadata:\n        name: nginx\n        labels:\n          app: nginx\n      spec:\n        containers:\n          - name: nginx\n            image: nginx # the expression looks for this field\n    selector:\n      matchLabels:\n        app: nginx\n",
       "category": "Kubernetes"
     },
