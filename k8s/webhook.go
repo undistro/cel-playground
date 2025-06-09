@@ -84,7 +84,7 @@ func EvalWebhook(webhookInput, oldObjectInput, objectValueInput, requestInput, a
 	// 'authorizer' - A CEL Authorizer. May be used to perform authorization checks for the principal (user or service account) of the request.
 	// 'authorizer.requestResource' - A CEL ResourceCheck constructed from the 'authorizer' and configured with the request resource.
 
-	matchConditionsEnvOptions := append([]cel.EnvOption(nil), celEnvOptions...)
+	matchConditionsEnvOptions := append([]cel.EnvOption{}, celEnvOptions...)
 	matchConditionsEnvOptions = append(matchConditionsEnvOptions, matchConditionsCelVars...)
 	matchConditionsEnv, err := cel.NewEnv(matchConditionsEnvOptions...)
 	if err != nil {

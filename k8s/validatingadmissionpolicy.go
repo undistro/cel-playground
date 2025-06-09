@@ -165,7 +165,7 @@ func EvalValidatingAdmissionPolicy(policyInput, oldObjectInput, objectValueInput
 	// 'authorizer' - A CEL Authorizer. May be used to perform authorization checks for the principal (user or service account) of the request.
 	// 'authorizer.requestResource' - A CEL ResourceCheck constructed from the 'authorizer' and configured with the request resource.
 
-	matchConditionsEnvOptions := append([]cel.EnvOption(nil), celEnvOptions...)
+	matchConditionsEnvOptions := append([]cel.EnvOption{}, celEnvOptions...)
 	matchConditionsEnvOptions = append(matchConditionsEnvOptions, matchConditionsCelVars...)
 	matchConditionsEnv, err := cel.NewEnv(matchConditionsEnvOptions...)
 	if err != nil {
@@ -214,7 +214,7 @@ func EvalValidatingAdmissionPolicy(policyInput, oldObjectInput, objectValueInput
 
 	// run validations only if matchConditions pass
 	if matchConditions {
-		validationEnvOptions := append([]cel.EnvOption(nil), celEnvOptions...)
+		validationEnvOptions := append([]cel.EnvOption{}, celEnvOptions...)
 		validationEnvOptions = append(validationEnvOptions, validationCelVars...)
 		validationEnv, err := cel.NewEnv(validationEnvOptions...)
 		if err != nil {

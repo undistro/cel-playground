@@ -23,7 +23,7 @@ func convertToMap(val any) (map[string]any, error) {
 		return nil, err
 	}
 	result := map[string]any{}
-	yaml.Unmarshal(bytes, result)
+	err = yaml.Unmarshal(bytes, result)
 	if err != nil {
 		return nil, err
 	}

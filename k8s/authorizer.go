@@ -186,7 +186,7 @@ func (r *ResourceCheck) Receive(function string, overload string, args []ref.Val
 				return types.NewErr("namespace already invoked")
 			}
 			if namespace, ok := getString(args[0].Value()); ok {
-				resourceCheck := &*r
+				resourceCheck := r
 				initResourceReceiver(resourceCheck, &namespace, resourceCheck.name, r.noSubresource)
 				return resourceCheck
 			}
@@ -198,7 +198,7 @@ func (r *ResourceCheck) Receive(function string, overload string, args []ref.Val
 				if len(name) == 0 {
 					return r
 				}
-				resourceCheck := &*r
+				resourceCheck := r
 				initResourceReceiver(resourceCheck, resourceCheck.namespace, &name, r.noSubresource)
 				return resourceCheck
 			}

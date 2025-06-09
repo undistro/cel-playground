@@ -121,7 +121,7 @@ type EvalResponse struct {
 	Validations              []*EvalResult   `json:"validations,omitempty"`
 	AuditAnnotations         []*EvalResult   `json:"auditAnnotations,omitempty"`
 	WebhookMatchConditions   [][]*EvalResult `json:"webhookMatchConditions,omitempty"`
-	Cost                     *uint64         `json:"cost, omitempty"`
+	Cost                     *uint64         `json:"cost,omitempty"`
 }
 
 func getResults(val *ref.Val) (any, *string) {
