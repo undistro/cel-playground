@@ -16,13 +16,12 @@ package k8s
 
 import (
 	"fmt"
-	"reflect"
 
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/common/types"
 	"github.com/google/cel-go/common/types/ref"
 	"github.com/google/cel-go/interpreter"
-	"google.golang.org/protobuf/types/known/structpb"
+	"github.com/undistro/cel-playground/utils"
 )
 
 type evalResponseError struct {
@@ -124,16 +123,17 @@ type EvalResponse struct {
 	Cost                     *uint64         `json:"cost,omitempty"`
 }
 
-func getResults(val *ref.Val) (any, *string) {
-	if val == nil || *val == nil {
+func getResults(val ref.Val) (any, *string) {
+	if val == nil {
 		return nil, nil
 	}
-	value := (*val).Value()
+	value := val.Value()
 	if err, ok := value.(error); ok {
 		errResponse := err.Error()
 		return nil, &errResponse
 	}
-	if value, err := (*val).ConvertToNative(reflect.TypeOf(&structpb.Value{})); err != nil {
+
+	if value, err := utils.ConvertValToNative(val); err != nil {
 		errResponse := err.Error()
 		return nil, &errResponse
 	} else {
@@ -152,7 +152,7 @@ func generateEvalVariables(names []string, lazyEvals lazyEvalMap) []*EvalVariabl
 	variables := []*EvalVariable{}
 	for _, name := range names {
 		if varLazyEval, ok := lazyEvals[name]; ok && varLazyEval.val != nil {
-			value, err := getResults(&varLazyEval.val.val)
+			value, err := getResults(varLazyEval.val.val)
 			variables = append(variables, &EvalVariable{
 				Name:    varLazyEval.name,
 				Value:   value,
@@ -168,10 +168,10 @@ func generateEvalVariables(names []string, lazyEvals lazyEvalMap) []*EvalVariabl
 func generateEvalResults(responses evalResponses) []*EvalResult {
 	evals := []*EvalResult{}
 	for _, eval := range responses {
-		value, err := getResults(&eval.val)
+		value, err := getResults(eval.val)
 		var message any
 		if eval.messageVal != nil {
-			message, _ = getResults(&eval.messageVal)
+			message, _ = getResults(eval.messageVal)
 		} else if eval.message != "" {
 			message = eval.message
 		}

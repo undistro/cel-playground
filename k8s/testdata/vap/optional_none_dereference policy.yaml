@@ -1,0 +1,30 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: "pod-security.policy.example.com"
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+    - apiGroups:   ["apps"]
+      apiVersions: ["v1"]
+      operations:  ["CREATE", "UPDATE"]
+      resources:   ["deployments"]
+  variables:
+  - name: containers
+    expression: object.spec.template.spec.containers
+  - name: securityContexts
+    expression: 'variables.containers.map(c, c.?securityContext)'
+  - name: namedSecurityContexts
+    expression: 'variables.containers.map(c, {c.name: c.?securityContext})'
+  validations:
+  - expression: variables.securityContexts.all(c, c.?runAsNonRoot == optional.of(true))
+    message: 'all containers must set runAsNonRoot to true'
+  - expression: variables.securityContexts.all(c, c.?readOnlyRootFilesystem == optional.of(true))
+    message: 'all containers must set readOnlyRootFilesystem to true'
+  - expression: variables.securityContexts.all(c, c.?allowPrivilegeEscalation != optional.of(true))
+    message: 'all containers must NOT set allowPrivilegeEscalation to true'
+  - expression: variables.securityContexts.all(c, c.?privileged != optional.of(true))
+    message: 'all containers must NOT set privileged to true'
+  - expression: variables.namedSecurityContexts.all(c, c.?securityContext.privileged != optional.of(true))
+    message: 'all named containers must NOT set privileged to true'

@@ -326,6 +326,59 @@ func TestValidationEval(t *testing.T) {
 			}},
 			Cost: uint64ptr(8),
 		},
+	}, {
+		name:    "test optional.none() dereference",
+		policy:  "optional_none_dereference policy.yaml",
+		orig:    "",
+		updated: "optional_none_dereference updated.yaml",
+
+		expected: k8s.EvalResponse{
+			ValidationVariables: []*k8s.EvalVariable{{
+				Name: "containers",
+				Value: []any{
+					map[string]any{
+						"image":                    "gcr.io/google-samples/kubernetes-bootcamp:v1",
+						"imagePullPolicy":          "IfNotPresent",
+						"name":                     "kubernetes-bootcamp",
+						"resources":                map[string]any{},
+						"terminationMessagePath":   "/dev/termination-log",
+						"terminationMessagePolicy": "File",
+					},
+				},
+				Cost: uint64ptr(5),
+			}, {
+				Name:  "securityContexts",
+				Value: []any{nil},
+				Cost:  uint64ptr(15),
+			}, {
+				Name: "namedSecurityContexts",
+				Value: []any{
+					map[string]any{
+						"kubernetes-bootcamp": nil,
+					},
+				},
+				Cost: uint64ptr(47),
+			}},
+			Validations: []*k8s.EvalResult{{
+				Result:  false,
+				Message: "all containers must set runAsNonRoot to true",
+				Cost:    uint64ptr(8),
+			}, {
+				Result:  false,
+				Message: "all containers must set readOnlyRootFilesystem to true",
+				Cost:    uint64ptr(8),
+			}, {
+				Result: true,
+				Cost:   uint64ptr(8),
+			}, {
+				Result: true,
+				Cost:   uint64ptr(8),
+			}, {
+				Result: true,
+				Cost:   uint64ptr(8),
+			}},
+			Cost: uint64ptr(107),
+		},
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
