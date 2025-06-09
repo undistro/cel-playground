@@ -17,14 +17,13 @@ package eval
 import (
 	"encoding/json"
 	"fmt"
-	"reflect"
 
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/checker"
 	"github.com/google/cel-go/common/types/ref"
 	"github.com/google/cel-go/ext"
 	"github.com/google/cel-go/interpreter"
-	"google.golang.org/protobuf/types/known/structpb"
+	"github.com/undistro/cel-playground/utils"
 	"gopkg.in/yaml.v2"
 	k8s "k8s.io/apiserver/pkg/cel/library"
 )
@@ -120,8 +119,8 @@ func Eval(exp string, input map[string]any) (string, error) {
 	return string(out), nil
 }
 
-func getResults(val *ref.Val) (any, error) {
-	if value, err := (*val).ConvertToNative(reflect.TypeOf(&structpb.Value{})); err != nil {
+func getResults(val ref.Val) (any, error) {
+	if value, err := utils.ConvertValToNative(val); err != nil {
 		return nil, err
 	} else {
 		return value, nil
@@ -129,7 +128,7 @@ func getResults(val *ref.Val) (any, error) {
 }
 
 func generateResponse(val ref.Val, costTracker *cel.EvalDetails) (*EvalResponse, error) {
-	result, evalError := getResults(&val)
+	result, evalError := getResults(val)
 	if evalError != nil {
 		return nil, evalError
 	}

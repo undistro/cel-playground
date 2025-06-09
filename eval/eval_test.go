@@ -32,6 +32,11 @@ var input = map[string]any{
 		"abc":      []string{"a", "b", "c"},
 		"memory":   "1.3G",
 	},
+	"nested": []any{
+		map[string]any{
+			"name": "test",
+		},
+	},
 }
 
 func TestEval(t *testing.T) {
@@ -153,6 +158,20 @@ func TestEval(t *testing.T) {
 			name: "sets.intersects test 3",
 			exp:  `sets.intersects([[1], [2, 3]], [[1, 2], [2, 3]])`,
 			want: true,
+		},
+		{
+			name: "optional list",
+			exp:  `nested.map(m, m.?optional)`,
+			want: []any{nil},
+		},
+		{
+			name: "optional map",
+			exp:  `nested.map(m, {m.name: m.?optional})`,
+			want: []any{
+				map[string]any{
+					"test": nil,
+				},
+			},
 		},
 	}
 	for _, tt := range tests {
