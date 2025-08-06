@@ -42,6 +42,11 @@ var modeExecFns = map[string]execFunction{
 			getArg(argMap, "dataInput"),
 		)
 	},
+	"cel-syntax": func(mode string, argMap js.Value) (string, error) {
+		return eval.CelSyntaxCheck(
+			getArg(argMap, "cel"),
+		)
+	},
 	"vap": func(mode string, argMap js.Value) (string, error) {
 		return k8s.EvalValidatingAdmissionPolicy(
 			getArg(argMap, "vap"),

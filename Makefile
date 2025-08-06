@@ -54,7 +54,7 @@ checklicense: ## Check copyright license headers in source code files.
 .PHONY: build
 build: fmt update-data ## Build the wasm binary.
 	GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o web/assets/main.wasm cmd/wasm/main.go
-	gzip --best -f web/assets/main.wasm
+	gzip --best -c web/assets/main.wasm > web/assets/main.wasm.gz
 
 ## Location to install dependencies to
 LOCALBIN ?= $(shell pwd)/bin

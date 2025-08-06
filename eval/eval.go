@@ -84,6 +84,35 @@ func CelEval(exp []byte, input []byte) (string, error) {
 	return Eval(string(exp), inputMap)
 }
 
+// CelSyntaxCheck checks the syntax of a CEL expression without evaluating it
+func CelSyntaxCheck(exp []byte) (string, error) {
+	// Create a minimal environment with common variable types for syntax checking
+	env, err := cel.NewEnv(append(celEnvOptions,
+		cel.Variable("total", cel.DynType),
+		cel.Variable("price", cel.DynType),
+		cel.Variable("expedition", cel.DynType),
+		cel.Variable("employment_contract", cel.DynType),
+		cel.Variable("work_hours_per_week", cel.DynType),
+		cel.Variable("siret_number", cel.DynType),
+		cel.Variable("employee_birth_date", cel.DynType),
+		cel.Variable("account", cel.DynType),
+		cel.Variable("transaction", cel.DynType),
+		cel.Variable("object", cel.DynType),
+		cel.Variable("params", cel.DynType),
+	)...)
+	if err != nil {
+		return "", fmt.Errorf("failed to create CEL env: %w", err)
+	}
+
+	_, issues := env.Compile(string(exp))
+	if issues != nil {
+		return "", fmt.Errorf("failed to compile the CEL expression: %s", issues.String())
+	}
+
+	// If we get here, the syntax is valid
+	return `{"result": true}`, nil
+}
+
 // Eval evaluates the cel expression against the given input
 func Eval(exp string, input map[string]any) (string, error) {
 	inputVars := make([]cel.EnvOption, 0, len(input))
