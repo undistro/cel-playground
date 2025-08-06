@@ -17,6 +17,7 @@ package eval
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/checker"
@@ -86,26 +87,32 @@ func CelEval(exp []byte, input []byte) (string, error) {
 
 // CelSyntaxCheck checks the syntax of a CEL expression without evaluating it
 func CelSyntaxCheck(exp []byte) (string, error) {
-	// Create a minimal environment with common variable types for syntax checking
-	env, err := cel.NewEnv(append(celEnvOptions,
-		cel.Variable("total", cel.DynType),
-		cel.Variable("price", cel.DynType),
-		cel.Variable("expedition", cel.DynType),
-		cel.Variable("employment_contract", cel.DynType),
-		cel.Variable("work_hours_per_week", cel.DynType),
-		cel.Variable("siret_number", cel.DynType),
-		cel.Variable("employee_birth_date", cel.DynType),
-		cel.Variable("account", cel.DynType),
-		cel.Variable("transaction", cel.DynType),
-		cel.Variable("object", cel.DynType),
-		cel.Variable("params", cel.DynType),
-	)...)
+	// Create a minimal environment with just the CEL options, no variables
+	env, err := cel.NewEnv(celEnvOptions...)
 	if err != nil {
 		return "", fmt.Errorf("failed to create CEL env: %w", err)
 	}
 
+	// Try to compile the expression - this will catch syntax errors
+	// even if variables are not declared (they'll be reported as undeclared references)
 	_, issues := env.Compile(string(exp))
 	if issues != nil {
+		// Check if the only issues are undeclared references
+		// If so, the syntax is valid but variables are missing (which is expected for syntax checking)
+		hasOnlyUndeclaredRefs := true
+		for _, issue := range issues.Errors() {
+			if !strings.Contains(issue.Message, "undeclared reference") {
+				hasOnlyUndeclaredRefs = false
+				break
+			}
+		}
+
+		if hasOnlyUndeclaredRefs {
+			// Only undeclared references - syntax is valid
+			return `{"result": true}`, nil
+		}
+
+		// Real syntax errors
 		return "", fmt.Errorf("failed to compile the CEL expression: %s", issues.String())
 	}
 
