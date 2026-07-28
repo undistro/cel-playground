@@ -56,18 +56,32 @@ function createAccordionItemsByResults(name, result, index) {
 
   outputResultEl.appendChild(listItem);
 }
+// An expression can legitimately produce nothing to print, and an open section
+// with an empty body reads as a broken panel rather than as a result. The two
+// ways of producing nothing stay separate placeholders: optional.none() and an
+// expression returning "" are different outcomes.
+function renderText(value) {
+  const text = escapeHtml(value);
+  if (text === "") return `<span class="result-empty">(empty string)</span>`;
+  return text;
+}
+
 function getResultValue(result) {
   if (result.isError) {
     return `<span style="color:#e01e5a">${escapeHtml(result.error)}</span>`;
   } else if ("message" in result) {
-    return escapeHtml(result.message);
+    return renderText(result.message);
   } else if ("value" in result) {
     if (typeof result.value === "object")
       return `<pre>${escapeHtml(JSON.stringify(result.value, null, 2))}</pre>`;
-    return escapeHtml(result.value);
+    return renderText(result.value);
   }
 
-  return escapeHtml(result.result);
+  // omitempty drops the key entirely when the expression yielded nothing.
+  if (result.result === undefined) {
+    return `<span class="result-empty">(no value)</span>`;
+  }
+  return renderText(result.result);
 }
 
 function createLabel(item, name, i) {

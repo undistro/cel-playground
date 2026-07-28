@@ -69,10 +69,18 @@
   transition: transform 300ms;
 }
 
+/* Muted: this is the panel talking, not a value. */
+.editor__output-result-accordion .result-empty {
+  color: #7f8c98;
+  font-style: italic;
+}
+
+/* Some result bodies contain newlines without being wrapped in a <pre>. */
 .editor__output-result-accordion .result-accordion-expansible-content {
   transition: max-height 400ms, visibility 50ms;
   overflow-x: auto;
   overflow-y: hidden;
+  white-space: pre-wrap;
 }
 
 .editor__output-result-accordion[data-open="false"]
