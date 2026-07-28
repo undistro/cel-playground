@@ -86,7 +86,7 @@ export function renderExamplesInSelectInstance(mode, examples) {
           setEditorTheme(inputEditor);
         });
       hideAccordions();
-      output.value = "";
+      clearOutput();
     } else {
       if (!example) return;
       handleFillExpressionContent(mode, example);
@@ -94,9 +94,23 @@ export function renderExamplesInSelectInstance(mode, examples) {
     }
 
     setCost("");
-    output.value = "";
+    clearOutput();
     hideAccordions();
   });
+}
+
+// Paired so the error state is always set and cleared together, and the class
+// name lives in one place.
+export function clearOutput() {
+  const output = document.getElementById("output");
+  output.value = "";
+  output.classList.remove("editor__output--error");
+}
+
+export function setOutputError(text) {
+  const output = document.getElementById("output");
+  output.value = text;
+  output.classList.add("editor__output--error");
 }
 
 export function setCost(cost) {

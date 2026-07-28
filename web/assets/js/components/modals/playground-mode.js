@@ -28,6 +28,7 @@ import { hideAccordions } from "../accordions/result.js";
 import { renderSharedContent } from "../../share.js";
 import { getCurrentMode } from "../../utils/localStorage.js";
 import { getDecompressedContent } from "../../utils/compress.js";
+import { clearOutput } from "../../utils/render-functions.js";
 
 const playgroundModesModalEl = document.getElementById(
   "playground-modes__modal"
@@ -127,7 +128,7 @@ async function handleModeClick(event, mode, element) {
   await renderUIChangesByMode(mode);
   localStorage.setItem(localStorageModeKey, value);
   hideAccordions();
-  output.value = "";
+  clearOutput();
   deleteContentUrlParam();
   setTimeout(() => modal.hide(), 350);
 }

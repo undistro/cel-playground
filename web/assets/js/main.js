@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { setCost } from "./utils/render-functions.js";
+import {
+  clearOutput,
+  setCost,
+  setOutputError,
+} from "./utils/render-functions.js";
 import {
   handleRenderAccordions,
   hideAccordions,
@@ -37,6 +41,7 @@ const output = document.getElementById("output");
 
 function run() {
   const values = getRunValues();
+  clearOutput();
   output.value = "Evaluating...";
   setCost("");
 
@@ -45,8 +50,7 @@ function run() {
     const result = eval(modeId, values);
     const { output: resultOutput, isError } = result;
     if (isError) {
-      output.value = resultOutput;
-      output.style.color = "red";
+      setOutputError(resultOutput);
       hideAccordions();
     } else {
       const obj = JSON.parse(resultOutput);
@@ -55,14 +59,13 @@ function run() {
 
       if ("result" in obj) {
         output.value = JSON.stringify(obj.result);
-        output.style.color = "white";
       } else {
         handleRenderAccordions(obj);
       }
       setCost(resultCost);
     }
   } catch (error) {
-    output.value = "";
+    clearOutput();
     setCost("");
     console.log(error);
   }
