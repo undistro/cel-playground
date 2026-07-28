@@ -29,13 +29,13 @@ func EvalWebhook(webhookInput, oldObjectInput, objectValueInput, requestInput, a
 		return "", err
 	}
 
-	var oldObjectValue map[string]any
-	if err := yaml.Unmarshal(oldObjectInput, &oldObjectValue); err != nil {
+	oldObjectValue, err := decodeObjectInput(oldObjectInput)
+	if err != nil {
 		return "", fmt.Errorf("failed to decode input for the old object resource value: %w", err)
 	}
 
-	var objectValue map[string]any
-	if err := yaml.Unmarshal(objectValueInput, &objectValue); err != nil {
+	objectValue, err := decodeObjectInput(objectValueInput)
+	if err != nil {
 		return "", fmt.Errorf("failed to decode input for the object resource value: %w", err)
 	}
 

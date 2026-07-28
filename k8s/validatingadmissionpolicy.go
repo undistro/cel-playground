@@ -88,13 +88,13 @@ func EvalValidatingAdmissionPolicy(policyInput, oldObjectInput, objectValueInput
 		return "", err
 	}
 
-	var oldObjectValue map[string]any
-	if err := yaml.Unmarshal(oldObjectInput, &oldObjectValue); err != nil {
+	oldObjectValue, err := decodeObjectInput(oldObjectInput)
+	if err != nil {
 		return "", fmt.Errorf("failed to decode input for the old resource value: %w", err)
 	}
 
-	var objectValue map[string]any
-	if err := yaml.Unmarshal(objectValueInput, &objectValue); err != nil {
+	objectValue, err := decodeObjectInput(objectValueInput)
+	if err != nil {
 		return "", fmt.Errorf("failed to decode input for the new resource value: %w", err)
 	}
 

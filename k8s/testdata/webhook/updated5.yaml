@@ -1,0 +1,8 @@
+apiVersion: example.com/v1
+kind: Cache
+metadata:
+  name: sessions
+  namespace: default
+spec:
+  eviction: on
+  replicas: 3

@@ -132,6 +132,22 @@ func TestWebhookEval(t *testing.T) {
 			},
 			Cost: uint64ptr(350016),
 		},
+	}, {
+		// The object is decoded the way a cluster decodes it. `eviction: on` is
+		// YAML 1.1, so it reaches CEL as a bool rather than the string "on" --
+		// the first match condition fails without that coercion. The second
+		// guards the other half of the decoder: `replicas: 3` must reach CEL as
+		// an int rather than a double, or `%` has no overload.
+		name:    "test a single webhook whose match conditions depend on a cluster-faithful decode",
+		webhook: "webhook5.yaml",
+		updated: "updated5.yaml",
+		expected: k8s.EvalResponse{
+			WebhookMatchConditions: [][]*k8s.EvalResult{{
+				{Name: strptr("eviction-enabled"), Result: true, Cost: uint64ptr(4)},
+				{Name: strptr("odd-replicas"), Result: true, Cost: uint64ptr(5)},
+			}},
+			Cost: uint64ptr(9),
+		},
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

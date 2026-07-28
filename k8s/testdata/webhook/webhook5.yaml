@@ -1,0 +1,25 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+webhooks:
+  - name: my-webhook.example.com
+    matchPolicy: Equivalent
+    rules:
+      - operations: ['CREATE','UPDATE']
+        apiGroups: ['*']
+        apiVersions: ['*']
+        resources: ['*']
+    failurePolicy: 'Ignore'
+    sideEffects: None
+    clientConfig:
+      service:
+        namespace: my-namespace
+        name: my-webhook
+      caBundle: 'PGNhYnVuZGxlPgo='
+    matchConditions:
+      # `eviction: on` is YAML 1.1, so a cluster stores a boolean here, not the
+      # string "on".
+      - name: 'eviction-enabled'
+        expression: 'object.spec.eviction == true'
+      # Integral numbers reach CEL as int, not double, so `%` has an overload.
+      - name: 'odd-replicas'
+        expression: 'object.spec.replicas % 2 == 1'
