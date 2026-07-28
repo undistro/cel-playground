@@ -23,6 +23,7 @@ import {
   getRunValues,
 } from "./utils/editor.js";
 import { getCurrentMode, getCurrentTheme } from "./utils/localStorage.js";
+import { COPY_FEEDBACK_MS, copyToClipboard } from "./utils/clipboard.js";
 
 const shareButton = document.getElementById("share");
 shareButton.addEventListener("click", share);
@@ -95,15 +96,22 @@ celInput.addEventListener("mouseleave", () => {
   celCopyIcon.style.display = "none";
 });
 
-celCopyIcon.addEventListener("click", () => {
-  const exprEditorValue = getExprEditorValue();
-  navigator.clipboard.writeText(exprEditorValue).catch(console.error);
-  celCopyHover.style.display = "none";
-  celCopyClick.style.display = "flex";
-  setTimeout(() => {
-    celCopyClick.style.display = "none";
-  }, 1000);
-});
+// The two editor icons are the same affordance over different nodes: swap the
+// hover label for the "copied" one, then put it back.
+function wireEditorCopy(icon, hover, click, getValue) {
+  icon.addEventListener("click", () => {
+    copyToClipboard(getValue()).then((copied) => {
+      if (!copied) return;
+      hover.style.display = "none";
+      click.style.display = "flex";
+      setTimeout(() => {
+        click.style.display = "none";
+      }, COPY_FEEDBACK_MS);
+    });
+  });
+}
+
+wireEditorCopy(celCopyIcon, celCopyHover, celCopyClick, getExprEditorValue);
 
 celCopyIcon.addEventListener("mouseover", () => {
   celCopyHover.style.display = "flex";
@@ -126,15 +134,7 @@ dataInput.addEventListener("mouseleave", () => {
   dataCopyIcon.style.display = "none";
 });
 
-dataCopyIcon.addEventListener("click", () => {
-  const dataInputValue = getInputEditorValue();
-  navigator.clipboard.writeText(dataInputValue);
-  dataCopyHover.style.display = "none";
-  dataCopyClick.style.display = "flex";
-  setTimeout(() => {
-    dataCopyClick.style.display = "none";
-  }, 1000);
-});
+wireEditorCopy(dataCopyIcon, dataCopyHover, dataCopyClick, getInputEditorValue);
 
 dataCopyIcon.addEventListener("mouseover", () => {
   dataCopyHover.style.display = "flex";
@@ -149,14 +149,20 @@ copyButton.addEventListener("click", copy);
 
 function copy() {
   const copyText = document.querySelector(".share-url__input");
+  // The highlight is the affordance here, so it happens whether or not the
+  // write succeeds; only the confirmation waits.
   copyText.select();
   copyText.setSelectionRange(0, 99999);
-  navigator.clipboard.writeText(copyText.value);
-  window.getSelection().removeAllRanges();
 
-  const tooltip = document.querySelector(".share-url__tooltip");
-  tooltip.style.opacity = 1;
-  setTimeout(() => {
-    tooltip.style.opacity = 0;
-  }, 3000);
+  copyToClipboard(copyText.value).then((copied) => {
+    window.getSelection().removeAllRanges();
+    if (!copied) return;
+
+    const tooltip = document.querySelector(".share-url__tooltip");
+    tooltip.style.opacity = 1;
+    // Longer than the icon ticks: this one is a sentence to read, not a glyph.
+    setTimeout(() => {
+      tooltip.style.opacity = 0;
+    }, 3000);
+  });
 }

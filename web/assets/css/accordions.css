@@ -69,10 +69,88 @@
   transition: transform 300ms;
 }
 
+/* The caret, the status icons and the label text, left-aligned as one row. */
+.editor__output-result-accordion .result-accordion-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.editor__output-result-accordion .result-accordion-error-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e01e5a;
+}
+
+.editor__output-result-accordion .result-error {
+  color: #e01e5a;
+}
+
+/* The cost and the copy button, right-aligned opposite the label. */
+.editor__output-result-accordion .result-accordion-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+/* 24px square: the collapsed row is a 24px content box, so this is the largest
+   the button can be without making the row overflow its rounded card. The hit
+   area is extended past that by the ::after below. */
+.editor__output-result-accordion .result-accordion-copy {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+  color: #7f8c98;
+  font-size: 1.15rem;
+  line-height: 1;
+  transition: color 150ms, background-color 150ms;
+}
+
+/* Widens the clickable region to 40x40 without taking up any layout space, so
+   the button stays easy to hit inside a row that cannot grow. */
+.editor__output-result-accordion .result-accordion-copy::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+
+.editor__output-result-accordion .result-accordion-copy:hover,
+.editor__output-result-accordion .result-accordion-copy:focus-visible {
+  color: #e6e6e6;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.editor__output-result-accordion .result-accordion-copy.copied {
+  color: #4ec9b0;
+}
+
+.editor__output-result-accordion .result-accordion-copy.copy-failed {
+  color: #e01e5a;
+}
+
+/* Muted: this is the panel talking, not a value. */
+.editor__output-result-accordion .result-empty {
+  color: #7f8c98;
+  font-style: italic;
+}
+
+/* Some result bodies contain newlines without being wrapped in a <pre>. */
 .editor__output-result-accordion .result-accordion-expansible-content {
   transition: max-height 400ms, visibility 50ms;
   overflow-x: auto;
   overflow-y: hidden;
+  white-space: pre-wrap;
 }
 
 .editor__output-result-accordion[data-open="false"]
