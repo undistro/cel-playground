@@ -17,6 +17,7 @@ package eval
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/checker"
@@ -83,6 +84,41 @@ func CelEval(exp []byte, input []byte) (string, error) {
 		return "", fmt.Errorf("failed to decode input: %w", err)
 	}
 	return Eval(string(exp), inputMap)
+}
+
+// CelSyntaxCheck checks the syntax of a CEL expression without evaluating it
+func CelSyntaxCheck(exp []byte) (string, error) {
+	// Create a minimal environment with just the CEL options, no variables
+	env, err := cel.NewEnv(celEnvOptions...)
+	if err != nil {
+		return "", fmt.Errorf("failed to create CEL env: %w", err)
+	}
+
+	// Try to compile the expression - this will catch syntax errors
+	// even if variables are not declared (they'll be reported as undeclared references)
+	_, issues := env.Compile(string(exp))
+	if issues != nil {
+		// Check if the only issues are undeclared references
+		// If so, the syntax is valid but variables are missing (which is expected for syntax checking)
+		hasOnlyUndeclaredRefs := true
+		for _, issue := range issues.Errors() {
+			if !strings.Contains(issue.Message, "undeclared reference") {
+				hasOnlyUndeclaredRefs = false
+				break
+			}
+		}
+
+		if hasOnlyUndeclaredRefs {
+			// Only undeclared references - syntax is valid
+			return `{"result": true}`, nil
+		}
+
+		// Real syntax errors
+		return "", fmt.Errorf("failed to compile the CEL expression: %s", issues.String())
+	}
+
+	// If we get here, the syntax is valid
+	return `{"result": true}`, nil
 }
 
 // Eval evaluates the cel expression against the given input
