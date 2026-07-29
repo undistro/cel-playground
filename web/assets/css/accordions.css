@@ -20,21 +20,22 @@
   flex-direction: column;
   gap: 1rem;
   position: absolute;
+  /* Not width/height: 100% -- that adds the padding on top and overflows
+     .editor__output-holder. */
   top: 0;
   left: 0;
+  right: 0;
   bottom: 0;
   margin: 0;
   padding-left: 1rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  width: 100%;
-  height: 100%;
   background-color: #1d1f21;
   overflow-y: auto;
 }
 
 .editor__output-result .editor__output-result-accordion {
-  width: calc(100% - 4rem);
+  width: calc(100% - 3rem); /* 1rem of the gutter is the padding above */
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -70,6 +71,7 @@
 }
 
 .editor__output-result-accordion .result-accordion-expansible-content {
+  --result-body-max-height: 450px;
   transition: max-height 400ms, visibility 50ms;
   overflow-x: auto;
   overflow-y: hidden;
@@ -83,10 +85,19 @@
 
 .editor__output-result-accordion[data-open="true"]
   .result-accordion-expansible-content {
-  max-height: 450px;
+  max-height: var(--result-body-max-height);
   visibility: visible;
 }
 
 .editor__output-result-accordion[data-open="true"] .result-arrow {
   transform: rotate(90deg);
+}
+
+/* Scrolls here rather than on .result-accordion-expansible-content, whose
+   overflow-y stays hidden so its opening transition cannot flash a scrollbar.
+   Matching caps and margin: 0 keep this box inside that clip. */
+.editor__output-result-accordion .result-accordion-expansible-content pre {
+  margin: 0;
+  max-height: var(--result-body-max-height);
+  overflow: auto;
 }

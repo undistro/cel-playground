@@ -124,8 +124,6 @@ export function handleRenderAccordions(result) {
   outputResultEl.style.display = "flex";
 
   holderEl.scrollTo({ top: 0, behavior: "smooth" });
-  holderEl.style.overflowY = "auto";
-  holderEl.style.overflowX = "hidden";
 
   Object.entries(result).forEach(([key, values]) => {
     renderAccordions(key, values);

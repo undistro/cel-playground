@@ -368,11 +368,10 @@ a {
   position: relative;
   height: 100%;
   width: 100%;
-  /* overflow-y: auto;
-  overflow-x: hidden; */
 }
 
 .editor__output-holder .editor__output {
+  box-sizing: border-box;
   background: #1d1f21;
   resize: none;
   height: 100%;
