@@ -132,7 +132,12 @@ func extractVAPV1Alpha1CelInformation(policy *v1alpha1.ValidatingAdmissionPolicy
 	}
 
 	return &CelInformation{
-		name, namespace, variables, validations, auditAnnotations, matchConditions, nil,
+		name:             name,
+		namespace:        namespace,
+		variables:        variables,
+		validations:      validations,
+		auditAnnotations: auditAnnotations,
+		matchConditions:  matchConditions,
 	}
 }
 
@@ -175,7 +180,12 @@ func extractVAPV1Beta1CelInformation(policy *v1beta1.ValidatingAdmissionPolicy) 
 	}
 
 	return &CelInformation{
-		name, namespace, variables, validations, auditAnnotations, matchConditions, nil,
+		name:             name,
+		namespace:        namespace,
+		variables:        variables,
+		validations:      validations,
+		auditAnnotations: auditAnnotations,
+		matchConditions:  matchConditions,
 	}
 }
 
@@ -218,7 +228,12 @@ func extractVAPV1CelInformation(policy *v1.ValidatingAdmissionPolicy) *CelInform
 	}
 
 	return &CelInformation{
-		name, namespace, variables, validations, auditAnnotations, matchConditions, nil,
+		name:             name,
+		namespace:        namespace,
+		variables:        variables,
+		validations:      validations,
+		auditAnnotations: auditAnnotations,
+		matchConditions:  matchConditions,
 	}
 }
 
@@ -235,7 +250,7 @@ func extractVWV1Beta1CelInformation(webhookConfig *v1beta1.ValidatingWebhookConf
 		webhookMatchConditions = append(webhookMatchConditions, matchConditions)
 	}
 	return &CelInformation{
-		"", "", nil, nil, nil, nil, webhookMatchConditions,
+		webhookMatchConditions: webhookMatchConditions,
 	}
 }
 
@@ -252,7 +267,7 @@ func extractVWV1CelInformation(webhookConfig *v1.ValidatingWebhookConfiguration)
 		webhookMatchConditions = append(webhookMatchConditions, matchConditions)
 	}
 	return &CelInformation{
-		"", "", nil, nil, nil, nil, webhookMatchConditions,
+		webhookMatchConditions: webhookMatchConditions,
 	}
 }
 
@@ -269,7 +284,7 @@ func extractMWV1Beta1CelInformation(webhookConfig *v1beta1.MutatingWebhookConfig
 		webhookMatchConditions = append(webhookMatchConditions, matchConditions)
 	}
 	return &CelInformation{
-		"", "", nil, nil, nil, nil, webhookMatchConditions,
+		webhookMatchConditions: webhookMatchConditions,
 	}
 }
 
@@ -286,6 +301,6 @@ func extractMWV1CelInformation(webhookConfig *v1.MutatingWebhookConfiguration) *
 		webhookMatchConditions = append(webhookMatchConditions, matchConditions)
 	}
 	return &CelInformation{
-		"", "", nil, nil, nil, nil, webhookMatchConditions,
+		webhookMatchConditions: webhookMatchConditions,
 	}
 }
